@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_item_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="comn.example.user.j_trok.ItemDetail">
+
+    <LinearLayout
+        android:id="@+id/image_and_terms"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image1"/>
+
+        <TextView
+            android:id="@+id/terms_and_conditions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/terms"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:clickable="true"
+            android:onClick="toggle_contents"
+            android:background="@drawable/background_border"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/image_and_terms"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:weightSum="1">
+
+        <TextView
+            android:drawableLeft="@drawable/ic_perm_identity_18pt_2x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Previous comment"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:drawableLeft="@drawable/ic_perm_identity_18pt_2x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Previous comment"
+            android:textSize="20dp"
+            android:layout_marginTop="30dp"/>
+
+        <EditText
+            android:id="@+id/new_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="New comment"
+            android:textSize="20dp"
+            android:paddingTop="20dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/post"
+        android:layout_width="322dp"
+        android:layout_height="60dp"
+        android:text="Post Comment"
+        android:layout_weight="0.15"
+        android:background="@color/bg_screen1"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="56dp" />
+
+</RelativeLayout>

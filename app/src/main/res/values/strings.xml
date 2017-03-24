@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">J_Trok</string>
+    <string name="title_activity_registration_form">Register</string>
+
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">J-Trok</string>
+    <string name="slide_1_desc">The easiest way to buy and sell online!</string>
+
+    <string name="slide_2_title">Digitizing trade by barter</string>
+    <string name="slide_2_desc">Trade with people all over the world!</string>
+
+    <string name="slide_3_title">Great Discounts</string>
+    <string name="slide_3_desc">Negotiate and get the best deals ever!</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
+    <string name="terms">Terms and Conditions</string>
+</resources>
