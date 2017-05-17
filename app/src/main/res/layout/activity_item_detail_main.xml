@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="comn.example.user.j_trok.ItemDetail">
+    tools:context="comn.example.user.j_trok.ui.ItemDetailActivity">
 
     <include layout="@layout/activity_item_detail"/>
 

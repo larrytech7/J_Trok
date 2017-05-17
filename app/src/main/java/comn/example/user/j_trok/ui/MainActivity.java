@@ -1,4 +1,4 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.fragments.BuyingFragment;
+import comn.example.user.j_trok.fragments.ProfileFragment;
+import comn.example.user.j_trok.fragments.SellingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,13 +34,13 @@ public class MainActivity extends AppCompatActivity {
                         Fragment selectedFragment = null;
                         switch (item.getItemId()) {
                             case R.id.action_item1:
-                                selectedFragment = Buy.newInstance();
+                                selectedFragment = BuyingFragment.newInstance();
                                 break;
                             case R.id.action_item2:
-                                selectedFragment = Sell.newInstance();
+                                selectedFragment = SellingFragment.newInstance();
                                 break;
                             case R.id.action_item3:
-                                selectedFragment = Profile.newInstance();
+                                selectedFragment = ProfileFragment.newInstance();
                                 break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, Buy.newInstance());
+        transaction.replace(R.id.frame_layout, BuyingFragment.newInstance());
         transaction.commit();
 
         //Used to select an item programmatically

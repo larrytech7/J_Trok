@@ -1,11 +1,13 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-public class RegistrationForm extends AppCompatActivity  implements View.OnClickListener{
+import comn.example.user.j_trok.R;
+
+public class RegistrationActivity extends AppCompatActivity  implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

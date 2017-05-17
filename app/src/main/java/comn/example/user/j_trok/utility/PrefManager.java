@@ -1,4 +1,4 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.utility;
 
 /**
  * Created by USER on 11/11/2016.

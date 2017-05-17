@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#dee"
-    tools:context="comn.example.user.j_trok.Buy">
+    tools:context="comn.example.user.j_trok.fragments.BuyingFragment">
 
     <android.support.v7.widget.SearchView
         android:id="@+id/search_bar"

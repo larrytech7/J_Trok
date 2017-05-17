@@ -1,4 +1,4 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.utility;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;

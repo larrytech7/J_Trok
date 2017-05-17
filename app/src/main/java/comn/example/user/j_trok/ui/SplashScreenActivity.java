@@ -1,10 +1,12 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class SplashScreen extends AppCompatActivity {
+import comn.example.user.j_trok.R;
+
+public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +20,7 @@ public class SplashScreen extends AppCompatActivity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(SplashScreen.this,IntroSlider.class);
+                    Intent intent = new Intent(SplashScreenActivity.this,IntroSliderActivity.class);
                     startActivity(intent);
                 }
             }

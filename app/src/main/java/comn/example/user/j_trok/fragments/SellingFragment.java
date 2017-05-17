@@ -1,4 +1,4 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.fragments;
 
 
 import android.os.Bundle;
@@ -7,9 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Profile extends Fragment {
-    public static Profile newInstance() {
-        Profile fragment = new Profile();
+import comn.example.user.j_trok.R;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class SellingFragment extends Fragment {
+
+    public static SellingFragment newInstance() {
+        SellingFragment fragment = new SellingFragment();
         return fragment;
     }
 
@@ -18,11 +25,12 @@ public class Profile extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_sell, container, false);
     }
 
 }

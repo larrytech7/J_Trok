@@ -1,4 +1,4 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class IntroSlider extends AppCompatActivity {
+import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.utility.PrefManager;
+import comn.example.user.j_trok.utility.ZoomOutPageTransformer;
+
+public class IntroSliderActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
@@ -119,7 +123,7 @@ public class IntroSlider extends AppCompatActivity {
 
     private void launchHomeScreen() {
         prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(IntroSlider.this, RegistrationForm.class)); //to be changed
+        startActivity(new Intent(IntroSliderActivity.this, RegistrationActivity.class)); //to be changed
         finish();
     }
 

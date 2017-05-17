@@ -1,4 +1,4 @@
-package comn.example.user.j_trok;
+package comn.example.user.j_trok.adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.ui.ItemDetailActivity;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private String[] mDataset;
@@ -49,7 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ItemDetail.class);
+                Intent intent = new Intent(v.getContext(), ItemDetailActivity.class);
                 v.getContext().startActivity(intent);
             }
         });
