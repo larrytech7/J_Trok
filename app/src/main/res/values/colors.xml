@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
+    <color name="google_plus_red">#dd4b39</color>
+    <color name="facebook_blue">#3b5998</color>
+    <color name="twitter_blue">#0084b4</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#009688</color>

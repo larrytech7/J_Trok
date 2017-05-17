@@ -10,5 +10,10 @@
     <dimen name="slide_title">30dp</dimen>
     <dimen name="slide_desc">20dp</dimen>
     <dimen name="desc_padding">40dp</dimen>
-    <dimen name="normal_font">20dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="textfield_padding_bottom">5dp</dimen>
+    <dimen name="textfield_padding_top">10dp</dimen>
+    <dimen name="normal_font">17dp</dimen>
+    <dimen name="image_view_icon_dimension">100dp</dimen>
 </resources>

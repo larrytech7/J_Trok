@@ -17,10 +17,9 @@
         </activity>
         <activity android:name=".RegistrationForm" />
         <activity android:name=".IntroSlider" />
-        <activity android:name=".HomePage" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ItemDetail" />
-        <activity android:name=".NewDeal"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ItemDetail"></activity>
+
     </application>
 
 </manifest>

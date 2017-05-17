@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="5dp">
+
+    <LinearLayout
+        android:id="@+id/activity_new_deal"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="comn.example.user.j_trok.Sell">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:background="@drawable/background_border"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/image_view_icon_dimension"
+                android:layout_height="@dimen/image_view_icon_dimension"
+                android:src="@drawable/ic_play"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_10"
+            android:paddingLeft="@dimen/textfield_padding_top">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Location"
+                android:textSize="@dimen/normal_font"/>
+
+            <ImageButton
+                android:id="@+id/locationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_location"
+                android:layout_centerVertical="true"
+                android:text="Button"
+                android:backgroundTint="@android:color/transparent"/>
+
+        </RelativeLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:paddingTop="@dimen/textfield_padding_top"
+            android:paddingBottom="@dimen/textfield_padding_top"
+            android:paddingLeft="@dimen/textfield_padding_top"
+            android:hint="Price"
+            android:textSize="@dimen/normal_font"
+            android:inputType="numberDecimal"
+            android:background="@drawable/background_border"
+            android:drawableEnd="@drawable/ic_attach_money"
+            android:drawableRight="@drawable/ic_attach_money"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:paddingTop="@dimen/textfield_padding_top"
+            android:paddingBottom="@dimen/textfield_padding_top"
+            android:paddingLeft="@dimen/textfield_padding_top"
+            android:hint="item description"
+            android:textSize="@dimen/normal_font"
+            android:minLines="3"
+            android:background="@drawable/background_border"
+            android:id="@+id/editText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="cancel"
+                android:textColor="@color/white"
+                android:textSize="@dimen/normal_font"
+                android:background="@drawable/round_border"
+                android:backgroundTint="@color/google_plus_red"/>
+
+            <Button
+                android:drawableEnd="@drawable/ic_send"
+                android:drawableRight="@drawable/ic_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="publish"
+                android:textColor="@color/bg_screen2"
+                android:textSize="@dimen/normal_font"
+                android:background="@drawable/round_border"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

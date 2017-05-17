@@ -1,84 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_item_detail"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attribute="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="comn.example.user.j_trok.ItemDetail">
+    android:orientation="vertical"
+    android:id="@+id/activity_item_detail"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <LinearLayout
-        android:id="@+id/image_and_terms"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp">
+        android:layout_height="225dp"
+        android:background="@drawable/background_border"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/image1"/>
-
-        <TextView
-            android:id="@+id/terms_and_conditions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/terms"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            android:clickable="true"
-            android:onClick="toggle_contents"
-            android:background="@drawable/background_border"/>
+            android:layout_width="@dimen/image_view_icon_dimension"
+            android:layout_height="@dimen/image_view_icon_dimension"
+            android:src="@drawable/ic_play"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_below="@id/image_and_terms"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:weightSum="1">
+        android:layout_marginBottom="70dp">
 
-        <TextView
-            android:drawableLeft="@drawable/ic_perm_identity_18pt_2x"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Previous comment"
-            android:textSize="20dp"
-            android:layout_marginTop="10dp"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:drawableLeft="@drawable/ic_perm_identity_18pt_2x"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Previous comment"
-            android:textSize="20dp"
-            android:layout_marginTop="30dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp"
+                android:paddingLeft="5dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10">
 
-        <EditText
-            android:id="@+id/new_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="New comment"
-            android:textSize="20dp"
-            android:paddingTop="20dp"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userPhoto"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/profile"
+                    android:elevation="5dp"/>
 
-    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp">
 
-    <Button
-        android:id="@+id/post"
-        android:layout_width="322dp"
-        android:layout_height="60dp"
-        android:text="Post Comment"
-        android:layout_weight="0.15"
-        android:background="@color/bg_screen1"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="56dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Author name"
+                        android:textSize="@dimen/normal_font"
+                        android:textColor="#212121"/>
 
-</RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="@dimen/margin_10"
+                attribute:cardCornerRadius="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_screen2"
+                        android:layout_marginRight="5dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/normal_font"
+                        android:text="Description: 16inch screen, 500G RAM, 4G ROM. State: used. Price: very fair, negotiable. Could be returned if item does not match description"
+                        android:textColor="#212121"
+                        android:minLines="3" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:elevation="5dp"
+                android:layout_marginTop="@dimen/margin_10"
+                attribute:cardCornerRadius="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/profile"
+                        android:elevation="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/normal_font"
+                            android:text="User"
+                            android:textColor="#212121"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#AA212121"
+                            android:text="comment"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
