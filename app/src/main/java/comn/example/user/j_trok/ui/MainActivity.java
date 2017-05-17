@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import comn.example.user.j_trok.R;
@@ -17,14 +18,14 @@ import comn.example.user.j_trok.fragments.SellingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TabLayout myTabLayout;
-    private ViewPager viewPager;
+    private static final String LOGTAG = "MAinActivity";
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -32,40 +33,48 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
+                        FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+                        //toggleIcon(item);
                         switch (item.getItemId()) {
-                            case R.id.action_item1:
-                                selectedFragment = BuyingFragment.newInstance();
+                            case R.id.action_buying:
+                                selectedFragment = getSupportFragmentManager().findFragmentByTag("buying");
+                                transaction.addToBackStack("buying");
                                 break;
-                            case R.id.action_item2:
-                                selectedFragment = SellingFragment.newInstance();
+                            case R.id.action_selling:
+                                selectedFragment = getSupportFragmentManager().findFragmentByTag("selling");
+                                transaction.addToBackStack("selling");
                                 break;
-                            case R.id.action_item3:
-                                selectedFragment = ProfileFragment.newInstance();
+                            case R.id.action_profile:
+                                selectedFragment = getSupportFragmentManager().findFragmentByTag("profile");
+                                transaction.addToBackStack("profile");
                                 break;
                         }
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_layout, selectedFragment);
-                        transaction.commit();
+                        transaction.replace(R.id.frame_layout, selectedFragment)
+                                .commit();
                         return true;
                     }
                 });
 
         //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, BuyingFragment.newInstance());
-        transaction.commit();
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, SellingFragment.newInstance(), "selling")
+                .replace(R.id.frame_layout, ProfileFragment.newInstance(), "profile")
+                .replace(R.id.frame_layout, BuyingFragment.newInstance(), "buying")
+                .commit();
 
-        //Used to select an item programmatically
-        //bottomNavigationView.getMenu().getItem(2).setChecked(true);
+    }
 
-        /*
-
-        VideoView videoView = (VideoView) findViewById(R.id.videoView1);
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(videoView);
-        videoView.setMediaController(mediaController);
-        videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.sample_video));
-        videoView.start();
-        */
+    private void toggleIcon(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_selling:
+                item.setIcon(getResources().getDrawable(R.drawable.ic_sell_selected));
+                break;
+            case R.id.action_buying:
+                item.setIcon(getResources().getDrawable(R.drawable.ic_shop_selected));
+                break;
+            case R.id.action_profile:
+                item.setIcon(getResources().getDrawable(R.drawable.ic_profile_selected));
+                break;
+        }
     }
 }
