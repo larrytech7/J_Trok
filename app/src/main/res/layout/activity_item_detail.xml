@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:attribute="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:id="@+id/activity_item_detail"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+    android:id="@+id/activity_item_detail">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_screen1"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <com.afollestad.easyvideoplayer.EasyVideoPlayer
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="225dp"
         android:background="@drawable/background_border"
@@ -143,5 +152,6 @@
             </android.support.v7.widget.CardView>
 
         </LinearLayout>
-    </ScrollView>
+    </ScrollView>-->
+
 </LinearLayout>

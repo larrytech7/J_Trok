@@ -1,45 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     tools:context="comn.example.user.j_trok.ui.ItemDetailActivity">
 
     <include layout="@layout/activity_item_detail"/>
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/comments_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/margin_10"
-        android:layout_marginBottom="60dp"
-        android:paddingLeft="@dimen/textfield_padding_top">
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="80dp"
+        android:background="@color/white"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-        <EditText
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Comment"
-            android:textSize="@dimen/normal_font"/>
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_send"
-            android:layout_centerVertical="true"
-            android:text="Button"
-            android:backgroundTint="@android:color/transparent"/>
-    </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/commentsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:reverseLayout="false"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                tools:listitem="@layout/news_item_layout" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="bottom"
+                app:cardBackgroundColor="@color/colorPrimary">
+                <EditText
+                    android:id="@+id/commentEditTextview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|bottom"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:background="@android:color/transparent"
+                    android:drawableLeft="@drawable/ic_chat"
+                    android:drawableStart="@drawable/ic_chat"
+                    android:hint="@string/chat"/>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_send"
+                    android:background="@drawable/md_transparent"
+                    android:layout_gravity="end|bottom"/>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
-    <android.support.design.widget.BottomNavigationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bg_screen1"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/details_item_menu"/>
+    </android.support.v4.widget.NestedScrollView>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
