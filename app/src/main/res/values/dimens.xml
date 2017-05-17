@@ -16,4 +16,7 @@
     <dimen name="textfield_padding_top">10dp</dimen>
     <dimen name="normal_font">17sp</dimen>
     <dimen name="image_view_icon_dimension">100dp</dimen>
+    <dimen name="textview_margin">25dp</dimen>
+    <dimen name="card_height">50dp</dimen>
+    <dimen name="rightMargin">50dp</dimen>
 </resources>
