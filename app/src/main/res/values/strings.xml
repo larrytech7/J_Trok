@@ -21,10 +21,7 @@
 
     <string name="terms">Terms and Conditions</string>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="slogan">Sold in 7 seconds</string>
+    <string name="slogan">Sold in %d seconds</string>
     <string name="share">Share</string>
     <string name="chat">Chat</string>
     <string name="chat_hint">Chat with Author</string>

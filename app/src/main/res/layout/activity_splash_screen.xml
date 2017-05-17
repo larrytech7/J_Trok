@@ -27,7 +27,7 @@
         android:layout_centerVertical="true" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewSlogan"
         android:text="@string/slogan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
