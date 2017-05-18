@@ -35,6 +35,8 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
     compile 'de.hdodenhof:circleimageview:1.2.1'
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.afollestad:easyvideoplayer:0.3.0'
     compile 'com.afollestad:material-camera:0.4.4'
     testCompile 'junit:junit:4.12'
