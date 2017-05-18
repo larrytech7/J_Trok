@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         sloganTextView = (TextView) findViewById(R.id.textViewSlogan);
 
-        new CountDownTimer(8000, 1000){
+        new CountDownTimer(3000, 1000){
 
             int i = 7;
 

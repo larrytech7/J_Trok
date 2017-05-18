@@ -5,11 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.fragments.BuyingFragment;
@@ -19,7 +23,7 @@ import comn.example.user.j_trok.fragments.SellingFragment;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOGTAG = "MAinActivity";
-    private FragmentTransaction transaction;
+    Map<String, Fragment> fragments = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,32 +38,35 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
                         FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+                        String fragment = "";
                         //toggleIcon(item);
                         switch (item.getItemId()) {
                             case R.id.action_buying:
-                                selectedFragment = getSupportFragmentManager().findFragmentByTag("buying");
-                                transaction.addToBackStack("buying");
+                                fragment = "buying";
+                                selectedFragment =  fragments.get(fragment);
                                 break;
                             case R.id.action_selling:
-                                selectedFragment = getSupportFragmentManager().findFragmentByTag("selling");
-                                transaction.addToBackStack("selling");
+                                fragment = "selling";
+                                selectedFragment = fragments.get(fragment);
                                 break;
                             case R.id.action_profile:
-                                selectedFragment = getSupportFragmentManager().findFragmentByTag("profile");
-                                transaction.addToBackStack("profile");
+                                fragment = "profile";
+                                selectedFragment = fragments.get(fragment);
                                 break;
                         }
-                        transaction.replace(R.id.frame_layout, selectedFragment)
+                        transaction.replace(R.id.frame_layout, selectedFragment, fragment)
                                 .commit();
                         return true;
                     }
                 });
 
+        fragments = new HashMap<>();
+        fragments.put("selling", SellingFragment.newInstance());
+        fragments.put("buying", BuyingFragment.newInstance());
+        fragments.put("profile", ProfileFragment.newInstance());
         //Manually displaying the first fragment - one time only
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, SellingFragment.newInstance(), "selling")
-                .replace(R.id.frame_layout, ProfileFragment.newInstance(), "profile")
-                .replace(R.id.frame_layout, BuyingFragment.newInstance(), "buying")
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, fragments.get("buying"), "buying")
                 .commit();
 
     }
