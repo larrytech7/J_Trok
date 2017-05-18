@@ -43,17 +43,15 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.action_buying:
                                 fragment = "buying";
-                                selectedFragment =  fragments.get(fragment);
                                 break;
                             case R.id.action_selling:
                                 fragment = "selling";
-                                selectedFragment = fragments.get(fragment);
                                 break;
                             case R.id.action_profile:
                                 fragment = "profile";
-                                selectedFragment = fragments.get(fragment);
                                 break;
                         }
+                        selectedFragment = fragments.get(fragment);
                         transaction.replace(R.id.frame_layout, selectedFragment, fragment)
                                 .commit();
                         return true;
