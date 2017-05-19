@@ -37,6 +37,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile 'com.github.javiersantos:MaterialStyledDialogs:2.1'
+    compile 'com.github.adroitandroid:ChipCloud:2.2.1'
     compile 'com.afollestad:easyvideoplayer:0.3.0'
     compile 'com.afollestad:material-camera:0.4.4'
     testCompile 'junit:junit:4.12'

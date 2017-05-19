@@ -32,4 +32,34 @@
     <string name="pause">Paused</string>
     <string name="error_loading_video">Error loading video</string>
     <string name="retry_loading">Retrying ...</string>
+    <string name="publish">Publish</string>
+    <string name="cancel">Cancel</string>
+    <string name="post_title_hint">Name|Title (*)</string>
+    <string name="post_desc_hint">Brief description</string>
+    <string name="publish_description">(*) fields are obligatory. Pick categories to improve your post\'s visibility</string>
+
+    <string-array name="categories">
+        <item>Phones</item>
+        <item>Computers</item>
+        <item>Books</item>
+        <item>Android</item>
+        <item>IOS</item>
+        <item>Clothing</item>
+        <item>Chairs</item>
+        <item>Beverages</item>
+        <item>Drinks</item>
+        <item>Modems</item>
+        <item>Internet</item>
+        <item>Suits</item>
+        <item>TVs</item>
+        <item>Consoles</item>
+        <item>Games</item>
+        <item>Cars</item>
+        <item>Trucks</item>
+        <item>Software</item>
+        <item>Jewelry</item>
+        <item>Shoes</item>
+        <item>Art</item>
+        <item>Sport</item>
+    </string-array>
 </resources>

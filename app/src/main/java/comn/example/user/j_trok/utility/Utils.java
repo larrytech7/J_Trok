@@ -13,6 +13,7 @@ import java.io.File;
 public class Utils {
 
     private static final String TAG = Utils.class.getName();
+    public static final String PREF_RECORDING_DURATION = "RECORDING_DURATION";
 
     public static void deleteFilesAtPath( File parentDir )
     {
