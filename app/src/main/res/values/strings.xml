@@ -37,6 +37,8 @@
     <string name="post_title_hint">Name|Title (*)</string>
     <string name="post_desc_hint">Brief description</string>
     <string name="publish_description">(*) fields are obligatory. Pick categories to improve your post\'s visibility</string>
+    <string name="price_hint">Price (*)</string>
+    <string name="location_hint">Location</string>
 
     <string-array name="categories">
         <item>Phones</item>

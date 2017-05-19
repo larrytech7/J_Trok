@@ -47,7 +47,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="bottom"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="true">
                 <EditText
                     android:id="@+id/commentEditTextview"
                     android:layout_width="match_parent"
@@ -55,9 +57,14 @@
                     android:layout_gravity="center_vertical|bottom"
                     android:layout_marginRight="@dimen/rightMargin"
                     android:layout_marginEnd="@dimen/rightMargin"
-                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="@dimen/rightMargin"
+                    android:layout_marginStart="@dimen/rightMargin"
+                    android:background="@drawable/background_border"
                     android:drawableLeft="@drawable/ic_chat"
                     android:drawableStart="@drawable/ic_chat"
+                    android:linksClickable="true"
+                    android:textColorLink="@color/bg_screen1"
+                    android:autoLink="all"
                     android:hint="@string/chat_hint"/>
 <!--                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/send_chat"
@@ -68,6 +75,14 @@
                     android:background="@color/white"
                     android:src="@drawable/ic_send" />-->
                 <ImageButton
+                    android:id="@+id/takePhotoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_camera"
+                    android:background="@drawable/md_transparent"
+                    android:layout_gravity="start|center_horizontal"/>
+                <ImageButton
+                    android:id="@+id/sendButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_send"

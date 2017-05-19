@@ -2,19 +2,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/textfield_padding_top"
+    android:paddingStart="@dimen/textfield_padding_top"
+    android:paddingRight="@dimen/textfield_padding_top"
+    android:paddingEnd="@dimen/textfield_padding_top">
     <EditText
         android:id="@+id/postTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:paddingTop="@dimen/textfield_padding_top"
+        android:paddingBottom="@dimen/textfield_padding_top"
+        android:paddingLeft="@dimen/textfield_padding_top"
         android:hint="@string/post_title_hint"
-        android:textSize="@dimen/normal_font"/>
+        android:textSize="@dimen/normal_font"
+        android:lines="1"
+        android:background="@drawable/background_border"/>
+    <EditText
+        android:id="@+id/locationEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:paddingTop="@dimen/textfield_padding_top"
+        android:paddingBottom="@dimen/textfield_padding_top"
+        android:paddingLeft="@dimen/textfield_padding_top"
+        android:drawableRight="@drawable/ic_location"
+        android:drawableEnd="@drawable/ic_location"
+        android:hint="@string/location_hint"
+        android:background="@drawable/background_border"
+        android:textSize="@dimen/normal_font"
+        android:maxLines="1"/>
+    <EditText
+        android:id="@+id/priceEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:paddingTop="@dimen/textfield_padding_top"
+        android:paddingBottom="@dimen/textfield_padding_top"
+        android:paddingLeft="@dimen/textfield_padding_top"
+        android:hint="@string/price_hint"
+        android:textSize="@dimen/normal_font"
+        android:inputType="numberDecimal"
+        android:background="@drawable/background_border"
+        android:drawableEnd="@drawable/ic_attach_money"
+        android:drawableRight="@drawable/ic_attach_money"/>
     <EditText
         android:id="@+id/postDescEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:paddingTop="@dimen/textfield_padding_top"
+        android:paddingBottom="@dimen/textfield_padding_top"
+        android:paddingLeft="@dimen/textfield_padding_top"
+        android:layout_marginBottom="@dimen/textfield_padding_top"
         android:hint="@string/post_desc_hint"
         android:textSize="@dimen/normal_font"
+        android:background="@drawable/background_border"
         android:minLines="3"/>
     <com.adroitandroid.chipcloud.ChipCloud
         xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
