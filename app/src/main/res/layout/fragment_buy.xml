@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#dee"
     tools:context="comn.example.user.j_trok.fragments.BuyingFragment">
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
+        android:layout_marginTop="@dimen/card_height"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
@@ -26,5 +20,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@mipmap/ic_send" />
+
+    <com.quinny898.library.persistentsearch.SearchBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchbox" />
 
 </android.support.design.widget.CoordinatorLayout>

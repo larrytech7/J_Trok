@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import comn.example.user.j_trok.R;
-import comn.example.user.j_trok.ui.ItemDetailActivity;
+import comn.example.user.j_trok.ui.PostDetailActivity;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private String[] mDataset;
@@ -52,7 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ItemDetailActivity.class);
+                Intent intent = new Intent(v.getContext(), PostDetailActivity.class);
                 v.getContext().startActivity(intent);
             }
         });

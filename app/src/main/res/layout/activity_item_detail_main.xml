@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="comn.example.user.j_trok.ui.ItemDetailActivity">
+    tools:context="comn.example.user.j_trok.ui.PostDetailActivity">
 
     <include layout="@layout/activity_item_detail"/>
 
@@ -60,8 +60,6 @@
                     android:layout_marginLeft="@dimen/rightMargin"
                     android:layout_marginStart="@dimen/rightMargin"
                     android:background="@drawable/background_border"
-                    android:drawableLeft="@drawable/ic_chat"
-                    android:drawableStart="@drawable/ic_chat"
                     android:linksClickable="true"
                     android:textColorLink="@color/bg_screen1"
                     android:autoLink="all"
@@ -82,7 +80,7 @@
                     android:background="@drawable/md_transparent"
                     android:layout_gravity="start|center_horizontal"/>
                 <ImageButton
-                    android:id="@+id/sendButton"
+                    android:id="@+id/sendChatButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_send"

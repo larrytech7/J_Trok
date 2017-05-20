@@ -5,7 +5,7 @@ android {
     buildToolsVersion '23.0.3'
     defaultConfig {
         applicationId "comn.example.user.j_trok"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -39,6 +39,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     compile 'com.github.adroitandroid:ChipCloud:2.2.1'
+    compile 'com.github.popalay:tutors:1.0.2'
+    compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
     compile 'com.afollestad:easyvideoplayer:0.3.0'
     compile 'com.afollestad:material-camera:0.4.4'
     testCompile 'junit:junit:4.12'

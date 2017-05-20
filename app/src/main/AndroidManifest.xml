@@ -42,7 +42,7 @@
 
         <activity android:name=".ui.MainActivity"></activity>
 
-        <activity android:name=".ui.ItemDetailActivity"
+        <activity android:name=".ui.PostDetailActivity"
             android:parentActivityName=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize">
             <meta-data android:name="android.support.PARENT_ACTIVITY"

@@ -3,30 +3,28 @@ package comn.example.user.j_trok.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.DimenRes;
-import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.view.ViewGroupCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.afollestad.easyvideoplayer.EasyVideoCallback;
 import com.afollestad.easyvideoplayer.EasyVideoPlayer;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import comn.example.user.j_trok.R;
 
 /**
  * Created by USER on 05/05/2017.
  */
-public class ItemDetailActivity extends AppCompatActivity implements EasyVideoCallback {
+public class PostDetailActivity extends AppCompatActivity implements EasyVideoCallback {
 
-    private static final String TAG = "ItemDetailActivity";
+    private static final String TAG = "PostDetailActivity";
     private EasyVideoPlayer player;
     private BottomSheetBehavior<View> bottomSheetBehavior;
     private boolean isSheetShown = false;
@@ -35,6 +33,7 @@ public class ItemDetailActivity extends AppCompatActivity implements EasyVideoCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail_main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,7 +61,6 @@ public class ItemDetailActivity extends AppCompatActivity implements EasyVideoCa
         View bottomView = findViewById(R.id.comments_bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomView);
         bottomSheetBehavior.setPeekHeight(0);
-        //bottomSheetBehavior.setSkipCollapsed(true);
         bottomSheetBehavior.setHideable(true);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -117,11 +115,13 @@ public class ItemDetailActivity extends AppCompatActivity implements EasyVideoCa
 
         switch (item.getItemId()){
             case R.id.action_like:
+                //TODO. Perform like on Post
                 return true;
             case R.id.action_chat:
                 toggleBottomSheet();
                 return true;
             case R.id.action_share:
+                //TODO. Add correct link for app deep linking of this post page
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,""+" \n http://traveler.cm/news");
@@ -139,6 +139,16 @@ public class ItemDetailActivity extends AppCompatActivity implements EasyVideoCa
             isSheetShown = true;
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
+    }
+
+    @OnClick(R.id.takePhotoButton)
+    public void takePhoto(View view){
+        //TODO. ADD photo to message chat
+    }
+
+    @OnClick(R.id.sendChatButton)
+    public void sendChatMessage(View view){
+        //TODO. Send Chat message
     }
 
     @Override

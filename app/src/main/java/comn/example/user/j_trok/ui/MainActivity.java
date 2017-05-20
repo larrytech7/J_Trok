@@ -1,14 +1,20 @@
 package comn.example.user.j_trok.ui;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.popalay.tutors.Tutors;
+import com.popalay.tutors.TutorsBuilder;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import comn.example.user.j_trok.R;
@@ -20,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOGTAG = "MAinActivity";
     Map<String, Fragment> fragments = new HashMap<>();
+    private Tutors tutors;
+    private Iterator<Map.Entry<String, View>> iterator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_layout, fragments.get("buying"), "buying")
                 .commit();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private void toggleIcon(MenuItem item) {

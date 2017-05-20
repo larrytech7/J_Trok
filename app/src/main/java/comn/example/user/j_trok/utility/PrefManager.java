@@ -44,4 +44,13 @@ public class PrefManager {
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
+
+    public boolean getShouldShowHints() {
+        return pref.getBoolean(Utils.PREF_SHOW_HINTS, true);
+    }
+
+    public void setShouldShowHints(boolean val){
+        editor.putBoolean(Utils.PREF_SHOW_HINTS, val)
+                .commit();
+    }
 }
