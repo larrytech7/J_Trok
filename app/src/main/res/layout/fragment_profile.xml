@@ -32,7 +32,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/sales"
+                    android:id="@+id/salesCreated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="37"
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/sales"
+                    android:layout_below="@id/salesCreated"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="-5dp"
                     android:text="Sales"
@@ -98,7 +98,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/pendingRequests"
+                    android:id="@+id/requestsMade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -111,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/pendingRequests"
+                    android:layout_below="@id/requestsMade"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="-5dp"
                     android:text="Requests"

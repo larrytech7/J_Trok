@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import comn.example.user.j_trok.R;
 
 public class ProfileFragment extends Fragment {
+
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         return fragment;

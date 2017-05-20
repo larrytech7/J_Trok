@@ -1,12 +1,17 @@
 package comn.example.user.j_trok.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,8 @@ import com.popalay.tutors.TutorsBuilder;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,13 +45,13 @@ import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.adapters.MyAdapter;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
+import comn.example.user.j_trok.utility.videocompression.MediaController;
 
-import static android.R.attr.category;
-import static android.R.attr.x;
 import static android.app.Activity.RESULT_OK;
 
 public class BuyingFragment extends Fragment implements TutorialListener, SearchBox.SearchListener {
 
+    private static final String LOGTAG = "BuyingFragment";
     private RecyclerView recyclerView;
     private final static int CAMERA_RQ_VIDEO = 6969;
     private Unbinder unbinder;
@@ -128,6 +135,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         //Check preference if first time so as to know if to show hints or not
         if (showHints)
             showHint(iterator);
+
     }
 
     private void showHint(Iterator<Map.Entry<String, View>> iterator) {
@@ -205,6 +213,38 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
             if (resultCode == RESULT_OK) {
                 String filePath = data.getDataString();
                 Toast.makeText(getActivity(), "Saved to: " + filePath, Toast.LENGTH_LONG).show();
+                //compress video at this point
+                new AsyncTask<Uri, String, Boolean>(){
+
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    protected Boolean doInBackground(Uri... paths) {
+                        Log.e(LOGTAG, "path: "+paths[0].getPath());
+                        boolean converted = false;
+                        try {
+                            converted = MediaController.getInstance()
+                                    .convertVideo(Utils.getFilePath(getActivity(), paths[0]));
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                        return converted;
+                    }
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean isConverted) {
+                        if (isConverted){
+                            //log converted path
+                            Log.d(LOGTAG, "Path: "+MediaController.cachedFile.getPath());
+                        }
+                        super.onPostExecute(isConverted);
+                    }
+                }.execute(data.getData());
+
                 showPublishDialog(filePath);
             } else if(data != null) {
                 Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);
