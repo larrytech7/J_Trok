@@ -42,6 +42,7 @@
     <string name="message_sell">Have awesome stuff to sell? Sell your stuff in 7 seconds. It starts with this button!</string>
     <string name="search_hint">Search and find awesome stuff</string>
     <string name="search">Search stuff</string>
+    <string name="preparing">preparing data</string>
 
     <string-array name="categories">
         <item>Phones</item>

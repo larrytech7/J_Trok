@@ -1,5 +1,6 @@
 package comn.example.user.j_trok.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -46,6 +47,7 @@ import comn.example.user.j_trok.adapters.MyAdapter;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
 import comn.example.user.j_trok.utility.videocompression.MediaController;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -104,7 +106,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     }
 
     @OnClick(R.id.fabCreatePost)
-    public void startPostCreate(View view){
+    public void startPostCreate(){
 
         new MaterialCamera(this)
                 .qualityProfile(MaterialCamera.QUALITY_1080P)
@@ -215,8 +217,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 Toast.makeText(getActivity(), "Saved to: " + filePath, Toast.LENGTH_LONG).show();
                 //compress video at this point
                 new AsyncTask<Uri, String, Boolean>(){
+                    private ProgressDialog mPrograssDialog;
 
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     protected Boolean doInBackground(Uri... paths) {
                         Log.e(LOGTAG, "path: "+paths[0].getPath());
@@ -234,6 +236,11 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                     @Override
                     protected void onPreExecute() {
                         super.onPreExecute();
+                        mPrograssDialog = new ProgressDialog(getActivity());
+                        mPrograssDialog.setIndeterminate(true);
+                        mPrograssDialog.setMessage(getString(R.string.preparing));
+                        mPrograssDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        mPrograssDialog.show();
                     }
 
                     @Override
@@ -241,13 +248,14 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                         if (isConverted){
                             //log converted path
                             Log.d(LOGTAG, "Path: "+MediaController.cachedFile.getPath());
-                            //TODO. upload this version of the file to the cloud
+                            //TODO. upload this version of the file to the cloud. Here'd be a suitable place to call the showPublishDialog method
+                            showPublishDialog(MediaController.cachedFile.getPath());
                         }
+                        mPrograssDialog.dismiss();
                         super.onPostExecute(isConverted);
                     }
                 }.execute(data.getData());
 
-                showPublishDialog(filePath);
             } else if(data != null) {
                 Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);
                 e.printStackTrace();
@@ -296,21 +304,24 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
     @Override
     public void onSearchClosed() {
-
+        //
     }
 
     @Override
     public void onSearchTermChanged(String s) {
+        //TODO. Apply real-time update of the Adapter in the recyclerview
         Toast.makeText(getActivity(), "Search changed to: "+s, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSearch(String s) {
         Toast.makeText(getActivity(), "Searching: "+s, Toast.LENGTH_LONG).show();
+        //TODO. build new adapter and replace current one
     }
 
     @Override
     public void onResultClick(SearchResult searchResult) {
+        //TODO. perform search with data from the searchResult object
         Toast.makeText(getActivity(), "Clicked: "+searchResult.toString(), Toast.LENGTH_LONG).show();
     }
 
