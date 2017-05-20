@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">J_Trok</string>
+    <string name="app_name">7Sel</string>
     <string name="title_activity_registration_form">Register</string>
 
     <string name="title_activity_welcome">Home Screen</string>
@@ -7,7 +7,7 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">J-Trok</string>
+    <string name="slide_1_title">7Sel</string>
     <string name="slide_1_desc">The easiest way to buy and sell online!</string>
 
     <string name="slide_2_title">Digitizing trade by barter</string>
