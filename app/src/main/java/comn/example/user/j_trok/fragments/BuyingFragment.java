@@ -223,7 +223,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                         boolean converted = false;
                         try {
                             converted = MediaController.getInstance()
-                                    .convertVideo(Utils.getFilePath(getActivity(), paths[0]));
+                                    .convertVideo(Utils.getFilePath(getActivity(), paths[0]),
+                                            new File(Utils.getVideoDirPath(getActivity())));
                         } catch (URISyntaxException e) {
                             e.printStackTrace();
                         }
@@ -240,6 +241,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                         if (isConverted){
                             //log converted path
                             Log.d(LOGTAG, "Path: "+MediaController.cachedFile.getPath());
+                            //TODO. upload this version of the file to the cloud
                         }
                         super.onPostExecute(isConverted);
                     }

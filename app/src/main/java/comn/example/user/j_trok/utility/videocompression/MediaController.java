@@ -93,17 +93,19 @@ public class MediaController {
     public static class VideoConvertRunnable implements Runnable {
 
         private String videoPath;
+        private File destDirectory;
 
-        private VideoConvertRunnable(String videoPath) {
+        private VideoConvertRunnable(String videoPath, File dest) {
             this.videoPath = videoPath;
+            this.destDirectory = dest;
         }
 
-        public static void runConversion(final String videoPath) {
+        public static void runConversion(final String videoPath, final File dest) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        VideoConvertRunnable wrapper = new VideoConvertRunnable(videoPath);
+                        VideoConvertRunnable wrapper = new VideoConvertRunnable(videoPath, dest);
                         Thread th = new Thread(wrapper, "VideoConvertRunnable");
                         th.start();
                         th.join();
@@ -116,7 +118,7 @@ public class MediaController {
 
         @Override
         public void run() {
-            MediaController.getInstance().convertVideo(videoPath);
+            MediaController.getInstance().convertVideo(videoPath, destDirectory);
         }
     }
 
@@ -143,12 +145,17 @@ public class MediaController {
         return lastCodecInfo;
     }
 
-    public void scheduleVideoConvert(String path) {
-        startVideoConvertFromQueue(path);
+    /**
+     * Background conversion for queueing tasks
+     * @param path source file to compress
+     * @param dest destination directory to put result
+     */
+    public void scheduleVideoConvert(String path, File dest) {
+        startVideoConvertFromQueue(path, dest);
     }
 
-    private void startVideoConvertFromQueue(String path) {
-        VideoConvertRunnable.runConversion(path);
+    private void startVideoConvertFromQueue(String path, File dest) {
+        VideoConvertRunnable.runConversion(path, dest);
     }
 
     @TargetApi(16)
@@ -227,9 +234,15 @@ public class MediaController {
         return -5;
     }
 
+    /**
+     * Perform the actual video compression. Processes the frames and does the magic
+     * @param sourcePath the source uri for the file as per
+     * @param destDir the destination directory where compressed video is eventually saved
+     * @return
+     */
     @TargetApi(16)
-    public boolean  convertVideo(final String path) {
-        this.path=path;
+    public boolean  convertVideo(final String sourcePath, File destDir) {
+        this.path=sourcePath;
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
@@ -250,9 +263,7 @@ public class MediaController {
         int bitrate = 450000;
         int rotateRender = 0;
 
-        File cacheFile = new File(
-                Environment.getExternalStorageDirectory()
-                        ,
+        File cacheFile = new File(destDir,
                 "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4"
         );
 
