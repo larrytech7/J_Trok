@@ -1,17 +1,18 @@
 package comn.example.user.j_trok.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.joanfuentes.hintcase.HintCase;
-import com.joanfuentes.hintcase.ShapeAnimator;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
 import com.joanfuentes.hintcaseassets.contentholderanimators.SlideInFromRightContentHolderAnimator;
 import com.joanfuentes.hintcaseassets.contentholderanimators.SlideOutFromRightContentHolderAnimator;
@@ -85,19 +86,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        showHint();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showHint();
+            }
+        }, 500);
     }
 
     private void showHint() {
-        final View actionBuy = findViewById(R.id.action_buying);
-        SimpleHintContentHolder hintBlock = new SimpleHintContentHolder.Builder(actionBuy.getContext())
+        SimpleHintContentHolder hintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_buying).getContext())
                 .setContentTitle("Need to sell awesome stuff? ")
                 .setContentText("Looking to make an awesome sale. Here you come! In 7s the deal is done!")
+                .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
+                .setContentStyle(R.style.MaterialStyledDialogs_Description)
                 .build();
-        new HintCase(actionBuy.getRootView().getRootView())
-                .setTarget(actionBuy, new CircularShape(), HintCase.TARGET_IS_NOT_CLICKABLE)
-                .setBackgroundColor(getResources().getColor(R.color.bg_screen2))
-                .setShapeAnimators(new RevealCircleShapeAnimator(), ShapeAnimator.NO_ANIMATOR)
+        new HintCase(findViewById(R.id.action_buying).getRootView().getRootView())
+                .setTarget(findViewById(R.id.action_buying), new CircularShape(), HintCase.TARGET_IS_NOT_CLICKABLE)
+                .setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen2, null))
+                .setShapeAnimators(new RevealCircleShapeAnimator(), new UnrevealCircleShapeAnimator())
                 .setHintBlock(hintBlock, new FadeInContentHolderAnimator(), new SlideOutFromRightContentHolderAnimator())
                 .setOnClosedListener(new HintCase.OnClosedListener() {
                     @Override
@@ -106,24 +113,26 @@ public class MainActivity extends AppCompatActivity {
                                 .setContentTitle("Buy awesome stuff!")
                                 .setContentText("Looking for awesome stuff to buy? Here they are! ")
                                 .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
+                                .setContentStyle(R.style.MaterialStyledDialogs_Description)
                                 .build();
                         new HintCase(findViewById(R.id.action_selling).getRootView().getRootView())
                                 .setTarget(findViewById(R.id.action_selling), new CircularShape())
-                                .setBackgroundColor(getResources().getColor(R.color.bg_screen3))
-                                .setShapeAnimators(ShapeAnimator.NO_ANIMATOR, new UnrevealCircleShapeAnimator())
+                                .setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
+                                .setShapeAnimators(new RevealCircleShapeAnimator(), new UnrevealCircleShapeAnimator())
                                 .setHintBlock(secondHintBlock, new SlideInFromRightContentHolderAnimator())
                                 .setOnClosedListener(new HintCase.OnClosedListener() {
                                     @Override
                                     public void onClosed() {
-                                        SimpleHintContentHolder thirdHintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_selling).getContext())
-                                                .setContentTitle("Buy awesome stuff!")
-                                                .setContentText("Looking for awesome stuff to buy? Here they are! ")
+                                        SimpleHintContentHolder thirdHintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_profile).getContext())
+                                                .setContentTitle("Your great profile!")
+                                                .setContentText("Let others know that they can indeed trust you! Complete your profile")
                                                 .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
+                                                .setContentStyle(R.style.MaterialStyledDialogs_Description)
                                                 .build();
-                                        new HintCase(findViewById(R.id.action_selling).getRootView().getRootView())
-                                                .setTarget(findViewById(R.id.action_selling), new CircularShape())
-                                                .setBackgroundColor(getResources().getColor(R.color.dot_dark_screen2))
-                                                .setShapeAnimators(ShapeAnimator.NO_ANIMATOR, new UnrevealCircleShapeAnimator())
+                                        new HintCase(findViewById(R.id.action_profile).getRootView().getRootView())
+                                                .setTarget(findViewById(R.id.action_profile), new CircularShape())
+                                                .setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.dot_dark_screen2, null))
+                                                .setShapeAnimators(new RevealCircleShapeAnimator(), new UnrevealCircleShapeAnimator())
                                                 .setHintBlock(thirdHintBlock, new SlideInFromRightContentHolderAnimator())
                                                 .show();
                                     }
