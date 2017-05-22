@@ -1,7 +1,10 @@
 package comn.example.user.j_trok;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -9,6 +12,14 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.afollestad.materialcamera.MaterialCamera;
+
+import java.io.File;
+
+import static comn.example.user.j_trok.R.id.fab;
+import static comn.example.user.j_trok.R.layout.fragment_buy;
 
 public class Buy extends Fragment implements SearchView.OnQueryTextListener{
 
@@ -20,14 +31,15 @@ public class Buy extends Fragment implements SearchView.OnQueryTextListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_buy, container, false);
+        final View rootView = inflater.inflate(fragment_buy, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -39,7 +51,6 @@ public class Buy extends Fragment implements SearchView.OnQueryTextListener{
 
         return rootView;
     }
-
 
     @Override
     public boolean onQueryTextSubmit(String query) {
