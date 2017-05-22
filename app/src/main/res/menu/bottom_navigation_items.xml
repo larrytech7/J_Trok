@@ -3,13 +3,13 @@
     <item
         android:id="@+id/action_buying"
         android:icon="@drawable/ic_shop"
-        android:title="Buying" />
+        android:title="@string/buying" />
     <item
         android:id="@+id/action_selling"
         android:icon="@drawable/ic_sell"
-        android:title="Selling"/>
+        android:title="@string/selling"/>
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/ic_profile"
-        android:title="Profile"/>
+        android:title="@string/profile"/>
 </menu>

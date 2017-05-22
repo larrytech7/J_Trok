@@ -35,8 +35,11 @@ public class PostDetailActivity extends AppCompatActivity implements EasyVideoCa
         setContentView(R.layout.activity_item_detail_main);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         // Grabs a reference to the player view
         player = (EasyVideoPlayer) findViewById(R.id.player);
         player.setRestartDrawableRes(R.drawable.ic_refresh);
@@ -126,6 +129,9 @@ public class PostDetailActivity extends AppCompatActivity implements EasyVideoCa
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,""+" \n http://traveler.cm/news");
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                return true;
+            case android.R.id.home:
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

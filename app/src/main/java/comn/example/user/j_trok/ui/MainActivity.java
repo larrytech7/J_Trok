@@ -1,17 +1,25 @@
 package comn.example.user.j_trok.ui;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.joanfuentes.hintcase.HintCase;
+import com.joanfuentes.hintcase.ShapeAnimator;
+import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
+import com.joanfuentes.hintcaseassets.contentholderanimators.SlideInFromRightContentHolderAnimator;
+import com.joanfuentes.hintcaseassets.contentholderanimators.SlideOutFromRightContentHolderAnimator;
+import com.joanfuentes.hintcaseassets.hintcontentholders.SimpleHintContentHolder;
+import com.joanfuentes.hintcaseassets.shapeanimators.RevealCircleShapeAnimator;
+import com.joanfuentes.hintcaseassets.shapeanimators.UnrevealCircleShapeAnimator;
+import com.joanfuentes.hintcaseassets.shapes.CircularShape;
 import com.popalay.tutors.Tutors;
-import com.popalay.tutors.TutorsBuilder;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,12 +36,13 @@ public class MainActivity extends AppCompatActivity {
     Map<String, Fragment> fragments = new HashMap<>();
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final BottomNavigationView bottomNavigationView = (BottomNavigationView)
+        bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -76,6 +85,53 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        showHint();
+    }
+
+    private void showHint() {
+        final View actionBuy = findViewById(R.id.action_buying);
+        SimpleHintContentHolder hintBlock = new SimpleHintContentHolder.Builder(actionBuy.getContext())
+                .setContentTitle("Need to sell awesome stuff? ")
+                .setContentText("Looking to make an awesome sale. Here you come! In 7s the deal is done!")
+                .build();
+        new HintCase(actionBuy.getRootView().getRootView())
+                .setTarget(actionBuy, new CircularShape(), HintCase.TARGET_IS_NOT_CLICKABLE)
+                .setBackgroundColor(getResources().getColor(R.color.bg_screen2))
+                .setShapeAnimators(new RevealCircleShapeAnimator(), ShapeAnimator.NO_ANIMATOR)
+                .setHintBlock(hintBlock, new FadeInContentHolderAnimator(), new SlideOutFromRightContentHolderAnimator())
+                .setOnClosedListener(new HintCase.OnClosedListener() {
+                    @Override
+                    public void onClosed() {
+                        SimpleHintContentHolder secondHintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_selling).getContext())
+                                .setContentTitle("Buy awesome stuff!")
+                                .setContentText("Looking for awesome stuff to buy? Here they are! ")
+                                .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
+                                .build();
+                        new HintCase(findViewById(R.id.action_selling).getRootView().getRootView())
+                                .setTarget(findViewById(R.id.action_selling), new CircularShape())
+                                .setBackgroundColor(getResources().getColor(R.color.bg_screen3))
+                                .setShapeAnimators(ShapeAnimator.NO_ANIMATOR, new UnrevealCircleShapeAnimator())
+                                .setHintBlock(secondHintBlock, new SlideInFromRightContentHolderAnimator())
+                                .setOnClosedListener(new HintCase.OnClosedListener() {
+                                    @Override
+                                    public void onClosed() {
+                                        SimpleHintContentHolder thirdHintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_selling).getContext())
+                                                .setContentTitle("Buy awesome stuff!")
+                                                .setContentText("Looking for awesome stuff to buy? Here they are! ")
+                                                .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
+                                                .build();
+                                        new HintCase(findViewById(R.id.action_selling).getRootView().getRootView())
+                                                .setTarget(findViewById(R.id.action_selling), new CircularShape())
+                                                .setBackgroundColor(getResources().getColor(R.color.dot_dark_screen2))
+                                                .setShapeAnimators(ShapeAnimator.NO_ANIMATOR, new UnrevealCircleShapeAnimator())
+                                                .setHintBlock(thirdHintBlock, new SlideInFromRightContentHolderAnimator())
+                                                .show();
+                                    }
+                                })
+                                .show();
+                    }
+                })
+                .show();
     }
 
     private void toggleIcon(MenuItem item) {

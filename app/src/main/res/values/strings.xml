@@ -43,6 +43,9 @@
     <string name="search_hint">Search and find awesome stuff</string>
     <string name="search">Search stuff</string>
     <string name="preparing">preparing data</string>
+    <string name="buying">Buying</string>
+    <string name="selling">Selling</string>
+    <string name="profile">Profile</string>
 
     <string-array name="categories">
         <item>Phones</item>
