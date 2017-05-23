@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +17,13 @@ import android.view.View;
 import com.afollestad.easyvideoplayer.EasyVideoCallback;
 import com.afollestad.easyvideoplayer.EasyVideoPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.adapters.ChatBaseAdapter;
 
 /**
  * Created by USER on 05/05/2017.
@@ -28,6 +34,7 @@ public class PostDetailActivity extends AppCompatActivity implements EasyVideoCa
     private EasyVideoPlayer player;
     private BottomSheetBehavior<View> bottomSheetBehavior;
     private boolean isSheetShown = false;
+    private RecyclerView chatRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,17 @@ public class PostDetailActivity extends AppCompatActivity implements EasyVideoCa
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        List<String> chats = new ArrayList<>();
+        chats.add("Larry");
+        chats.add("Elsie");
+        chats.add("Mabnor");
+        chats.add("Eric");
+        chats.add("Mabnor");
+        chats.add("Diane M");
+        //setup chats RecyclerView
+        chatRecyclerView = (RecyclerView) findViewById(R.id.chatsRecyclerView);
+        chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        chatRecyclerView.setAdapter(new ChatBaseAdapter(this, chats));
         // Grabs a reference to the player view
         player = (EasyVideoPlayer) findViewById(R.id.player);
         player.setRestartDrawableRes(R.drawable.ic_refresh);

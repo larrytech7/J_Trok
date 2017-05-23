@@ -30,13 +30,13 @@
             android:layout_gravity="bottom">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/commentsRecyclerView"
+                android:id="@+id/chatsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:reverseLayout="false"
                 app:layoutManager="LinearLayoutManager"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-                tools:listitem="@layout/news_item_layout" />
+                tools:listitem="@layout/item_chat_incoming" />
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/card_height"
@@ -60,9 +60,7 @@
                     android:layout_marginLeft="@dimen/rightMargin"
                     android:layout_marginStart="@dimen/rightMargin"
                     android:background="@drawable/background_border"
-                    android:linksClickable="true"
-                    android:textColorLink="@color/bg_screen1"
-                    android:autoLink="all"
+                    android:padding="3dp"
                     android:hint="@string/chat_hint"/>
 <!--                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/send_chat"

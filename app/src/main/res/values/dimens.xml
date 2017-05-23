@@ -19,4 +19,9 @@
     <dimen name="textview_margin">25dp</dimen>
     <dimen name="card_height">50dp</dimen>
     <dimen name="rightMargin">50dp</dimen>
+    <dimen name="chat_photo_width">120dp</dimen>
+    <dimen name="chat_photo_height">120dp</dimen>
+    <dimen name="margin_50">50dp</dimen>
+    <dimen name="size_70">70dp</dimen>
+    <dimen name="size_80">80dp</dimen>
 </resources>

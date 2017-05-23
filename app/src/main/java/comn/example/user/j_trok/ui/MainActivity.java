@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -30,6 +29,7 @@ import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.fragments.BuyingFragment;
 import comn.example.user.j_trok.fragments.ProfileFragment;
 import comn.example.user.j_trok.fragments.SellingFragment;
+import comn.example.user.j_trok.utility.PrefManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,12 +86,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showHint();
-            }
-        }, 500);
+        boolean showHints = new PrefManager(this).getShouldShowHints();
+        if (showHints)
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showHint();
+                }
+            }, 500);
     }
 
     private void showHint() {
@@ -135,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                                                 .setShapeAnimators(new RevealCircleShapeAnimator(), new UnrevealCircleShapeAnimator())
                                                 .setHintBlock(thirdHintBlock, new SlideInFromRightContentHolderAnimator())
                                                 .show();
+                                        new PrefManager(MainActivity.this).setShouldShowHints(false);
                                     }
                                 })
                                 .show();
