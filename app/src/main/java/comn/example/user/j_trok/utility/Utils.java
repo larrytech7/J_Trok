@@ -23,6 +23,9 @@ public class Utils {
     private static final String TAG = Utils.class.getName();
     public static final String PREF_RECORDING_DURATION = "RECORDING_DURATION";
     public static final String PREF_SHOW_HINTS = "SHOW_HINTS_PREF";
+    public static final String ANALYTICS_PARAM__TUTORIAL_ID = "TUTORIAL_ID";
+    public static final String ANALYTICS_PARAM__TUTORIAL_NAME = "HOME_TUTORIAL";
+    public static final String ANALYTICS_PARAM__TUTORIAL_CATEGORY = "TUTORIALS";
 
     public static void deleteFilesAtPath( File parentDir )
     {

@@ -1,5 +1,10 @@
 package comn.example.user.j_trok.utility.videocompression;
 
+/**
+ * @Author By Jorge E. Hernandez (@lalongooo) 2015
+ * @Co-Author Akah Larry (@larrytech7) 2017
+ */
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.media.MediaCodec;
@@ -9,7 +14,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -150,7 +154,8 @@ public class MediaController {
      * @param path source file to compress
      * @param dest destination directory to put result
      */
-    public void scheduleVideoConvert(String path, File dest) {
+
+public void scheduleVideoConvert(String path, File dest) {
         startVideoConvertFromQueue(path, dest);
     }
 

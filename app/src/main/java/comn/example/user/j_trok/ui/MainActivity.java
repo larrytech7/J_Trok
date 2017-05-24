@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.joanfuentes.hintcase.HintCase;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
 import com.joanfuentes.hintcaseassets.contentholderanimators.SlideInFromRightContentHolderAnimator;
@@ -30,6 +31,7 @@ import comn.example.user.j_trok.fragments.BuyingFragment;
 import comn.example.user.j_trok.fragments.ProfileFragment;
 import comn.example.user.j_trok.fragments.SellingFragment;
 import comn.example.user.j_trok.utility.PrefManager;
+import comn.example.user.j_trok.utility.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
     private BottomNavigationView bottomNavigationView;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -138,6 +142,12 @@ public class MainActivity extends AppCompatActivity {
                                                 .setHintBlock(thirdHintBlock, new SlideInFromRightContentHolderAnimator())
                                                 .show();
                                         new PrefManager(MainActivity.this).setShouldShowHints(false);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Utils.ANALYTICS_PARAM__TUTORIAL_ID);
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, Utils.ANALYTICS_PARAM__TUTORIAL_NAME);
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, Utils.ANALYTICS_PARAM__TUTORIAL_CATEGORY);
+                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+                                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE, bundle);
                                     }
                                 })
                                 .show();

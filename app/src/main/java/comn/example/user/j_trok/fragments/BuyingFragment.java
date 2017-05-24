@@ -4,11 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -47,7 +45,6 @@ import comn.example.user.j_trok.adapters.MyAdapter;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
 import comn.example.user.j_trok.utility.videocompression.MediaController;
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -216,21 +213,30 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 String filePath = data.getDataString();
                 Toast.makeText(getActivity(), "Saved to: " + filePath, Toast.LENGTH_LONG).show();
                 //compress video at this point
-                new AsyncTask<Uri, String, Boolean>(){
+                new AsyncTask<Uri, Integer, Boolean>(){
                     private ProgressDialog mPrograssDialog;
 
                     @Override
                     protected Boolean doInBackground(Uri... paths) {
                         Log.e(LOGTAG, "path: "+paths[0].getPath());
+                        int progress = 0;
                         boolean converted = false;
                         try {
                             converted = MediaController.getInstance()
                                     .convertVideo(Utils.getFilePath(getActivity(), paths[0]),
                                             new File(Utils.getVideoDirPath(getActivity())));
+                            publishProgress(++progress);
                         } catch (URISyntaxException e) {
                             e.printStackTrace();
                         }
                         return converted;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        super.onProgressUpdate(values);
+                        //Update progressdialog
+                        mPrograssDialog.setProgress(values[0] * 10);
                     }
 
                     @Override

@@ -9,7 +9,7 @@
 
 
 <ImageView
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="250dp"
     android:src="@drawable/image"
     android:layout_marginTop="@dimen/margin_30"/>
@@ -24,7 +24,7 @@
         android:layout_marginLeft="@dimen/margin_30"
         android:layout_marginBottom="@dimen/margin_10">
 
-        <Button
+        <!--<Button
             android:id="@+id/twitter_sign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,25 +37,15 @@
             android:textColor="@color/white"
             android:background="@drawable/round_border"
             android:backgroundTint="@color/twitter_blue"
-            android:onClick="gotoHome"/>
+            android:onClick="gotoHome"/>-->
 
-        <Button
-            android:id="@+id/google_sign"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/buttonGoogleSignIn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginLeft="@dimen/margin_30"
-            android:layout_marginRight="@dimen/margin_30"
-            android:elevation="60dp"
-            android:text="Google"
-            android:textSize="@dimen/normal_font"
-            android:textColor="@color/white"
-            android:background="@drawable/round_border"
-            android:backgroundTint="@color/google_plus_red"
-            android:onClick="gotoHome"/>
+            android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/facebook_sign"
+            android:id="@+id/buttonFacebookSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
