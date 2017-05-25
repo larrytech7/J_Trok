@@ -26,6 +26,10 @@ public class Utils {
     public static final String ANALYTICS_PARAM__TUTORIAL_ID = "TUTORIAL_ID";
     public static final String ANALYTICS_PARAM__TUTORIAL_NAME = "HOME_TUTORIAL";
     public static final String ANALYTICS_PARAM__TUTORIAL_CATEGORY = "TUTORIALS";
+    public static final String CURRENT_USER = "CURRENT_USER";
+    public static final String ANALYTICS_PARAM__LAUNCH_ID = "LAUNCH_ID";
+    public static final String ANALYTICS_PARAM__LAUNCH_NAME = "APP_LAUNCH_NAME";
+    public static final String ANALYTICS_PARAM__LAUNCH_CATEGORY = "APP_LUNCH_CATEGORY";
 
     public static void deleteFilesAtPath( File parentDir )
     {

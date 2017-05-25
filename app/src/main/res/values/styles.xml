@@ -16,8 +16,8 @@
     </style>
     <style name="appNameTextStyle" parent="MaterialStyledDialogs_TitleHeader">
         <item name="android:alpha">0.9</item>
-        <item name="android:textSize">@dimen/margin_50</item>
-        <item name="android:textColor">@color/bg_screen1</item>
+        <item name="android:textSize">50sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

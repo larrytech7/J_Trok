@@ -6,6 +6,7 @@
     android:id="@+id/activity_registration_form"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_screen1"
     tools:context="comn.example.user.j_trok.ui.RegistrationActivity">
 
 
@@ -31,7 +32,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom"
-        android:elevation="10dp"
+        android:paddingRight="@dimen/margin_30"
+        android:paddingEnd="@dimen/margin_30"
+        android:paddingLeft="@dimen/margin_30"
+        android:paddingStart="@dimen/margin_30"
         android:layout_marginRight="@dimen/margin_30"
         android:layout_marginLeft="@dimen/margin_30"
         android:layout_marginBottom="@dimen/margin_10">

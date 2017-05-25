@@ -38,10 +38,6 @@ public class IntroSliderActivity extends AppCompatActivity {
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
-        if (!prefManager.isFirstTimeLaunch()) {
-            launchHomeScreen();
-            finish();
-        }
 
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
@@ -123,7 +119,7 @@ public class IntroSliderActivity extends AppCompatActivity {
 
     private void launchHomeScreen() {
         prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(IntroSliderActivity.this, RegistrationActivity.class)); //to be changed
+        startActivity(new Intent(this, RegistrationActivity.class)); //to be changed
         finish();
     }
 
