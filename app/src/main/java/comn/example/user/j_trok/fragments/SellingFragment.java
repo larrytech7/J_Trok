@@ -4,6 +4,7 @@ package comn.example.user.j_trok.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,19 +14,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialcamera.MaterialCamera;
+import com.google.firebase.auth.FirebaseUser;
 import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.IOException;
 
-import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.Utils;
 
-import static android.R.attr.data;
 import static android.app.Activity.RESULT_OK;
 
 
@@ -36,18 +37,33 @@ public class SellingFragment extends Fragment {
 
     private static final int CAMERA_RQ_IMAGE = 400;
     private Unbinder unbinder;
+    User mAuthenticatedUser;
 
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    public static SellingFragment newInstance() {
+    public static SellingFragment newInstance(FirebaseUser user) {
         SellingFragment fragment = new SellingFragment();
+        User muser = new User();
+        muser.setUserEmail(user.getEmail());
+        muser.setUserName(user.getDisplayName());
+        muser.setUserCountry("");
+        muser.setUserCity("");
+        muser.setUserId(user.getUid());
+        muser.setUserProfilePhoto(user.getPhotoUrl().toString());
+
+        Bundle args = new Bundle();
+        args.putSerializable(Utils.CURRENT_USER, muser);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null && mAuthenticatedUser == null){
+               mAuthenticatedUser = (User) getArguments().getSerializable(Utils.CURRENT_USER);
+        }
     }
 
 
@@ -95,5 +111,17 @@ public class SellingFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Utils.CURRENT_USER, mAuthenticatedUser);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
     }
 }

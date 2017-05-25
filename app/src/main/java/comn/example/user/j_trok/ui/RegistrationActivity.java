@@ -3,10 +3,8 @@ package comn.example.user.j_trok.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -24,6 +22,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -35,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.utility.Utils;
 
 public class RegistrationActivity extends AppCompatActivity  implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -83,13 +83,17 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                // ...
+                Toast.makeText(RegistrationActivity.this,
+                        getString(R.string.com_facebook_smart_login_confirmation_cancel),
+                        Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
+                Toast.makeText(RegistrationActivity.this,
+                        getString(R.string.login_error, error.getMessage()),
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -107,7 +111,7 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
+                            goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -118,6 +122,12 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
                     }
                 });
 
+    }
+
+    private void goToHome(){
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 
     @OnClick(R.id.buttonGoogleSignIn)
@@ -161,10 +171,11 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d(TAG, "User: "+user.getEmail());
+                            goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(RegistrationActivity.this, "Authentication failed.",
+                            Toast.makeText(RegistrationActivity.this, getString(R.string.login_error, "Try again, please."),
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -175,5 +186,8 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(TAG, "Connection to GoogleAPI : failure =>"+ connectionResult.getErrorMessage());
+        Toast.makeText(RegistrationActivity.this, getString(R.string.login_error, "Connection to google lost."),
+                Toast.LENGTH_SHORT).show();
     }
+
 }

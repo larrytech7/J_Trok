@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -24,6 +25,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.google.firebase.auth.FirebaseUser;
 import com.popalay.tutors.TutorialListener;
 import com.popalay.tutors.Tutors;
 import com.popalay.tutors.TutorsBuilder;
@@ -37,11 +39,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.adapters.MyAdapter;
+import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
 import comn.example.user.j_trok.utility.videocompression.MediaController;
@@ -57,9 +61,23 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
     private SearchBox search;
+    private User mAuthenticatedUser;
+    @BindView(R.id.searchbox)
+    public SearchBox searchBox;
 
-    public static BuyingFragment newInstance() {
+    public static BuyingFragment newInstance(FirebaseUser user) {
         BuyingFragment fragment = new BuyingFragment();
+        User muser = new User();
+        muser.setUserEmail(user.getEmail());
+        muser.setUserName(user.getDisplayName());
+        muser.setUserCountry("");
+        muser.setUserCity("");
+        muser.setUserId(user.getUid());
+        muser.setUserProfilePhoto(user.getPhotoUrl().toString());
+
+        Bundle args = new Bundle();
+        args.putSerializable(Utils.CURRENT_USER, muser);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -67,7 +85,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.deleteEmptyVideos(getActivity());
-
+        if (getArguments() != null && mAuthenticatedUser == null){
+            mAuthenticatedUser = (User) getArguments().getSerializable(Utils.CURRENT_USER);
+        }
     }
 
     @Override
@@ -76,6 +96,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_buy, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        //configure recycler view
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -92,7 +113,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
             search.addSearchable(option);
         }
         search.setAnimateDrawerLogo(true);
-        search.setLogoText(getString(R.string.search));
+        search.setLogoText(getString(R.string.search, mAuthenticatedUser.getUserName()));
         search.setLogoTextColor(R.color.bg_screen1);
         //search.setMenuVisibility(SearchBox.GONE);
         search.enableVoiceRecognition(getActivity());
@@ -331,4 +352,15 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         Toast.makeText(getActivity(), "Clicked: "+searchResult.toString(), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Utils.CURRENT_USER, mAuthenticatedUser);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
+    }
 }

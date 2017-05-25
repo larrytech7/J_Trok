@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.joanfuentes.hintcase.HintCase;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
 import com.joanfuentes.hintcaseassets.contentholderanimators.SlideInFromRightContentHolderAnimator;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Iterator<Map.Entry<String, View>> iterator;
     private BottomNavigationView bottomNavigationView;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
+        mAuth = FirebaseAuth.getInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -77,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         fragments = new HashMap<>();
-        fragments.put("selling", SellingFragment.newInstance());
-        fragments.put("buying", BuyingFragment.newInstance());
-        fragments.put("profile", ProfileFragment.newInstance());
+        fragments.put("selling", SellingFragment.newInstance(mAuth.getCurrentUser()));
+        fragments.put("buying", BuyingFragment.newInstance(mAuth.getCurrentUser()));
+        fragments.put("profile", ProfileFragment.newInstance(mAuth.getCurrentUser()));
         //Manually displaying the first fragment - one time only
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_layout, fragments.get("buying"), "buying")
