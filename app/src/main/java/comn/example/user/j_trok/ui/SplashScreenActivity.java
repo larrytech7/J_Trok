@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import comn.example.user.j_trok.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private TextView sloganTextView;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         sloganTextView = (TextView) findViewById(R.id.textViewSlogan);
-
+        mAuth = FirebaseAuth.getInstance();
         new CountDownTimer(3000, 1000){
 
             int i = 7;
@@ -39,4 +44,19 @@ public class SplashScreenActivity extends AppCompatActivity {
         }.start();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null){
+            //TODO: USER is connected and logged-in, go to Home
+            Intent intent = new Intent(SplashScreenActivity.this,IntroSliderActivity.class);
+            //startActivity(intent);
+            //SplashScreenActivity.this.finish();
+            Log.d("SplashScreen", "User connected on "+currentUser.getProviderId());
+        }else{
+            //TODO: Continue to login Screen
+        }
+    }
 }

@@ -73,4 +73,8 @@
         <item>Art</item>
         <item>Sport</item>
     </string-array>
+
+    <string name="fb_login_protocol_scheme">fb1643272769025679</string>
+    <string name="facebook_app_id" translatable="false">1643272769025679</string>
+
 </resources>
