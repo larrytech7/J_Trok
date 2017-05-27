@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import comn.example.user.j_trok.R;
-import comn.example.user.j_trok.adapters.MyAdapter;
+import comn.example.user.j_trok.adapters.FeedsAdapter;
 import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
@@ -55,7 +55,6 @@ import static android.app.Activity.RESULT_OK;
 public class BuyingFragment extends Fragment implements TutorialListener, SearchBox.SearchListener {
 
     private static final String LOGTAG = "BuyingFragment";
-    private RecyclerView recyclerView;
     private final static int CAMERA_RQ_VIDEO = 6969;
     private Unbinder unbinder;
     private Tutors tutors;
@@ -64,6 +63,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private User mAuthenticatedUser;
     @BindView(R.id.searchbox)
     public SearchBox searchBox;
+    @BindView(R.id.recycler_view)
+    public RecyclerView recyclerView;
 
     public static BuyingFragment newInstance(FirebaseUser user) {
         BuyingFragment fragment = new BuyingFragment();
@@ -97,12 +98,11 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         View rootView = inflater.inflate(R.layout.fragment_buy, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         //configure recycler view
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-        MyAdapter adapter = new MyAdapter(new String[]{"Author one", "Author two", "Author three", "Author four", "Author five"});
+        FeedsAdapter adapter = new FeedsAdapter(new String[]{"Author one", "Author two", "Author three", "Author four", "Author five"});
         recyclerView.setAdapter(adapter);
 
         //configure search
@@ -361,6 +361,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
+        if (savedInstanceState != null)
+            mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
     }
 }

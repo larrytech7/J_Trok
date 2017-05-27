@@ -76,6 +76,8 @@
         <item>Sport</item>
     </string-array>
 
+    <string name="timeinterval" formatted="false" translatable="false">%d %s</string>
+
     <string name="fb_login_protocol_scheme">fb1643272769025679</string>
     <string name="facebook_app_id" translatable="false">1643272769025679</string>
     <string name="login_error">Login error! %s</string>

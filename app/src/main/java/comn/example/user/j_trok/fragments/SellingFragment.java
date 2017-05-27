@@ -122,6 +122,7 @@ public class SellingFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
+        if (savedInstanceState != null)
+            mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
     }
 }

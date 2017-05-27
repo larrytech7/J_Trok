@@ -16,6 +16,8 @@ import android.view.View;
 
 import com.afollestad.easyvideoplayer.EasyVideoCallback;
 import com.afollestad.easyvideoplayer.EasyVideoPlayer;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.adapters.ChatBaseAdapter;
+import comn.example.user.j_trok.models.Chat;
+import comn.example.user.j_trok.models.User;
+import comn.example.user.j_trok.utility.Utils;
 
 /**
  * Created by USER on 05/05/2017.
@@ -35,6 +40,7 @@ public class PostDetailActivity extends AppCompatActivity implements EasyVideoCa
     private BottomSheetBehavior<View> bottomSheetBehavior;
     private boolean isSheetShown = false;
     private RecyclerView chatRecyclerView;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +53,15 @@ public class PostDetailActivity extends AppCompatActivity implements EasyVideoCa
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        List<String> chats = new ArrayList<>();
-        chats.add("Larry");
-        chats.add("Elsie");
-        chats.add("Mabnor");
-        chats.add("Eric");
-        chats.add("Mabnor");
-        chats.add("Diane M");
+        firebaseAuth = FirebaseAuth.getInstance();
+        User user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
+
         //setup chats RecyclerView
+        FirebaseDatabase qDatabase = FirebaseDatabase.getInstance();
         chatRecyclerView = (RecyclerView) findViewById(R.id.chatsRecyclerView);
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        chatRecyclerView.setAdapter(new ChatBaseAdapter(this, chats));
+        chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
+                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/feed_id/chats/"), user,this));
         // Grabs a reference to the player view
         player = (EasyVideoPlayer) findViewById(R.id.player);
         player.setRestartDrawableRes(R.drawable.ic_refresh);

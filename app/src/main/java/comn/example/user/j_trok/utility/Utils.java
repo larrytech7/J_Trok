@@ -9,10 +9,18 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.models.User;
 
 /**
  * Created by Larry Akah on 5/19/17.
@@ -30,6 +38,40 @@ public class Utils {
     public static final String ANALYTICS_PARAM__LAUNCH_ID = "LAUNCH_ID";
     public static final String ANALYTICS_PARAM__LAUNCH_NAME = "APP_LAUNCH_NAME";
     public static final String ANALYTICS_PARAM__LAUNCH_CATEGORY = "APP_LUNCH_CATEGORY";
+
+    /**
+     * Get simple time elapsed and represent as human readable
+     * @param c context to fetch string resources
+     * @param previousTimestamp previous timestamp in the past
+     * @return string time for elapsed time since @param previousTimestamp
+     */
+    public static String getTimeDifference(Context  c, long previousTimestamp ){
+        long currentTimeStamp = System.currentTimeMillis();
+
+        long diff = Math.abs(currentTimeStamp - previousTimestamp); //avoid negative values however
+        if (diff > 86 * Math.pow(10,6))
+            return SimpleDateFormat.getDateTimeInstance().format(new Date(previousTimestamp));
+        //now do calculations and round up to nearest second, minute or hour
+        double intervalInSeconds = diff / Math.pow(10, 6); //convert to seconds
+        if (intervalInSeconds < 60)
+            return c.getString(R.string.timeinterval, Math.round(intervalInSeconds), "s"); //time in seconds
+        if (intervalInSeconds < 3600)
+            return c.getString(R.string.timeinterval, Math.round((intervalInSeconds / 60 )), "m"); //time in minutes
+        if (intervalInSeconds > 3600)
+            return c.getString(R.string.timeinterval, Math.round((intervalInSeconds / 3600 )), "h"); //time in hours
+        return SimpleDateFormat.getDateTimeInstance().format(new Date(previousTimestamp));
+    }
+
+    public static User getUserConfig(@NonNull  FirebaseUser user){
+        User muser = new User();
+        muser.setUserEmail(user.getEmail());
+        muser.setUserName(user.getDisplayName());
+        muser.setUserCountry("");
+        muser.setUserCity("");
+        muser.setUserId(user.getUid());
+        muser.setUserProfilePhoto(user.getPhotoUrl().toString());
+        return muser;
+    }
 
     public static void deleteFilesAtPath( File parentDir )
     {
