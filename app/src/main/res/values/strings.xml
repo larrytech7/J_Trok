@@ -8,14 +8,14 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">7Sel</string>
-    <string name="slide_1_desc">The easiest way to buy and sell online!</string>
+    <string name="slide_1_title">Peer-to-peer</string>
+    <string name="slide_1_desc">The fastest way to buy or sell amongst peers</string>
 
-    <string name="slide_2_title">Digitizing trade by barter</string>
-    <string name="slide_2_desc">Trade with people all over the world!</string>
+    <string name="slide_2_title">Connecting peers via trade</string>
+    <string name="slide_2_desc">Exchange with peers around the globe. Trust us with the heavy lifting</string>
 
-    <string name="slide_3_title">Great Discounts</string>
-    <string name="slide_3_desc">Negotiate and get the best deals ever!</string>
+    <string name="slide_3_title">Making Awesome sales</string>
+    <string name="slide_3_desc">Get the best deals ever in 10s! Only from your peers</string>
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
