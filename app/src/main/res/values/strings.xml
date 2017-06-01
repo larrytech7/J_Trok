@@ -44,7 +44,7 @@
     <string name="message_sell">Have awesome stuff to sell? Sell your stuff in 7 seconds. It starts with this button!</string>
     <string name="search_hint">Quickly search for cool stuff</string>
     <string name="search">%s, quickly find stuff here</string>
-    <string name="preparing">preparing data</string>
+    <string name="preparing">preparing </string>
     <string name="buying">Buying</string>
     <string name="selling">Selling</string>
     <string name="profile">Profile</string>
@@ -57,7 +57,7 @@
         <item>Books</item>
         <item>Android</item>
         <item>IOS</item>
-        <item>Clothing</item>
+        <item>Fashion | Clothing</item>
         <item>Chairs</item>
         <item>Beverages</item>
         <item>Drinks</item>
@@ -81,5 +81,10 @@
     <string name="fb_login_protocol_scheme">fb1643272769025679</string>
     <string name="facebook_app_id" translatable="false">1643272769025679</string>
     <string name="login_error">Login error! %s</string>
+    <string name="upload_error">Error uploading thumbnail. Please try again</string>
+    <string name="publishing">Publishing</string>
+    <string name="uploading_thumbs">Uploading thumbs</string>
+    <string name="error_uploading">Error uploading</string>
+    <string name="uploaded">Published</string>
 
 </resources>

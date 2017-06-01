@@ -2,15 +2,19 @@ package comn.example.user.j_trok.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,18 +29,28 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.popalay.tutors.TutorialListener;
 import com.popalay.tutors.Tutors;
 import com.popalay.tutors.TutorsBuilder;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -45,6 +59,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.adapters.FeedsAdapter;
+import comn.example.user.j_trok.models.TradePost;
 import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
@@ -65,6 +80,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public SearchBox searchBox;
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
+    private FirebaseStorage firebaseStorage;
+    private FirebaseDatabase firebaseDatabase;
 
     public static BuyingFragment newInstance(FirebaseUser user) {
         BuyingFragment fragment = new BuyingFragment();
@@ -105,6 +122,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         FeedsAdapter adapter = new FeedsAdapter(new String[]{"Author one", "Author two", "Author three", "Author four", "Author five"});
         recyclerView.setAdapter(adapter);
 
+        //firebase
+        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         //configure search
         search = (SearchBox) rootView.findViewById(R.id.searchbox);
         String[] categories = getResources().getStringArray(R.array.categories);
@@ -177,7 +197,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private void showPublishDialog(final String filePath){
 
         View view = View.inflate(getActivity(), R.layout.publish_video_post, null);
-        String[] categories = getResources().getStringArray(R.array.categories);
+        final String[] categories = getResources().getStringArray(R.array.categories);
+        final List<String> selectedCategories = new ArrayList<>();
+
         final ChipCloud categoryChip = (ChipCloud) view.findViewById(R.id.category_chip_cloud);
         new ChipCloud.Configure()
                 .chipCloud(categoryChip)
@@ -187,12 +209,14 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         .chipListener(new ChipListener() {
             @Override
             public void chipSelected(int i) {
-                //TODO: SAVE VALUE of selected tag
+                // SAVE VALUE of selected tag
+                selectedCategories.add(categories[i]);
             }
 
             @Override
             public void chipDeselected(int i) {
-                //TODO: Remove value from list of selected tags
+                //Remove value from list of selected tags
+                selectedCategories.remove(categories[i]);
             }
         }).build();
         new MaterialStyledDialog.Builder(getActivity())
@@ -207,9 +231,28 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //TODO: collect values and publish to firebase
-                        String value = ((EditText) dialog.findViewById(R.id.postTitleEditText)).getText().toString();
-                        Toast.makeText(getActivity(), String.format("title %s file: %s", value, filePath), Toast.LENGTH_LONG).show();
+                        // collect values and publish to firebase
+                        String pTitle = ((EditText) dialog.findViewById(R.id.postTitleEditText)).getText().toString();
+                        String pDesc = ((EditText) dialog.findViewById(R.id.postDescEditText)).getText().toString();
+                        String pPrice = ((EditText) dialog.findViewById(R.id.priceEditTextView)).getText().toString();
+                        String pLocation = ((EditText) dialog.findViewById(R.id.locationEditTextView)).getText().toString();
+                        if (!TextUtils.isEmpty(pTitle) && !TextUtils.isEmpty(pPrice)) {
+
+                            TradePost tradePost = new TradePost();
+                            tradePost.setTradeNameTitle(pTitle);
+                            tradePost.setTradeDescription(pDesc);
+                            tradePost.setTradeAmount(Long.parseLong(pPrice));
+                            tradePost.setTradeLocation(pLocation);
+                            tradePost.setTags(selectedCategories);
+                            tradePost.setVideoThumbnailUrl(filePath); //temporal filepath
+                            tradePost.setTradeVideoUrl(filePath);
+                            publishPost(tradePost);
+                        }else{
+                            //publish error,warning about missing fields
+                            Toast.makeText(getContext(), getString(R.string.mcam_error), Toast.LENGTH_SHORT).show();
+                            dialog.show();
+
+                        }
                     }
                 })
                 .setNegativeText(getString(R.string.cancel))
@@ -221,6 +264,76 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 })
                 .setCancelable(false)
                 .show();
+    }
+
+    /**
+     * Upload post resource to firebase
+     * TODO: Task needs to be moved to background
+     * @param tradePost
+     */
+    private void publishPost(final TradePost tradePost) {
+        //create video thumbnail and upload post
+        try {
+            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage(getString(R.string.publishing));
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+
+            //configure tradepost author
+            tradePost.setAuthorId(mAuthenticatedUser.getUserId());
+            tradePost.setAuthorName(mAuthenticatedUser.getUserName());
+            tradePost.setAuthorProfileImage(mAuthenticatedUser.getUserProfilePhoto());
+            tradePost.setTradeTime(System.currentTimeMillis());
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ThumbnailUtils.createVideoThumbnail(tradePost.getVideoThumbnailUrl(),
+                    MediaStore.Video.Thumbnails.MICRO_KIND)
+                    .compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            final StorageReference storageReference = firebaseStorage.getReference()
+                    .child(Utils.STORAGE_REF_VIDEO_THUMBS+File.separatorChar+Utils.getFileName(tradePost.getVideoThumbnailUrl())+".JPG");
+            final StorageTask<UploadTask.TaskSnapshot> thumbsTask = storageReference.putBytes(byteArrayOutputStream.toByteArray()).addOnCompleteListener(getActivity(), new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isComplete() & task.isSuccessful()) {
+                                //start uploading video file. Get url to stored thumbnail and get set to the model
+                                tradePost.setVideoThumbnailUrl(task.getResult().getDownloadUrl().toString());
+
+                            } else {
+                                //Notify on Error
+                                Utils.showMessage(getActivity(), getString(R.string.upload_error));
+                                mProgressDialog.dismiss();
+                            }
+                        }
+                    });
+            Uri videoUpload = Uri.fromFile(new File(tradePost.getTradeVideoUrl()));
+            storageReference.child(Utils.STORAGE_REF_VIDEO).putFile(videoUpload).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    //upload video after thumbsTask has completed
+                    if (thumbsTask.isComplete()){
+                        if (task.isComplete() && task.isSuccessful()) {
+                            tradePost.setTradeVideoUrl(task.getResult().getDownloadUrl().toString());
+                            DatabaseReference ref = firebaseDatabase.getReference().child(Utils.DATABASE_TRADES).push();
+                            String key = ref.getKey();
+                            tradePost.setTradePostId(key);
+                            ref.setValue(tradePost);
+                            Utils.showMessage(getActivity(), getString(R.string.uploaded));
+                        }else{
+                            Utils.showMessage(getActivity(), getString(R.string.error_uploading));
+                        }
+                    }else{
+                      Utils.showMessage(getActivity(), getString(R.string.uploading_thumbs));
+                    }
+                    mProgressDialog.dismiss();
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
     }
 
     @Override
@@ -257,7 +370,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                     protected void onProgressUpdate(Integer... values) {
                         super.onProgressUpdate(values);
                         //Update progressdialog
-                        mPrograssDialog.setProgress(values[0] * 10);
+                        Log.d(LOGTAG, "Video compression Progress ... "+values[0]);
+                        //mPrograssDialog.setProgress(values[0] * 10);
                     }
 
                     @Override
@@ -266,19 +380,21 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                         mPrograssDialog = new ProgressDialog(getActivity());
                         mPrograssDialog.setIndeterminate(true);
                         mPrograssDialog.setMessage(getString(R.string.preparing));
+                        mPrograssDialog.setCancelable(false);
+                        mPrograssDialog.setCanceledOnTouchOutside(false);
                         mPrograssDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                         mPrograssDialog.show();
                     }
 
                     @Override
                     protected void onPostExecute(Boolean isConverted) {
+                        mPrograssDialog.dismiss();
                         if (isConverted){
                             //log converted path
                             Log.d(LOGTAG, "Path: "+MediaController.cachedFile.getPath());
-                            //TODO. upload this version of the file to the cloud. Here'd be a suitable place to call the showPublishDialog method
+                            //upload this version of the file to the cloud. Here'd be a suitable place to call the showPublishDialog method
                             showPublishDialog(MediaController.cachedFile.getPath());
                         }
-                        mPrograssDialog.dismiss();
                         super.onPostExecute(isConverted);
                     }
                 }.execute(data.getData());

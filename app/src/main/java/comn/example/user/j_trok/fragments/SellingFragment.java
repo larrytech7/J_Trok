@@ -3,7 +3,9 @@ package comn.example.user.j_trok.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.afollestad.materialcamera.MaterialCamera;
 import com.google.firebase.auth.FirebaseUser;
 import com.iceteck.silicompressorr.SiliCompressor;
 
+import java.io.File;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -74,6 +77,15 @@ public class SellingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_sell, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(
+                Utils.getVideoDirPath(getActivity())+ File.separatorChar+"VIDEO_20170601_143338.mp4",
+                MediaStore.Video.Thumbnails.MICRO_KIND);
+        imageView.setImageBitmap(thumb);
     }
 
     @OnClick(R.id.btnValidate)

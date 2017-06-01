@@ -4,13 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,6 +22,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.models.User;
@@ -38,6 +43,9 @@ public class Utils {
     public static final String ANALYTICS_PARAM__LAUNCH_ID = "LAUNCH_ID";
     public static final String ANALYTICS_PARAM__LAUNCH_NAME = "APP_LAUNCH_NAME";
     public static final String ANALYTICS_PARAM__LAUNCH_CATEGORY = "APP_LUNCH_CATEGORY";
+    public static final String STORAGE_REF_VIDEO = "media/videos";
+    public static final String STORAGE_REF_VIDEO_THUMBS = "media/videothumbs";
+    public static final String DATABASE_TRADES = "trades";
 
     /**
      * Get simple time elapsed and represent as human readable
@@ -73,6 +81,37 @@ public class Utils {
         return muser;
     }
 
+    public static Bitmap retriveVideoThumbnail(String videoPath) throws Throwable
+    {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever mediaMetadataRetriever = null;
+        try
+        {
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            //if (Build.VERSION.SDK_INT >= 14)
+                mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
+            //else
+              //  mediaMetadataRetriever.setDataSource(videoPath);
+            bitmap = mediaMetadataRetriever.getFrameAtTime();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new Throwable(
+                    "Exception in retriveVideoFrameFromVideo(String videoPath)"
+                            + e.getMessage());
+
+        }
+        finally
+        {
+            if (mediaMetadataRetriever != null)
+            {
+                mediaMetadataRetriever.release();
+            }
+        }
+        return bitmap;
+    }
+
     public static void deleteFilesAtPath( File parentDir )
     {
         File[] files = parentDir.listFiles();
@@ -105,6 +144,11 @@ public class Utils {
     public static String getVideoDirPath( Context ctx )
     {
         return getSdCard().getAbsolutePath() + "/Android/data/" + ctx.getPackageName() + "/media/videos";
+    }
+
+    public static String getFileName(@NonNull String file){
+        File newfile = new File(file);
+        return newfile.isFile() ? newfile.getName() : null;
     }
 
     public static String getImageDirPath( Context ctx )
@@ -174,5 +218,9 @@ public class Utils {
 
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static void showMessage(Context activity, String s) {
+        Toast.makeText(activity, s, Toast.LENGTH_SHORT).show();
     }
 }

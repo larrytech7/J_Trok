@@ -19,6 +19,7 @@ public class TradePost implements Serializable {
     private String tradeDescription;
     private String tradeLocation;
     private long tradeTime; //time first posted
+    private String videoThumbnailUrl;
     private String tradeVideoUrl;
     private String tradeImageUrl;
     private List<String> tags;
@@ -121,5 +122,13 @@ public class TradePost implements Serializable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getVideoThumbnailUrl() {
+        return videoThumbnailUrl;
+    }
+
+    public void setVideoThumbnailUrl(String videoThumbnailUrl) {
+        this.videoThumbnailUrl = videoThumbnailUrl;
     }
 }
