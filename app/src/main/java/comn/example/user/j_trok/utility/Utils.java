@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -46,6 +45,9 @@ public class Utils {
     public static final String STORAGE_REF_VIDEO = "media/videos";
     public static final String STORAGE_REF_VIDEO_THUMBS = "media/videothumbs";
     public static final String DATABASE_TRADES = "trades";
+    public static final String ANALYTICS_PARAM_ARTICLE_SELL_CATEGORY = "ARTICLE_SELL_POSTED";
+    public static final String CUSTOM_EVENT_ARTICLE_PUBLISHED = "ARTICLE_PUBLISHED";
+    public static final String DATABASE_USERS = "users";
 
     /**
      * Get simple time elapsed and represent as human readable

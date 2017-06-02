@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -66,8 +67,11 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         viewHolder.chatDateTimeTextview.setText(Utils.getTimeDifference(context, model.getChatDateTime()));
 
         if (getItemViewType(position) == VIEW_TYPE_INCOMING)
-            Glide.with(context)
+            Picasso.with(context)
                     .load(model.getAuthorProfileImage())
+                    .fit()
+                    .placeholder(R.drawable.app_icon)
+                    .error(R.drawable.crescent_bottom)
                     .into(viewHolder.userChatImageView);
     }
 

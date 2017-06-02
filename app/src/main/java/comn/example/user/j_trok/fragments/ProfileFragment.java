@@ -2,22 +2,41 @@ package comn.example.user.j_trok.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.Utils;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -38,8 +57,11 @@ public class ProfileFragment extends Fragment {
     TextView phoneTextView;
     @BindView(R.id.aboutTextView)
     TextView aboutTextView;
-    private User mAuthenticatedUser;
+    @BindView(R.id.locationTextView)
+    TextView locationTextView;
 
+    private User mAuthenticatedUser;
+    private FirebaseDatabase firebaseDatabase;
 
     public static ProfileFragment newInstance(FirebaseUser user) {
         ProfileFragment fragment = new ProfileFragment();
@@ -75,7 +97,42 @@ public class ProfileFragment extends Fragment {
         usernameTextView.setText(mAuthenticatedUser.getUserName());
         emailTextView.setText(mAuthenticatedUser.getUserEmail());
         userCountryTextView.setText(mAuthenticatedUser.getUserCountry());
+
+        Picasso.with(getContext())
+                .load(mAuthenticatedUser.getUserProfilePhoto())
+                .placeholder(R.drawable.app_icon)
+                .error(R.drawable.crescent_bottom)
+                .into(profilePhotoImageView);
+
+        //firebase
+        firebaseDatabase = FirebaseDatabase.getInstance();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //attach real-time listener for the user's data in firebase
+        firebaseDatabase.getReference().child(Utils.DATABASE_USERS)
+                .child(mAuthenticatedUser.getUserId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        phoneTextView.setText(user.getUserPhoneNumber());
+                        aboutTextView.setText(user.getUserStatusText());
+                        locationTextView.setText(user.getUserCity());
+                        userCountryTextView.setText(user.getUserCity()+"-"+user.getUserCountry());
+                        salesTextView.setText(user.getSells());
+                        requestRequestTextView.setText(user.getBuys());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //databaseError.toException().printStackTrace();
+                    }
+                });
+
     }
 
     @Override
@@ -96,4 +153,102 @@ public class ProfileFragment extends Fragment {
         if (savedInstanceState != null)
             mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
     }
+
+    @OnClick(R.id.buttonEditContact)
+    public void editContact(){
+        //
+        new MaterialDialog.Builder(getContext())
+                .title(getString(R.string.phone_contact))
+                .backgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen1, null))
+                .icon(getResources().getDrawable(R.drawable.ic_contact_phone))
+                .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .inputType(InputType.TYPE_CLASS_PHONE)
+                .inputRange(9,15, ResourcesCompat.getColor(getResources(), R.color.google_plus_red, null))
+                .input(getString(R.string.update_contact), "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        Log.d("PORIFLE", ""+input);
+                    }
+                })
+                .positiveColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .positiveText(getString(R.string.update))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String contact = dialog.getInputEditText().getText().toString();
+                        Map<String, Object> update = new HashMap<>();
+                        update.put("userPhoneNumber", contact);
+                        firebaseDatabase.getReference().child(Utils.DATABASE_USERS)
+                                .child(mAuthenticatedUser.getUserId())
+                                .updateChildren(update);
+                    }
+                })
+                .show();
+    }
+
+    @OnClick(R.id.buttonEditLocation)
+    public void editLocation(){
+        new MaterialDialog.Builder(getContext())
+                .title(getString(R.string.location_hint))
+                .backgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen1, null))
+                .icon(getResources().getDrawable(R.drawable.ic_location))
+                .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputRange(2,255, ResourcesCompat.getColor(getResources(), R.color.google_plus_red, null))
+                .input(getString(R.string.update_location), "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        Log.d("PORIFLE", ""+input);
+                    }
+                })
+                .positiveColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .positiveText(getString(R.string.update))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String location = dialog.getInputEditText().getText().toString();
+                        //Seperate town from country
+                        String[] vals = location.split("[-]");
+                        Map<String, Object> update = new HashMap<>();
+                        update.put("userCity", vals.length > 1 ? vals[0] : location);
+                        update.put("userCountry", vals.length > 1 ? vals[1] : "");
+                        firebaseDatabase.getReference().child(Utils.DATABASE_USERS)
+                                .child(mAuthenticatedUser.getUserId())
+                                .updateChildren(update);
+                        Log.d("ProfileFragement", "Location: "+vals[0]);
+                    }
+                })
+                .show();
+    }
+    @OnClick(R.id.buttonEditStatus)
+    public void editStatus(){
+        new MaterialDialog.Builder(getContext())
+                .title(getString(R.string.about))
+                .backgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen1, null))
+                .icon(getResources().getDrawable(R.drawable.ic_status))
+                .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(getString(R.string.update_status), "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        Log.d("PORIFLE", ""+input);
+                    }
+                })
+                .positiveColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .positiveText(getString(R.string.update))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        String status = dialog.getInputEditText().getText().toString();
+                        Map<String, Object> update = new HashMap<>();
+                        update.put("userStatusText", status);
+                        firebaseDatabase.getReference().child(Utils.DATABASE_USERS)
+                                .child(mAuthenticatedUser.getUserId())
+                                .updateChildren(update);
+                    }
+                })
+                .show();
+    }
+
 }

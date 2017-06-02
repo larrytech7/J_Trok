@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -12,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import comn.example.user.j_trok.R;
-import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.PrefManager;
 import comn.example.user.j_trok.utility.Utils;
 
@@ -56,10 +54,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             FirebaseUser currentUser = mAuth.getCurrentUser();
             if (currentUser != null){
                 //USER is connected and logged-in, go to Home
-                //User fuser = new User(); //TODO. Configure this user
                 startIntent.setClass(this,MainActivity.class);
-                //startIntent.putExtra(Utils.CURRENT_USER, fuser);
-                Log.d("SplashScreen", "User connected on "+currentUser.getProviderId());
             }else{
                 //Proceed to login Screen
                 startIntent.setClass(this, RegistrationActivity.class);

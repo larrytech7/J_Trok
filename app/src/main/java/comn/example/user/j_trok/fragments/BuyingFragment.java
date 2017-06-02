@@ -30,7 +30,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,6 +48,8 @@ import com.quinny898.library.persistentsearch.SearchResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +86,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public RecyclerView recyclerView;
     private FirebaseStorage firebaseStorage;
     private FirebaseDatabase firebaseDatabase;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public static BuyingFragment newInstance(FirebaseUser user) {
         BuyingFragment fragment = new BuyingFragment();
@@ -125,6 +130,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         //firebase
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         //configure search
         search = (SearchBox) rootView.findViewById(R.id.searchbox);
         String[] categories = getResources().getStringArray(R.array.categories);
@@ -308,8 +314,10 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             }
                         }
                     });
-            Uri videoUpload = Uri.fromFile(new File(tradePost.getTradeVideoUrl()));
-            storageReference.child(Utils.STORAGE_REF_VIDEO).putFile(videoUpload).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            final InputStream videoStream = new FileInputStream(new File(tradePost.getTradeVideoUrl()));
+            //Uri videoUpload = Uri.fromFile(new File(tradePost.getTradeVideoUrl()));
+            firebaseStorage.getReference().child(Utils.STORAGE_REF_VIDEO)
+                    .putStream(videoStream).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     //upload video after thumbsTask has completed
@@ -319,7 +327,23 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             DatabaseReference ref = firebaseDatabase.getReference().child(Utils.DATABASE_TRADES).push();
                             String key = ref.getKey();
                             tradePost.setTradePostId(key);
-                            ref.setValue(tradePost);
+                            ref.setValue(tradePost).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Map<String, Object> update = new HashMap<>();
+                                    update.put("sells", mAuthenticatedUser.getSells()+1);
+                                    firebaseDatabase.getReference().child(Utils.DATABASE_USERS)
+                                            .child(mAuthenticatedUser.getUserId())
+                                            .updateChildren(update);
+                                    //Flag for new Event
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, tradePost.getTradePostId());
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, tradePost.getTradeNameTitle());
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, Utils.ANALYTICS_PARAM_ARTICLE_SELL_CATEGORY);
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+                                    mFirebaseAnalytics.logEvent(Utils.CUSTOM_EVENT_ARTICLE_PUBLISHED, bundle);
+                                }
+                            });
                             Utils.showMessage(getActivity(), getString(R.string.uploaded));
                         }else{
                             Utils.showMessage(getActivity(), getString(R.string.error_uploading));

@@ -16,7 +16,7 @@ public class User implements Serializable {
     private String userCountry;
     private String userStatusText;
     private int buys; //number of stuffs user has had to request to buy
-    private int sells; //number of stuffs, user has had to sell
+    private int sells; //number of stuffs, user has had to post for sell
     private String userPhoneNumber;
 
     public User() {
