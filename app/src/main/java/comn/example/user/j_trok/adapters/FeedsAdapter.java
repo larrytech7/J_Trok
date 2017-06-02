@@ -1,13 +1,15 @@
 package comn.example.user.j_trok.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.util.Pair;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -85,7 +87,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
     }
 
     @Override
-    protected void populateViewHolder(MyViewHolder viewHolder, final TradePost model, int position) {
+    protected void populateViewHolder(final MyViewHolder viewHolder, final TradePost model, int position) {
 
         Picasso.with(context)
                 .load(Uri.parse(model.getVideoThumbnailUrl()))
@@ -124,7 +126,19 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PostDetailActivity.class);
                 intent.putExtra(Utils.FEED_DETAIL_ID, model.getTradePostId());
-                v.getContext().startActivity(intent);
+
+                Pair[] pairs = new Pair[3];
+
+                pairs[0] = new Pair<View, String>(viewHolder.feedsImageView, "article_shared");
+                pairs[1] = new Pair<View, String>(viewHolder.mTextView, "username_shared");
+                pairs[2] = new Pair<View, String>(viewHolder.feedsAutorImageView, "profile_shared");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation((Activity)context, pairs);
+                    context.startActivity(intent, optionsCompat.toBundle());
+                }else{
+                    v.getContext().startActivity(intent);
+                }
             }
         });
         viewHolder.mCardView.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +146,18 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PostDetailActivity.class);
                 intent.putExtra(Utils.FEED_DETAIL_ID, model.getTradePostId());
-                v.getContext().startActivity(intent);
+                Pair[] pairs = new Pair[3];
+
+                pairs[0] = new Pair<View, String>(viewHolder.feedsImageView, "article_shared");
+                pairs[1] = new Pair<View, String>(viewHolder.mTextView, "username_shared");
+                pairs[2] = new Pair<View, String>(viewHolder.feedsAutorImageView, "profile_shared");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation((Activity)context, pairs);
+                    context.startActivity(intent, optionsCompat.toBundle());
+                }else{
+                    v.getContext().startActivity(intent);
+                }
             }
         });
     }

@@ -16,6 +16,7 @@
             android:layout_height="200dp"
             android:src="@drawable/selling3"
             android:scaleType="fitXY"
+            android:transitionName="article_shared"
             android:adjustViewBounds="true"/>
 
         <ImageView
@@ -46,6 +47,7 @@
             android:hint="@string/author_name"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
+            android:transitionName="username_shared"
             android:layout_gravity="bottom"/>
 
     </FrameLayout>
@@ -61,6 +63,7 @@
         android:layout_marginEnd="2dp"
         android:layout_marginTop="-25dp"
         android:src="@drawable/profile"
+        android:transitionName="profile_shared"
         android:elevation="5dp"/>
 
     <TextView

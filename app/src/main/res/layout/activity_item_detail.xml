@@ -28,6 +28,7 @@
                 app:autoPlay = "true"
                 app:autoLoop = "true"
                 app:setFullScreen = "false"
+                android:transitionName="article_shared"
                 app:fullScreenButtonEnabled = "true"
                 app:fullScreenButtonVisible = "true"/>
 
@@ -38,6 +39,7 @@
                 android:textSize="@dimen/normal_font"
                 android:textColor="@color/white"
                 android:hint="@string/author_name"
+                android:transitionName="username_shared"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="@dimen/margin_10"
@@ -52,6 +54,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginEnd="2dp"
+                android:transitionName="profile_shared"
                 android:layout_marginTop="@dimen/textfield_padding_bottom"
                 android:src="@drawable/profile"/>
 
