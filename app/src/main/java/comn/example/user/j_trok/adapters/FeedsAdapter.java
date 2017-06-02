@@ -1,20 +1,52 @@
 package comn.example.user.j_trok.adapters;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.models.TradePost;
+import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.ui.PostDetailActivity;
+import comn.example.user.j_trok.utility.Utils;
 
-public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
-    private String[] mDataset;
+public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapter.MyViewHolder> {
+
+    private Context context;
+    User mUser;
+
+    /**
+     * @param modelClass      Firebase will marshall the data at a location into an instance of a class that you provide
+     * @param modelLayout     This is the layout used to represent a single item in the list. You will be responsible for populating an
+     *                        instance of the corresponding view with the data from an instance of modelClass.
+     * @param viewHolderClass The class that hold references to all sub-views in an instance modelLayout.
+     * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location, using some
+     *                        combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
+     */
+    public FeedsAdapter(Class modelClass, int modelLayout, Class viewHolderClass, Query ref, Context ctx, User user) {
+        super(modelClass, modelLayout, viewHolderClass, ref);
+        this.context = ctx;
+        this.mUser = user;
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -25,44 +57,83 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         public CardView mCardView;
         @BindView(R.id.authorName)
         public TextView mTextView;
+        @BindView(R.id.feedsAuthorImageView)
+        ImageView feedsAutorImageView;
+        @BindView(R.id.priceTagTextView)
+        TextView priceTagTextView;
+        @BindView(R.id.feedsDateTextView)
+        TextView dateTextView;
+        @BindView(R.id.feedsImageView)
+        ImageView feedsImageView;
+        @BindView(R.id.likeButton)
+        ImageButton likeButton;
+        @BindView(R.id.commentButton)
+        ImageButton commentButton;
+        @BindView(R.id.shareButton)
+        ImageButton shareButton;
 
         public MyViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public FeedsAdapter(String[] myDataset) {
-        mDataset = myDataset;
-    }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public FeedsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_view, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-        return new MyViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
-
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PostDetailActivity.class);
-                v.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return super.getItemCount();
+    }
+
+    @Override
+    protected void populateViewHolder(MyViewHolder viewHolder, final TradePost model, int position) {
+
+        Picasso.with(context)
+                .load(Uri.parse(model.getVideoThumbnailUrl()))
+                .placeholder(R.drawable.selling3)
+                .resize(200, 200)
+                .into(viewHolder.feedsImageView);
+        Picasso.with(context)
+                .load(Uri.parse(model.getAuthorProfileImage()))
+                .resize(100,100)
+                .into(viewHolder.feedsAutorImageView);
+
+        viewHolder.mTextView.setText(String.format(Locale.ENGLISH, "By %s ", model.getAuthorName()));
+        viewHolder.priceTagTextView.setText(String.format(Locale.ENGLISH ,"%d %s", model.getTradeAmount(), model.getCurrency()));
+        viewHolder.dateTextView.setText(Utils.getTimeDifference(context, model.getTradeTime()));
+
+        //interaction listeners
+        viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String, Object> likeMap = new HashMap<>();
+                likeMap.put(mUser.getUserId(), model.getLikes().containsKey(mUser.getUserId()) ? null:
+                        new HashMap<String, Boolean>().put(mUser.getUserId(), true));
+                FirebaseDatabase.getInstance().getReference("trades")
+                        .child(model.getTradePostId()).child("likes")
+                        .updateChildren(likeMap);
+            }
+        });
+        viewHolder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = model.getTradePostId();
+            }
+        });
+        viewHolder.commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PostDetailActivity.class);
+                intent.putExtra(Utils.FEED_DETAIL_ID, model.getTradePostId());
+                v.getContext().startActivity(intent);
+            }
+        });
+        viewHolder.mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PostDetailActivity.class);
+                intent.putExtra(Utils.FEED_DETAIL_ID, model.getTradePostId());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 }

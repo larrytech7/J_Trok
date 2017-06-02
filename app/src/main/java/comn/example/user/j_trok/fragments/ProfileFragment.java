@@ -115,10 +115,14 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
-                        phoneTextView.setText(user.getUserPhoneNumber());
-                        aboutTextView.setText(user.getUserStatusText());
-                        locationTextView.setText(user.getUserCity());
-                        userCountryTextView.setText(user.getUserCity()+"-"+user.getUserCountry());
+                        try {
+                            phoneTextView.setText(user.getUserPhoneNumber());
+                            aboutTextView.setText(user.getUserStatusText());
+                            locationTextView.setText(user.getUserCity());
+                            userCountryTextView.setText(user.getUserCity()+"-"+user.getUserCountry());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         //salesTextView.setText(user.getSells());
                         //requestRequestTextView.setText(user.getBuys());
                     }

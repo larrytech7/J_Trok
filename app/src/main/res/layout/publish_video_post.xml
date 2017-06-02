@@ -7,7 +7,7 @@
     android:paddingStart="@dimen/textfield_padding_top"
     android:paddingRight="@dimen/textfield_padding_top"
     android:paddingEnd="@dimen/textfield_padding_top">
-    <EditText
+    <!--<EditText
         android:id="@+id/postTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +46,8 @@
         android:inputType="numberDecimal"
         android:background="@drawable/background_border"
         android:drawableEnd="@drawable/ic_attach_money"
-        android:drawableRight="@drawable/ic_attach_money"/>
+        android:drawableRight="@drawable/ic_attach_money"/>-->
+
     <EditText
         android:id="@+id/postDescEditText"
         android:layout_width="match_parent"

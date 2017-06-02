@@ -23,6 +23,7 @@ import com.joanfuentes.hintcaseassets.shapeanimators.UnrevealCircleShapeAnimator
 import com.joanfuentes.hintcaseassets.shapes.CircularShape;
 import com.popalay.tutors.Tutors;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
                     showHint();
                 }
             }, 500);
+        //clear any video residues
+        Utils.deleteEmptyVideos(this);
     }
 
     private void showHint() {
@@ -159,17 +162,4 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void toggleIcon(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_selling:
-                item.setIcon(getResources().getDrawable(R.drawable.ic_sell_selected));
-                break;
-            case R.id.action_buying:
-                item.setIcon(getResources().getDrawable(R.drawable.ic_shop_selected));
-                break;
-            case R.id.action_profile:
-                item.setIcon(getResources().getDrawable(R.drawable.ic_profile_selected));
-                break;
-        }
-    }
 }

@@ -37,8 +37,8 @@
     <string name="publish">Publish</string>
     <string name="cancel">Cancel</string>
     <string name="post_title_hint">Name|Title (*)</string>
-    <string name="post_desc_hint">Brief description</string>
-    <string name="publish_description">(*) fields are obligatory. Pick categories to improve your post\'s visibility</string>
+    <string name="post_desc_hint">(*) Tell us more about what you are selling. (Preferably start with the name)</string>
+    <string name="publish_description">(*) fields are obligatory. Pick categories to improve item visibility</string>
     <string name="price_hint">Price (*)</string>
     <string name="location_hint">Location</string>
     <string name="message_sell">Have awesome stuff to sell? Sell your stuff in 7 seconds. It starts with this button!</string>
@@ -82,7 +82,7 @@
     <string name="facebook_app_id" translatable="false">1643272769025679</string>
     <string name="login_error">Login error! %s</string>
     <string name="upload_error">Error uploading thumbnail. Please try again</string>
-    <string name="publishing">Publishing</string>
+    <string name="publishing">Publishing, please wait</string>
     <string name="uploading_thumbs">Uploading thumbs</string>
     <string name="error_uploading">Error uploading</string>
     <string name="uploaded">Published</string>

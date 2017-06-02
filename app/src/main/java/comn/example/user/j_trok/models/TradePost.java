@@ -2,7 +2,9 @@ package comn.example.user.j_trok.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Larry Akah on 5/19/17.
@@ -16,6 +18,7 @@ public class TradePost implements Serializable {
     private String authorProfileImage;
     private String tradeNameTitle;
     private long tradeAmount; //amount selling or buying for
+    private String currency; //currency
     private String tradeDescription;
     private String tradeLocation;
     private long tradeTime; //time first posted
@@ -23,6 +26,7 @@ public class TradePost implements Serializable {
     private String tradeVideoUrl;
     private String tradeImageUrl;
     private List<String> tags;
+    private Map<String, Boolean> likes;
 
     public TradePost() {
         this.tags = new ArrayList<>();
@@ -130,5 +134,21 @@ public class TradePost implements Serializable {
 
     public void setVideoThumbnailUrl(String videoThumbnailUrl) {
         this.videoThumbnailUrl = videoThumbnailUrl;
+    }
+
+    public String getCurrency() {
+        return currency == null? "$" : currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public Map<String, Boolean> getLikes() {
+        return likes == null ? new HashMap<String, Boolean>() : likes;
+    }
+
+    public void setLikes(Map<String, Boolean> likes) {
+        this.likes = likes;
     }
 }

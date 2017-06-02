@@ -1,6 +1,7 @@
 package comn.example.user.j_trok.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -12,6 +13,7 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
@@ -119,18 +121,22 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_buy, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        //configure recycler view
-        recyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
-        FeedsAdapter adapter = new FeedsAdapter(new String[]{"Author one", "Author two", "Author three", "Author four", "Author five"});
-        recyclerView.setAdapter(adapter);
-
         //firebase
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+
+        //configure recycler view
+        recyclerView.setHasFixedSize(true);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        //staggeredGridLayoutManager.setSpanCount(2);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+
+        FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
+                firebaseDatabase.getReference("trades"), getActivity(), mAuthenticatedUser);
+        recyclerView.setAdapter(adapter);
+
         //configure search
         search = (SearchBox) rootView.findViewById(R.id.searchbox);
         String[] categories = getResources().getStringArray(R.array.categories);
@@ -238,17 +244,18 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         // collect values and publish to firebase
-                        String pTitle = ((EditText) dialog.findViewById(R.id.postTitleEditText)).getText().toString();
+                        //String pTitle = ((EditText) dialog.findViewById(R.id.postTitleEditText)).getText().toString();
                         String pDesc = ((EditText) dialog.findViewById(R.id.postDescEditText)).getText().toString();
-                        String pPrice = ((EditText) dialog.findViewById(R.id.priceEditTextView)).getText().toString();
-                        String pLocation = ((EditText) dialog.findViewById(R.id.locationEditTextView)).getText().toString();
-                        if (!TextUtils.isEmpty(pTitle) && !TextUtils.isEmpty(pPrice)) {
+                        //String pPrice = ((EditText) dialog.findViewById(R.id.priceEditTextView)).getText().toString();
+                        //String pLocation = ((EditText) dialog.findViewById(R.id.locationEditTextView)).getText().toString();
+                        if (!TextUtils.isEmpty(pDesc)) {
 
                             TradePost tradePost = new TradePost();
-                            tradePost.setTradeNameTitle(pTitle);
+                            tradePost.setTradeNameTitle(pDesc);
                             tradePost.setTradeDescription(pDesc);
-                            tradePost.setTradeAmount(Long.parseLong(pPrice));
-                            tradePost.setTradeLocation(pLocation);
+                            tradePost.setTradeAmount(Utils.fetchPrice(pDesc).getAmount()); //fetch price from description
+                            tradePost.setCurrency(Utils.fetchPrice(pDesc).getCurrency()); //fetch currency from description
+                            tradePost.setTradeLocation(mAuthenticatedUser.getUserCity()); //assume location is user's city
                             tradePost.setTags(selectedCategories);
                             tradePost.setVideoThumbnailUrl(filePath); //temporal filepath
                             tradePost.setTradeVideoUrl(filePath);
@@ -257,7 +264,6 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             //publish error,warning about missing fields
                             Toast.makeText(getContext(), getString(R.string.mcam_error), Toast.LENGTH_SHORT).show();
                             dialog.show();
-
                         }
                     }
                 })
@@ -280,12 +286,10 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private void publishPost(final TradePost tradePost) {
         //create video thumbnail and upload post
         try {
-            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage(getString(R.string.publishing));
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
+            final MaterialDialog.Builder mProgressDialog = new MaterialDialog.Builder(getActivity())
+                    .progress(true, 0)
+                    .widgetColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
+                    .content(getString(R.string.publishing));
             mProgressDialog.show();
 
             //configure tradepost author
@@ -310,7 +314,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             } else {
                                 //Notify on Error
                                 Utils.showMessage(getActivity(), getString(R.string.upload_error));
-                                mProgressDialog.dismiss();
+
                             }
                         }
                     });
@@ -351,7 +355,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                     }else{
                       Utils.showMessage(getActivity(), getString(R.string.uploading_thumbs));
                     }
-                    mProgressDialog.dismiss();
+                    mProgressDialog.progress(false, 0);
                 }
             });
         } catch (Throwable throwable) {
@@ -477,12 +481,12 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     @Override
     public void onSearchTermChanged(String s) {
         //TODO. Apply real-time update of the Adapter in the recyclerview
-        Toast.makeText(getActivity(), "Search changed to: "+s, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
     public void onSearch(String s) {
-        Toast.makeText(getActivity(), "Searching: "+s, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "REGEX: "+Utils.fetchPrice(s), Toast.LENGTH_LONG).show();
         //TODO. build new adapter and replace current one
     }
 

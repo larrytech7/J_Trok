@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.style.TtsSpan;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,11 +20,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import comn.example.user.j_trok.R;
+import comn.example.user.j_trok.models.Price;
 import comn.example.user.j_trok.models.User;
 
 /**
@@ -48,6 +53,7 @@ public class Utils {
     public static final String ANALYTICS_PARAM_ARTICLE_SELL_CATEGORY = "ARTICLE_SELL_POSTED";
     public static final String CUSTOM_EVENT_ARTICLE_PUBLISHED = "ARTICLE_PUBLISHED";
     public static final String DATABASE_USERS = "users";
+    public static final String FEED_DETAIL_ID = "FEED_ID";
 
     /**
      * Get simple time elapsed and represent as human readable
@@ -224,5 +230,37 @@ public class Utils {
 
     public static void showMessage(Context activity, String s) {
         Toast.makeText(activity, s, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Use regular expression to extract the price suggested in given text
+     * @param pDesc text to extract from
+     * @return Price price extracted or 0
+     */
+    public static Price fetchPrice(String pDesc) {
+        String[] parts = pDesc.split("[ ]"); //split with spaces
+        long amount = 0;
+        String currency = "$";
+        Pattern pattern =  Pattern.compile("[0-9]{2,}[a-zA-Z$]{0,5}");
+        //loop through parts, to find a match
+        for (String part : parts){
+            if (pattern.matcher(part).matches()) { //matches an amount type
+                //now filter if it's entirely numeric or followed by currency
+                if (Pattern.matches("[0-9]{2,}", part)) {
+                    amount = Long.parseLong(part);
+                }
+                else{
+                    currency = part;
+                    amount = Long.parseLong(part.replaceAll("[a-zA-Z$]+", ""));
+                    currency = currency.replaceAll("[0-9]+", "");
+                    //match and extract the numeric part of the amount
+                    //Matcher matcher = Pattern.compile("[a-zA-Z$]+").matcher(part);
+                    //amount = matcher.matches() ? Long.parseLong(part.substring(0, matcher.start())) : 1;
+                }
+
+                break;
+            }
+        }
+        return new Price(amount, currency);
     }
 }
