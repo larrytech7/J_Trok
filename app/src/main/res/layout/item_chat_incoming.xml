@@ -24,16 +24,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/username"
-                    android:layout_marginStart="@dimen/size_80"
-                    android:layout_marginLeft="@dimen/size_80"
+                    android:layout_marginStart="@dimen/size_70"
+                    android:layout_marginLeft="@dimen/size_70"
                     style="@style/Base.TextAppearance.AppCompat.Headline"/>
                 <TextView
                     android:id="@+id/chatDateTimeTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="dateTime"
-                    android:layout_marginStart="@dimen/size_80"
-                    android:layout_marginLeft="@dimen/size_80"/>
+                    android:layout_marginStart="@dimen/size_70"
+                    android:layout_marginLeft="@dimen/size_70"/>
                 <TextView
                     android:id="@+id/chatContentTextView"
                     android:layout_width="match_parent"
@@ -49,8 +49,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userChatPhoto"
-        android:layout_width="@dimen/size_70"
-        android:layout_height="@dimen/size_70"
+        android:layout_width="@dimen/margin_50"
+        android:layout_height="@dimen/margin_50"
         android:src="@drawable/profile"
         android:layout_marginStart="@dimen/margin_10"
         android:layout_marginLeft="@dimen/margin_10"

@@ -93,5 +93,6 @@
     <string name="update">Update</string>
     <string name="update_location">Update location (City-Country)</string>
     <string name="update_status">Brief about yourself</string>
+    <string name="author_name">Author name</string>
 
 </resources>

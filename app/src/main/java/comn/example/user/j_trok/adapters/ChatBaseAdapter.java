@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
@@ -69,6 +67,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         if (getItemViewType(position) == VIEW_TYPE_INCOMING)
             Picasso.with(context)
                     .load(model.getAuthorProfileImage())
+                    .resize(70,70)
                     .fit()
                     .placeholder(R.drawable.app_icon)
                     .error(R.drawable.crescent_bottom)

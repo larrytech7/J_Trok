@@ -42,11 +42,11 @@ dependencies {
     compile 'com.github.popalay:tutors:1.0.2'
     compile 'com.iceteck.silicompressorr:silicompressor:1.1.0'
     compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
-    compile 'com.afollestad:easyvideoplayer:0.3.0'
     compile 'com.afollestad:material-camera:0.4.4'
     compile 'com.joanfuentes:HintCase:1.0.4'
     compile 'com.joanfuentes:HintCaseAssets:1.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'uk.co.jakelee:vidsta:1.0.0'
 
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-core:10.2.6'

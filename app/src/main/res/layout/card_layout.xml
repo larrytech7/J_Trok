@@ -13,14 +13,15 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/image3"
-            android:scaleType="fitXY" />
+            android:src="@drawable/selling3"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1000 FCFA"
-            android:textSize="20dp"
+            android:text="100 FCFA"
+            android:textSize="20sp"
             android:layout_gravity="end"
             android:layout_marginTop="5dp"
             android:paddingLeft="2dp"
@@ -45,7 +46,9 @@
         android:layout_height="40dp"
         android:layout_gravity="bottom|end"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginRight="2dp"
+        android:layout_marginEnd="2dp"
         android:layout_marginTop="-25dp"
         android:src="@drawable/profile"
         android:elevation="5dp"/>

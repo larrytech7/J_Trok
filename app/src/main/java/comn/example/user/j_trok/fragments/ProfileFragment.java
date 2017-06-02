@@ -16,9 +16,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
-import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,8 +65,6 @@ public class ProfileFragment extends Fragment {
         User muser = new User();
         muser.setUserEmail(user.getEmail());
         muser.setUserName(user.getDisplayName());
-        muser.setUserCountry("");
-        muser.setUserCity("");
         muser.setUserId(user.getUid());
         muser.setUserProfilePhoto(user.getPhotoUrl().toString());
 
@@ -100,6 +95,7 @@ public class ProfileFragment extends Fragment {
 
         Picasso.with(getContext())
                 .load(mAuthenticatedUser.getUserProfilePhoto())
+                //.resize(120,120)
                 .placeholder(R.drawable.app_icon)
                 .error(R.drawable.crescent_bottom)
                 .into(profilePhotoImageView);
@@ -123,8 +119,8 @@ public class ProfileFragment extends Fragment {
                         aboutTextView.setText(user.getUserStatusText());
                         locationTextView.setText(user.getUserCity());
                         userCountryTextView.setText(user.getUserCity()+"-"+user.getUserCountry());
-                        salesTextView.setText(user.getSells());
-                        requestRequestTextView.setText(user.getBuys());
+                        //salesTextView.setText(user.getSells());
+                        //requestRequestTextView.setText(user.getBuys());
                     }
 
                     @Override
@@ -164,7 +160,7 @@ public class ProfileFragment extends Fragment {
                 .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
                 .inputType(InputType.TYPE_CLASS_PHONE)
                 .inputRange(9,15, ResourcesCompat.getColor(getResources(), R.color.google_plus_red, null))
-                .input(getString(R.string.update_contact), "", false, new MaterialDialog.InputCallback() {
+                .input(getString(R.string.update_contact), mAuthenticatedUser.getUserPhoneNumber(), false, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         Log.d("PORIFLE", ""+input);
@@ -195,7 +191,8 @@ public class ProfileFragment extends Fragment {
                 .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .inputRange(2,255, ResourcesCompat.getColor(getResources(), R.color.google_plus_red, null))
-                .input(getString(R.string.update_location), "", false, new MaterialDialog.InputCallback() {
+                .input(getString(R.string.update_location), mAuthenticatedUser.getUserCity()+"-"+mAuthenticatedUser.getUserCountry(),
+                        false, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         Log.d("PORIFLE", ""+input);
@@ -228,7 +225,7 @@ public class ProfileFragment extends Fragment {
                 .icon(getResources().getDrawable(R.drawable.ic_status))
                 .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
                 .inputType(InputType.TYPE_CLASS_TEXT)
-                .input(getString(R.string.update_status), "", false, new MaterialDialog.InputCallback() {
+                .input(getString(R.string.update_status), mAuthenticatedUser.getUserStatusText(), false, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         Log.d("PORIFLE", ""+input);
