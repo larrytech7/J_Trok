@@ -134,7 +134,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
-                firebaseDatabase.getReference("trades"), getActivity(), mAuthenticatedUser);
+                firebaseDatabase.getReference("trades").orderByChild("tradeTime"), getActivity(), mAuthenticatedUser);
         recyclerView.setAdapter(adapter);
 
         //configure search
@@ -286,11 +286,11 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private void publishPost(final TradePost tradePost) {
         //create video thumbnail and upload post
         try {
-            final MaterialDialog.Builder mProgressDialog = new MaterialDialog.Builder(getActivity())
+            final MaterialDialog mProgressDialog = new MaterialDialog.Builder(getActivity())
                     .progress(true, 0)
+                    .autoDismiss(false)
                     .widgetColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
-                    .content(getString(R.string.publishing));
-            mProgressDialog.show();
+                    .content(getString(R.string.publishing)).show();
 
             //configure tradepost author
             tradePost.setAuthorId(mAuthenticatedUser.getUserId());
@@ -355,7 +355,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                     }else{
                       Utils.showMessage(getActivity(), getString(R.string.uploading_thumbs));
                     }
-                    mProgressDialog.progress(false, 0);
+                    mProgressDialog.dismiss();
                 }
             });
         } catch (Throwable throwable) {
