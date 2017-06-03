@@ -54,6 +54,10 @@ public class Utils {
     public static final String CUSTOM_EVENT_ARTICLE_PUBLISHED = "ARTICLE_PUBLISHED";
     public static final String DATABASE_USERS = "users";
     public static final String FEED_DETAIL_ID = "FEED_ID";
+    public static final String CHAT_EVENT = "CHAT_EVENT";
+    public static final String ANALYTICS_PARAM_CHATS_ID = "CHAT_ID";
+    public static final String ANALYTICS_PARAM_CHAT_NAME = "CHAT_NAME";
+    public static final String ANALYTICS_PARAM_CHAT_CATEGORY = "CHAT_CATEGORY";
 
     /**
      * Get simple time elapsed and represent as human readable

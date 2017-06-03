@@ -14,51 +14,52 @@
         android:background="@color/bg_screen1"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <FrameLayout
-            android:id="@+id/imageFrame"
+    <FrameLayout
+        android:id="@+id/imageFrame"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+        <uk.co.jakelee.vidsta.VidstaPlayer
+            android:id="@+id/player"
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="match_parent"
+            android:transitionName="article_shared"
+            app:autoLoop="true"
+            app:autoPlay="true"
+            app:buttonTintColor="@color/bg_screen3"
+            app:fullScreenButtonEnabled="true"
+            app:fullScreenButtonVisible="true"
+            app:setFullScreen="false"
+            app:textColor="@color/colorPrimary" />
 
-            <uk.co.jakelee.vidsta.VidstaPlayer
-                android:id="@+id/player"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:textColor = "@color/colorPrimary"
-                app:buttonTintColor = "@color/bg_screen3"
-                app:autoPlay = "true"
-                app:autoLoop = "true"
-                app:setFullScreen = "false"
-                android:transitionName="article_shared"
-                app:fullScreenButtonEnabled = "true"
-                app:fullScreenButtonVisible = "true"/>
+        <TextView
+            android:id="@+id/authorNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="@dimen/margin_10"
+            android:hint="@string/author_name"
+            android:text="authora"
+            android:textColor="@color/twitter_blue"
+            android:textSize="@dimen/normal_font"
+            android:transitionName="username_shared" />
 
-            <TextView
-                android:id="@+id/authorNameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/normal_font"
-                android:textColor="@color/white"
-                android:hint="@string/author_name"
-                android:transitionName="username_shared"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="@dimen/margin_10"
-                android:layout_gravity="top"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authorImageView"
+            android:layout_width="@dimen/margin_50"
+            android:layout_height="@dimen/margin_50"
+            android:layout_gravity="top|end"
+            android:layout_marginEnd="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="@dimen/textfield_padding_bottom"
+            android:src="@drawable/profile"
+            android:transitionName="profile_shared" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/authorImageView"
-                android:layout_width="@dimen/margin_50"
-                android:layout_height="@dimen/margin_50"
-                android:layout_gravity="top|end"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginEnd="2dp"
-                android:transitionName="profile_shared"
-                android:layout_marginTop="@dimen/textfield_padding_bottom"
-                android:src="@drawable/profile"/>
-
-        </FrameLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/articleDescriptionTextView"
@@ -73,14 +74,10 @@
         android:id="@+id/chatsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/card_height"
         app:reverseLayout="false"
         app:layoutManager="LinearLayoutManager"
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         tools:listitem="@layout/item_chat_incoming" />
-
-    <!--<com.afollestad.easyvideoplayer.EasyVideoPlayer
-        android:id="@+id/player"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>-->
 
 </LinearLayout>
