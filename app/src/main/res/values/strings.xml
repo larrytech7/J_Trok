@@ -1,5 +1,6 @@
-<resources>
-    <string name="app_name">J_Trok</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name" tools:override="true">7Sel</string>
     <string name="title_activity_registration_form">Register</string>
 
     <string name="title_activity_welcome">Home Screen</string>
@@ -7,20 +8,95 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">J-Trok</string>
-    <string name="slide_1_desc">The easiest way to buy and sell online!</string>
+    <string name="slide_1_title">Peer-to-peer</string>
+    <string name="slide_1_desc">The fastest way to buy or sell amongst peers</string>
 
-    <string name="slide_2_title">Digitizing trade by barter</string>
-    <string name="slide_2_desc">Trade with people all over the world!</string>
+    <string name="slide_2_title">Connecting peers via trade</string>
+    <string name="slide_2_desc">Exchange with peers around the globe. Trust us with the heavy lifting</string>
 
-    <string name="slide_3_title">Great Discounts</string>
-    <string name="slide_3_desc">Negotiate and get the best deals ever!</string>
+    <string name="slide_3_title">Making Awesome sales</string>
+    <string name="slide_3_desc">Get the best deals ever in 10s! Only from your peers</string>
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
 
     <string name="terms">Terms and Conditions</string>
 
+    <string name="slogan">Make an awesome sale in %d seconds</string>
+    <string name="slogan_2">Inspiring your purchases to drive your sales</string>
+    <string name="share">Share</string>
+    <string name="chat">Chat</string>
+    <string name="chat_hint">Chat with Author</string>
+    <string name="like">Like post</string>
+    <string name="share_hint">Share post</string>
+    <string name="loading">Loading ...</string>
+    <string name="playing">Now playing ...</string>
+    <string name="pause">Paused</string>
+    <string name="error_loading_video">Error loading video</string>
+    <string name="retry_loading">Retrying ...</string>
+    <string name="publish">Publish</string>
+    <string name="cancel">Cancel</string>
+    <string name="post_title_hint">Name|Title (*)</string>
+    <string name="post_desc_hint">(*) Tell us more about what you are selling. (Preferably start with the name)</string>
+    <string name="publish_description">(*) fields are obligatory. Pick categories to improve item visibility</string>
+    <string name="price_hint">Price (*)</string>
+    <string name="location_hint">Location</string>
+    <string name="message_sell">Have awesome stuff to sell? Sell your stuff in 7 seconds. It starts with this button!</string>
+    <string name="search_hint">Quickly search for cool stuff</string>
+    <string name="search">%s, quickly find stuff here</string>
+    <string name="preparing">preparing </string>
+    <string name="buying">Buying</string>
+    <string name="selling">Selling</string>
+    <string name="profile">Profile</string>
+    <string name="username">\@ %s Username</string>
+    <string name="chat_content_hint">This is one of the chat content data testing 798-756-4545-543 at the email, larryakah@gmail.com creator of site www.iceteck.com</string>
 
+    <string-array name="categories">
+        <item>Phones</item>
+        <item>Computers</item>
+        <item>Books</item>
+        <item>Android</item>
+        <item>IOS</item>
+        <item>Fashion | Clothing</item>
+        <item>Chairs</item>
+        <item>Beverages</item>
+        <item>Drinks</item>
+        <item>Modems</item>
+        <item>Internet</item>
+        <item>Suits</item>
+        <item>TVs</item>
+        <item>Consoles</item>
+        <item>Games</item>
+        <item>Cars</item>
+        <item>Trucks</item>
+        <item>Software</item>
+        <item>Jewelry</item>
+        <item>Shoes</item>
+        <item>Art</item>
+        <item>Sport</item>
+    </string-array>
+
+    <string name="timeinterval" formatted="false" translatable="false">%d %s</string>
+
+    <string name="fb_login_protocol_scheme">fb1643272769025679</string>
+    <string name="facebook_app_id" translatable="false">1643272769025679</string>
+    <string name="login_error">Login error! %s</string>
+    <string name="upload_error">Error uploading thumbnail. Please try again</string>
+    <string name="publishing">Publishing, please wait</string>
+    <string name="uploading_thumbs">Uploading thumbs</string>
+    <string name="error_uploading">Error uploading</string>
+    <string name="uploaded">Published</string>
+    <string name="about">About</string>
+    <string name="phone_contact">Phone Contact</string>
+    <string name="email">Email</string>
+    <string name="update_contact">Enter as international (+)</string>
+    <string name="update">Update</string>
+    <string name="update_location">Update location (City-Country)</string>
+    <string name="update_status">Brief about yourself</string>
+    <string name="author_name">Author name</string>
+
+<<<<<<< HEAD
     <string name="slogan">Sold in 7 seconds</string>
+=======
+>>>>>>> 9e70e30a93644dcd810cc2d88f8af2d790a72e73
 </resources>

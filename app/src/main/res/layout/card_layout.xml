@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <FrameLayout
         android:id="@+id/imageFrame"
@@ -11,16 +11,26 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/feedsImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/image3"
-            android:scaleType="fitXY" />
+            android:layout_height="200dp"
+            android:src="@drawable/selling3"
+            android:scaleType="fitXY"
+            android:transitionName="article_shared"
+            android:adjustViewBounds="true"/>
+
+        <ImageView
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:src="@drawable/ic_play"
+            android:layout_gravity="center_vertical"/>
 
         <TextView
+            android:id="@+id/priceTagTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1000 FCFA"
-            android:textSize="20dp"
+            android:text=""
+            android:textSize="20sp"
             android:layout_gravity="end"
             android:layout_marginTop="5dp"
             android:paddingLeft="2dp"
@@ -33,29 +43,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/normal_font"
-            android:hint="Author name"
+            android:textColor="@color/bg_screen3"
+            android:hint="@string/author_name"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:transitionName="username_shared"
             android:layout_gravity="bottom"/>
 
     </FrameLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/fab"
+        android:id="@+id/feedsAuthorImageView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="bottom|end"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginRight="2dp"
+        android:layout_marginEnd="2dp"
         android:layout_marginTop="-25dp"
         android:src="@drawable/profile"
+        android:transitionName="profile_shared"
         android:elevation="5dp"/>
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/feedsDateTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Date"
+        android:text=""
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_gravity="bottom"/>
 
     <LinearLayout
@@ -68,7 +85,6 @@
             android:id="@+id/likeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:src="@drawable/ic_like_inactive"
             android:background="@android:color/transparent"
             android:layout_weight="1"/>

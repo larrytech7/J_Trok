@@ -5,36 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_screen1"
-    tools:context="comn.example.user.j_trok.SplashScreen">
+    tools:context="comn.example.user.j_trok.ui.SplashScreenActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="210dp"
+        android:id="@+id/imageView"
+        android:adjustViewBounds="true"
+        android:src="@drawable/app_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"/>
 
     <TextView android:id="@+id/textView"
-        android:text="J-Trok"
+        android:text="@string/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:textSize="40dp"
+        android:layout_marginTop="@dimen/margin_30"
+        android:textSize="40sp"
+        android:layout_below="@id/imageView"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/imageView"
-        android:src="@drawable/image1"
-        android:layout_above="@+id/textView2"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
-
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewSlogan"
         android:text="@string/slogan"
+        android:layout_below="@id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
+        android:textSize="30sp"
+        style="@style/MaterialStyledDialogs_Description"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:gravity="center_horizontal" />
+        android:layout_marginBottom="@dimen/margin_30"
+        android:gravity="center_horizontal|bottom" />
 
 </RelativeLayout>

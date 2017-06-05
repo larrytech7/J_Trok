@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:attribute="http://schemas.android.com/apk/res-auto"
-    tools:context="comn.example.user.j_trok.Profile">
+    tools:context="comn.example.user.j_trok.fragments.ProfileFragment">
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:elevation="20dp"
-        android:background="@drawable/image4"
+        android:background="@drawable/selling3"
         android:scaleType="centerCrop"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -32,10 +32,10 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/sales"
+                    android:id="@+id/salesCreated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="37"
+                    android:text="0"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/normal_font"
                     android:textStyle="bold"
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/sales"
+                    android:layout_below="@id/salesCreated"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="-5dp"
                     android:text="Sales"
@@ -76,6 +76,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/userCountryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/userName"
@@ -98,12 +99,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/pendingRequests"
+                    android:id="@+id/requestsMade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
-                    android:text="25"
+                    android:text="0"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/normal_font"
                     android:textStyle="bold" />
@@ -111,7 +112,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/pendingRequests"
+                    android:layout_below="@id/requestsMade"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="-5dp"
                     android:text="Requests"
@@ -160,55 +161,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/normal_font"
-                            android:text="User name"
+                            android:text="@string/email"
                             android:textColor="#212121"/>
 
                         <TextView
+                            android:id="@+id/emailTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#AA212121"
-                            android:text="Enter your name here"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:elevation="5dp"
-                android:layout_margin="8dp"
-                attribute:cardCornerRadius="3dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:layout_width="5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/bg_screen2" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/normal_font"
-                            android:text="About"
-                            android:textColor="#212121"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="#AA212121"
-                            android:text="About"/>
+                            android:text="-"/>
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -231,9 +192,11 @@
                         android:background="@color/bg_screen1" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
@@ -241,15 +204,22 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/normal_font"
-                            android:text="Contact"
+                            android:text="@string/phone_contact"
                             android:textColor="#212121"/>
 
                         <TextView
+                            android:id="@+id/phoneTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#AA212121"
-                            android:text="email or phone"/>
+                            android:text="-"/>
                     </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/buttonEditContact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
+                        android:src="@drawable/ic_edit"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -271,9 +241,11 @@
                         android:background="@color/bg_screen2" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
@@ -281,17 +253,76 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/normal_font"
-                            android:text="Other"
+                            android:text="@string/location_hint"
                             android:textColor="#212121"/>
+
+                        <TextView
+                            android:id="@+id/locationTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="#AA212121"
+                            android:text="-"/>
+                    </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/buttonEditLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
+                        android:src="@drawable/ic_edit"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:elevation="5dp"
+                android:layout_margin="8dp"
+                attribute:cardCornerRadius="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_screen2" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textSize="@dimen/normal_font"
+                            android:text="@string/about"
+                            android:textColor="#212121"/>
+
+                        <TextView
+                            android:id="@+id/aboutTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
                             android:textColor="#AA212121"
-                            android:text="my goods are the best"/>
+                            android:text="-"/>
                     </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/buttonEditStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
+                        android:src="@drawable/ic_edit"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="comn.example.user.j_trok.Sell">
+        tools:context="comn.example.user.j_trok.fragments.SellingFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,6 +23,7 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="@dimen/image_view_icon_dimension"
                 android:layout_height="@dimen/image_view_icon_dimension"
                 android:src="@drawable/ic_play"
@@ -101,6 +102,7 @@
                 android:backgroundTint="@color/google_plus_red"/>
 
             <Button
+                android:id="@+id/btnValidate"
                 android:drawableEnd="@drawable/ic_send"
                 android:drawableRight="@drawable/ic_send"
                 android:layout_width="wrap_content"
