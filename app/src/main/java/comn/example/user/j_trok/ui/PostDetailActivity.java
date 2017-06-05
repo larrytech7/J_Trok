@@ -23,6 +23,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -204,6 +206,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 mp.setVolume(0.3f,0.4f);
                 mp.start();
             }
+            //subscribe FCM for messages
+            FirebaseMessaging.getInstance().subscribeToTopic(tradePost.getTradePostId());
             //NOW FIRE EVENT FOR THIS CHAT
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Utils.ANALYTICS_PARAM_CHATS_ID);

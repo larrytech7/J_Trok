@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.joanfuentes.hintcase.HintCase;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
 import com.joanfuentes.hintcaseassets.contentholderanimators.SlideInFromRightContentHolderAnimator;
@@ -104,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
             }, 500);
         //clear any video residues
         Utils.deleteEmptyVideos(this);
+        //subscribe for new Posts
+        FirebaseMessaging.getInstance().subscribeToTopic(Utils.TOPIC_FEEDS);
     }
 
     private void showHint() {
