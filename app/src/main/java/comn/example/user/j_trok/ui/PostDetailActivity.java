@@ -1,17 +1,33 @@
 package comn.example.user.j_trok.ui;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +35,7 @@ import butterknife.OnClick;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.adapters.ChatBaseAdapter;
 import comn.example.user.j_trok.models.Chat;
+import comn.example.user.j_trok.models.TradePost;
 import comn.example.user.j_trok.models.User;
 import comn.example.user.j_trok.utility.Utils;
 import uk.co.jakelee.vidsta.VidstaPlayer;
@@ -28,16 +45,29 @@ import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
 /**
  * Created by USER on 05/05/2017.
  */
-public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener {
+public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener{
 
     private static final String TAG = "PostDetailActivity";
     private boolean isSheetShown = false;
     private FirebaseAuth firebaseAuth;
+
     @BindView(R.id.player)
     VidstaPlayer player;
     @BindView(R.id.chatsRecyclerView)
     RecyclerView chatRecyclerView;
+    @BindView(R.id.authorImageView)
+    ImageView authorImageView;
+    @BindView(R.id.authorNameTextView)
+    TextView authorNameTextView;
+    @BindView(R.id.articleDescriptionTextView)
+    TextView articleDescriptionTextView;
+    @BindView(R.id.chatEditTextview)
+    EditText chatEditTextView;
+
     private User user;
+    private FirebaseDatabase qDatabase;
+    private TradePost tradePost;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +81,53 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         firebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
 
         //setup chats RecyclerView
-        FirebaseDatabase qDatabase = FirebaseDatabase.getInstance();
+        qDatabase = FirebaseDatabase.getInstance();
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                 ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/feed_id/chats/"), user,this));
         // Grabs a reference to the player view
-        player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
-        player.setAutoLoop(true);
+        //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
+        player.setAutoLoop(false);
         player.setAutoPlay(true);
         player.setOnVideoErrorListener(this);
         player.setOnFullScreenClickListener(this);
         // From here, the player view will show a progress indicator until the player is prepared.
         // Once it's prepared, the progress indicator goes away and the controls become enabled for the user
+        loadDetails(getIntent());
+    }
 
+    private void loadDetails(Intent intent) {
+        if (intent != null){
+            String key = intent.getStringExtra(Utils.FEED_DETAIL_ID);
+            qDatabase.getReference("trades")
+                    .child(key)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            tradePost = dataSnapshot.getValue(TradePost.class);
+                            player.setVideoSource(Uri.parse(tradePost.getTradeVideoUrl()));
+                            authorNameTextView.setText(tradePost.getAuthorName());
+                            articleDescriptionTextView.setText(tradePost.getTradeDescription());
+                            Picasso.with(PostDetailActivity.this)
+                                    .load(Uri.parse(tradePost.getAuthorProfileImage()))
+                                    .placeholder(R.drawable.selling3)
+                                    .into(authorImageView);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+            chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
+                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/"+key), user,this));
+
+        }
     }
 
     @Override
@@ -99,9 +160,6 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             case R.id.action_like:
                 //TODO. Perform like on Post
                 return true;
-            case R.id.action_chat:
-                toggleBottomSheet();
-                return true;
             case R.id.action_share:
                 //TODO. Add correct link for app deep linking of this post page
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -126,14 +184,42 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         }
     }
 
-    @OnClick(R.id.takePhotoButton)
+    /*@OnClick(R.id.takePhotoButton)
     public void takePhoto(View view){
         //TODO. ADD photo to message chat
-    }
+    }*/
 
     @OnClick(R.id.sendChatButton)
     public void sendChatMessage(View view){
-        //TODO. Send Chat message
+        //Send Chat message
+        String message = chatEditTextView.getText().toString();
+        if (!TextUtils.isEmpty(message)){
+            //push chat
+            Chat userChat = new Chat(user.getUserName(), user.getUserId(), user.getUserProfilePhoto(),
+                    message, System.currentTimeMillis(), "");
+            qDatabase.getReference("chats/"+tradePost.getTradePostId())
+            .push().setValue(userChat);
+            chatEditTextView.setText("");
+            //play sound for this
+            if (!player.isPlaying()){
+                MediaPlayer mp = MediaPlayer.create(this, R.raw.send_sound);
+                mp.setVolume(0.3f,0.4f);
+                mp.start();
+            }
+            //subscribe FCM for messages
+            FirebaseMessaging.getInstance().subscribeToTopic(tradePost.getTradePostId());
+            //NOW FIRE EVENT FOR THIS CHAT
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Utils.ANALYTICS_PARAM_CHATS_ID);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, Utils.ANALYTICS_PARAM_CHAT_NAME);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, Utils.ANALYTICS_PARAM_CHAT_CATEGORY);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+            mFirebaseAnalytics.logEvent(Utils.CHAT_EVENT, bundle);
+
+        }else{
+            chatEditTextView.setError(getString(R.string.obligatory_field));
+            chatEditTextView.requestFocus();
+        }
     }
 
     @Override

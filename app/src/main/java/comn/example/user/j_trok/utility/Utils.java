@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.text.style.TtsSpan;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,11 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import comn.example.user.j_trok.R;
@@ -54,6 +51,12 @@ public class Utils {
     public static final String CUSTOM_EVENT_ARTICLE_PUBLISHED = "ARTICLE_PUBLISHED";
     public static final String DATABASE_USERS = "users";
     public static final String FEED_DETAIL_ID = "FEED_ID";
+    public static final String CHAT_EVENT = "CHAT_EVENT";
+    public static final String ANALYTICS_PARAM_CHATS_ID = "CHAT_ID";
+    public static final String ANALYTICS_PARAM_CHAT_NAME = "CHAT_NAME";
+    public static final String ANALYTICS_PARAM_CHAT_CATEGORY = "CHAT_CATEGORY";
+    public static final String INSTANT_REPLY = "INSTANT_REPLY";
+    public static final String TOPIC_FEEDS = "trade_feeds";
 
     /**
      * Get simple time elapsed and represent as human readable

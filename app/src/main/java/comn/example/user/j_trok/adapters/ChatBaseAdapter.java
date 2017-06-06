@@ -1,7 +1,9 @@
 package comn.example.user.j_trok.adapters;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Optional;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.models.Chat;
 import comn.example.user.j_trok.models.User;
@@ -68,7 +71,6 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
             Picasso.with(context)
                     .load(model.getAuthorProfileImage())
                     .resize(70,70)
-                    .fit()
                     .placeholder(R.drawable.app_icon)
                     .error(R.drawable.crescent_bottom)
                     .into(viewHolder.userChatImageView);
@@ -78,7 +80,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
     public int getItemViewType(int position) {
         //TODO: Will have to add new viewTypes when integrating images into sending chats
         Chat chat = getItem(position);
-        return chat.getAuthorId().equals(localUser.getUserId()) ?
+        return TextUtils.equals(chat.getAuthorId() , localUser.getUserId()) ?
                 VIEW_TYPE_OUTGOING : VIEW_TYPE_INCOMING;
     }
 
@@ -95,7 +97,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         TextView chatContentTextView;
         @BindView(R.id.chatDateTimeTextView)
         TextView chatDateTimeTextview;
-        @BindView(R.id.userChatPhoto)
+        @Nullable @BindView(R.id.userChatPhoto)
         ImageView userChatImageView;
 
         public ViewHolder(View itemView) {

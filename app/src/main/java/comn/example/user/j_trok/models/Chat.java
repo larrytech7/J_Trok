@@ -18,6 +18,15 @@ public class Chat implements Serializable {
     public Chat() {
     }
 
+    public Chat(String authorName, String authorId, String authorProfileImage, String chatText, long chatDateTime, String chatExtraImageUrl) {
+        this.authorName = authorName;
+        this.authorId = authorId;
+        this.authorProfileImage = authorProfileImage;
+        this.chatText = chatText;
+        this.chatDateTime = chatDateTime;
+        this.chatExtraImageUrl = chatExtraImageUrl;
+    }
+
     public String getAuthorName() {
         return authorName;
     }

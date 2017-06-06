@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/dots_height"
-    app:cardCornerRadius="@dimen/margin_10"
-    app:cardBackgroundColor="@color/light_grey">
 
-    <LinearLayout
-        android:orientation="vertical"
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/textfield_padding_bottom"
+        android:layout_marginStart="@dimen/textfield_padding_bottom"
+        android:layout_marginLeft="@dimen/textfield_padding_bottom"
+        android:layout_marginEnd="@dimen/textfield_padding_bottom"
+        android:layout_marginBottom="@dimen/textfield_padding_bottom"
+        android:background="@drawable/balloon_outgoing_normal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/chatUsernameTextView"
@@ -37,10 +36,11 @@
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
             android:gravity="end"
+            android:drawableRight="@drawable/ic_check_sent"
+            android:drawableEnd="@drawable/ic_check_sent"
             android:text="dateTime"
             android:layout_marginStart="@dimen/margin_30"
             android:layout_marginLeft="@dimen/margin_30"
             android:layout_marginRight="@dimen/margin_30"
             android:layout_marginEnd="@dimen/margin_30"/>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>
