@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="comn.example.user.j_trok">
 
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-=======
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -24,7 +23,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
->>>>>>> 9e70e30a93644dcd810cc2d88f8af2d790a72e73
     <application
         android:name=".SevenApp"
         android:allowBackup="true"
@@ -58,12 +56,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-        <activity android:name=".RegistrationForm" />
-        <activity android:name=".IntroSlider" />
+
         <activity android:name=".MainActivity" />
-        <activity android:name=".ItemDetail" />
-=======
+
 
         <activity android:name=".ui.RegistrationActivity" />
 
@@ -85,7 +80,6 @@
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:theme="@style/MaterialCamera.CaptureActivity" />
 
->>>>>>> 9e70e30a93644dcd810cc2d88f8af2d790a72e73
     </application>
 
 </manifest>

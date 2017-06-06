@@ -18,7 +18,7 @@ import com.afollestad.materialcamera.MaterialCamera;
 
 import java.io.File;
 
-import static comn.example.user.j_trok.R.id.fab;
+import static comn.example.user.j_trok.R.id.fabCreatePost;
 import static comn.example.user.j_trok.R.layout.fragment_buy;
 
 public class Buy extends Fragment implements SearchView.OnQueryTextListener{
