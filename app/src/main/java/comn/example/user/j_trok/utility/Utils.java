@@ -56,7 +56,7 @@ public class Utils {
     public static final String ANALYTICS_PARAM_CHAT_NAME = "CHAT_NAME";
     public static final String ANALYTICS_PARAM_CHAT_CATEGORY = "CHAT_CATEGORY";
     public static final String INSTANT_REPLY = "INSTANT_REPLY";
-    public static final String TOPIC_FEEDS = "trade_feeds";
+    public static final String TOPIC_FEEDS = "trades";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();

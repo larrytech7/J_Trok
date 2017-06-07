@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -104,6 +105,10 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         viewHolder.priceTagTextView.setText(String.format(Locale.ENGLISH ,"%d %s", model.getTradeAmount(), model.getCurrency()));
         viewHolder.dateTextView.setText(TimeAgo.using(model.getTradeTime()));
 
+        if (model.getLikes().size() > 0 && model.getLikes().containsKey(mUser.getUserId())){
+            //turn like button on
+            viewHolder.likeButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_like_active, null));
+        }
         //interaction listeners
         viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override

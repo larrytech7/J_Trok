@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -258,6 +259,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             tradePost.setTags(selectedCategories);
                             tradePost.setVideoThumbnailUrl(filePath); //temporal filepath
                             tradePost.setTradeVideoUrl(filePath);
+                            tradePost.setLikes(new HashMap<String, Boolean>());
                             publishPost(tradePost);
                         }else{
                             //publish error,warning about missing fields
@@ -359,6 +361,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
             });
         } catch (Throwable throwable) {
             throwable.printStackTrace();
+            FirebaseCrash.report(throwable);
         }
 
     }
