@@ -96,6 +96,7 @@
     <string name="author_name">Author name</string>
     <string name="obligatory_field">Message cannot be empty</string>
     <string name="reply">Reply</string>
-    <string name="new_comments">%d comments</string>
+    <string name="new_comments">%d comment(s)</string>
+    <string name="new_posts">%d new stuff published</string>
 
 </resources>

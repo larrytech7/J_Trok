@@ -9,12 +9,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +46,7 @@ import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
 /**
  * Created by USER on 05/05/2017.
  */
-public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener{
+public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener, MediaPlayer.OnErrorListener {
 
     private static final String TAG = "PostDetailActivity";
     private boolean isSheetShown = false;
@@ -59,6 +64,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     TextView articleDescriptionTextView;
     @BindView(R.id.chatEditTextview)
     EditText chatEditTextView;
+    @BindView(R.id.vplayer)
+    VideoView videoView;
 
     private User user;
     private FirebaseDatabase qDatabase;
@@ -114,6 +121,16 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                         .load(Uri.parse(tradePost.getAuthorProfileImage()))
                                         .placeholder(R.drawable.selling3)
                                         .into(authorImageView);
+                                MediaPlayer mp = new MediaPlayer();
+                                try {
+                                    mp.setDataSource(PostDetailActivity.this, Uri.parse(tradePost.getTradeVideoUrl()));
+                                    videoView.setVideoURI(Uri.parse(tradePost.getTradeVideoUrl()));
+                                    videoView.setMediaController(new MediaController(PostDetailActivity.this));
+                                    videoView.setOnErrorListener(PostDetailActivity.this);
+                                    mp.start();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
@@ -229,5 +246,12 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     @Override
     public void onToggleClick(boolean isFullscreen) {
         //full screen toggle
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+
+        Log.e("VideoError", "Video Play error");
+        return false;
     }
 }

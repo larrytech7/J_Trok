@@ -61,10 +61,11 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 //configure notifications based on the type
                 switch (type){
                     case NOTIFICATION_TYPE_FEED:
-                        NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body,"","");
+                        NotificationCompat.Builder builder = getNotification(PostDetailActivity.class, this, title, body,
+                                Utils.FEED_DETAIL_ID,payload.getString("key"));
                         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
                         bigTextStyle.bigText(body);
-                        bigTextStyle.setSummaryText(getString(R.string.new_comments, numMessages));
+                        bigTextStyle.setSummaryText(getString(R.string.new_posts, numMessages));
                         builder.setStyle(bigTextStyle);
                         builder.setSmallIcon(R.drawable.ic_play);
                         //fire
@@ -75,7 +76,6 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         nm.notify(NOTIFICATION_TYPE_FEED, notif);
                         break;
                     case NOTIFICATION_TYPE_CHAT:
-                        ++numMessages;
                         messageList.add(body);
                         NotificationCompat.Builder cbuilder = getNotification(PostDetailActivity.class, this, title, body,
                         Utils.FEED_DETAIL_ID, payload.getString("key"));
@@ -98,7 +98,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         }
                         cbuilder.addAction(commentAction);
                         cbuilder.setStyle(inboxStyle);
-                        cbuilder.setNumber(numMessages);
+                        cbuilder.setNumber(++numMessages);
 
                         //fire
                         Notification notification = cbuilder.build();
