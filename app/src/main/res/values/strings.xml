@@ -99,4 +99,8 @@
     <string name="new_comments">%d comment(s)</string>
     <string name="new_posts">%d new stuff published</string>
 
+<<<<<<< HEAD
+    <string name="slogan">Sold in 7 seconds</string>
+=======
+>>>>>>> 9e70e30a93644dcd810cc2d88f8af2d790a72e73
 </resources>
