@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
@@ -101,7 +102,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
 
         viewHolder.mTextView.setText(String.format(Locale.ENGLISH, "By %s ", model.getAuthorName()));
         viewHolder.priceTagTextView.setText(String.format(Locale.ENGLISH ,"%d %s", model.getTradeAmount(), model.getCurrency()));
-        viewHolder.dateTextView.setText(Utils.getTimeDifference(context, model.getTradeTime()));
+        viewHolder.dateTextView.setText(TimeAgo.using(model.getTradeTime()));
 
         //interaction listeners
         viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {

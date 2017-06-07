@@ -58,29 +58,6 @@ public class Utils {
     public static final String INSTANT_REPLY = "INSTANT_REPLY";
     public static final String TOPIC_FEEDS = "trade_feeds";
 
-    /**
-     * Get simple time elapsed and represent as human readable
-     * @param c context to fetch string resources
-     * @param previousTimestamp previous timestamp in the past
-     * @return string time for elapsed time since @param previousTimestamp
-     */
-    public static String getTimeDifference(Context  c, long previousTimestamp ){
-        long currentTimeStamp = System.currentTimeMillis();
-
-        long diff = Math.abs(currentTimeStamp - previousTimestamp); //avoid negative values however
-        if (diff > 86 * Math.pow(10,6))
-            return SimpleDateFormat.getDateTimeInstance().format(new Date(previousTimestamp));
-        //now do calculations and round up to nearest second, minute or hour
-        double intervalInSeconds = diff / Math.pow(10, 6); //convert to seconds
-        if (intervalInSeconds < 60)
-            return c.getString(R.string.timeinterval, Math.round(intervalInSeconds), "s"); //time in seconds
-        if (intervalInSeconds < 3600)
-            return c.getString(R.string.timeinterval, Math.round((intervalInSeconds / 60 )), "m"); //time in minutes
-        if (intervalInSeconds > 3600)
-            return c.getString(R.string.timeinterval, Math.round((intervalInSeconds / 3600 )), "h"); //time in hours
-        return SimpleDateFormat.getDateTimeInstance().format(new Date(previousTimestamp));
-    }
-
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();
         muser.setUserEmail(user.getEmail());
@@ -244,7 +221,7 @@ public class Utils {
         String[] parts = pDesc.split("[ ]"); //split with spaces
         long amount = 0;
         String currency = "$";
-        Pattern pattern =  Pattern.compile("[0-9]{2,}[a-zA-Z$]{0,5}");
+        Pattern pattern =  Pattern.compile("[0-9]{2,}[a-zA-Z.$]{0,5}");
         //loop through parts, to find a match
         for (String part : parts){
             if (pattern.matcher(part).matches()) { //matches an amount type

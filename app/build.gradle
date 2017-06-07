@@ -13,7 +13,6 @@ android {
         multiDexEnabled true
     }
     dexOptions {
-        incremental true
         javaMaxHeapSize "4g"
     }
     buildTypes {
@@ -48,6 +47,8 @@ dependencies {
     compile 'com.joanfuentes:HintCaseAssets:1.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'uk.co.jakelee:vidsta:1.0.0'
+    compile 'com.github.marlonlom:timeago:3.0.1'
+
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-core:10.2.6'
     compile 'com.google.firebase:firebase-auth:10.2.6'

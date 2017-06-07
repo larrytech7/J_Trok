@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
@@ -18,11 +19,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 import comn.example.user.j_trok.R;
 import comn.example.user.j_trok.models.Chat;
 import comn.example.user.j_trok.models.User;
-import comn.example.user.j_trok.utility.Utils;
 
 /**
  * Created by Larry Akah on 5/22/17.
@@ -65,7 +64,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         //setviews data here
         viewHolder.userNameTextView.setText(model.getAuthorName());
         viewHolder.chatContentTextView.setText(model.getChatText());
-        viewHolder.chatDateTimeTextview.setText(Utils.getTimeDifference(context, model.getChatDateTime()));
+        viewHolder.chatDateTimeTextview.setText(TimeAgo.using(model.getChatDateTime()));
 
         if (getItemViewType(position) == VIEW_TYPE_INCOMING)
             Picasso.with(context)

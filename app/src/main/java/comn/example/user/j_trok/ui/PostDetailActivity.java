@@ -2,7 +2,6 @@ package comn.example.user.j_trok.ui;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,10 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,13 +106,15 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             tradePost = dataSnapshot.getValue(TradePost.class);
-                            player.setVideoSource(Uri.parse(tradePost.getTradeVideoUrl()));
-                            authorNameTextView.setText(tradePost.getAuthorName());
-                            articleDescriptionTextView.setText(tradePost.getTradeDescription());
-                            Picasso.with(PostDetailActivity.this)
-                                    .load(Uri.parse(tradePost.getAuthorProfileImage()))
-                                    .placeholder(R.drawable.selling3)
-                                    .into(authorImageView);
+                            if (tradePost != null) {
+                                player.setVideoSource(Uri.parse(tradePost.getTradeVideoUrl()));
+                                authorNameTextView.setText(tradePost.getAuthorName());
+                                articleDescriptionTextView.setText(tradePost.getTradeDescription());
+                                Picasso.with(PostDetailActivity.this)
+                                        .load(Uri.parse(tradePost.getAuthorProfileImage()))
+                                        .placeholder(R.drawable.selling3)
+                                        .into(authorImageView);
+                            }
                         }
 
                         @Override

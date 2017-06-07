@@ -317,9 +317,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             }
                         }
                     });
-            final InputStream videoStream = new FileInputStream(new File(tradePost.getTradeVideoUrl()));
+            InputStream videoStream = new FileInputStream(new File(tradePost.getTradeVideoUrl()));
             //Uri videoUpload = Uri.fromFile(new File(tradePost.getTradeVideoUrl()));
-            firebaseStorage.getReference().child(Utils.STORAGE_REF_VIDEO)
+            firebaseStorage.getReference().child(Utils.STORAGE_REF_VIDEO+File.separatorChar+Utils.getFileName(tradePost.getTradeVideoUrl()))
                     .putStream(videoStream).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -398,6 +398,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                         super.onProgressUpdate(values);
                         //Update progressdialog
                         Log.d(LOGTAG, "Video compression Progress ... "+values[0]);
+                        mPrograssDialog.setSecondaryProgress(values[0] * 10);
                         //mPrograssDialog.setProgress(values[0] * 10);
                     }
 
