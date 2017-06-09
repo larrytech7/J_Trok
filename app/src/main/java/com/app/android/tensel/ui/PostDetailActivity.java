@@ -15,9 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.ChatBaseAdapter;
@@ -35,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.net.URISyntaxException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,8 +63,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     TextView articleDescriptionTextView;
     @BindView(R.id.chatEditTextview)
     EditText chatEditTextView;
-    @BindView(R.id.vplayer)
-    VideoView videoView;
+    /*@BindView(R.id.vplayer)
+    VideoView videoView;*/
 
     private User user;
     private FirebaseDatabase qDatabase;
@@ -124,25 +122,21 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             tradePost = dataSnapshot.getValue(TradePost.class);
-                            if (tradePost != null) {
-                                player.setVideoSource(Uri.parse(tradePost.getTradeVideoUrl()));
-                                authorNameTextView.setText(tradePost.getAuthorName());
-                                articleDescriptionTextView.setText(tradePost.getTradeDescription());
-                                Picasso.with(PostDetailActivity.this)
-                                        .load(Uri.parse(tradePost.getAuthorProfileImage()))
-                                        .placeholder(R.drawable.selling3)
-                                        .into(authorImageView);
-                                MediaPlayer mp = new MediaPlayer();
-                                try {
-                                    mp.setDataSource(PostDetailActivity.this, Uri.parse(tradePost.getTradeVideoUrl()));
-                                    videoView.setVideoURI(Uri.parse(tradePost.getTradeVideoUrl()));
-                                    videoView.setMediaController(new MediaController(PostDetailActivity.this));
-                                    videoView.setOnErrorListener(PostDetailActivity.this);
-                                    mp.start();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    FirebaseCrash.report(e.getCause());
+                            try {
+                                if (tradePost != null) {
+                                    player.setVideoSource(Uri.parse(Utils.getFilePath(PostDetailActivity.this,
+                                            Uri.parse(tradePost.getTradeVideoUrl()))));
+                                    authorNameTextView.setText(tradePost.getAuthorName());
+                                    articleDescriptionTextView.setText(tradePost.getTradeDescription());
+                                    Picasso.with(PostDetailActivity.this)
+                                            .load(Uri.parse(tradePost.getAuthorProfileImage()))
+                                            .placeholder(R.drawable.selling3)
+                                            .into(authorImageView);
+
                                 }
+                            }catch (URISyntaxException uriEx){
+                                uriEx.printStackTrace();
+                                FirebaseCrash.report(uriEx.getCause());
                             }
                         }
 
@@ -188,10 +182,11 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 //TODO. Perform like on Post
                 return true;
             case R.id.action_share:
-                //TODO. Add correct link for app deep linking of this post page
+                //Add correct link for app deep linking of this post page
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT,""+" \n http://traveler.cm/news");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_string, tradePost.getAuthorName(),
+                        " https://app.tensel.com/sell/"+tradePost.getTradePostId()));
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
                 return true;
             case android.R.id.home:
