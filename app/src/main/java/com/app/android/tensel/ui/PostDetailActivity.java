@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import berlin.volders.rxdownload.RxDownloadManager;
 import butterknife.BindView;
@@ -139,7 +143,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                             .into(authorImageView);
                                     rxDownloadManager = RxDownloadManager.from(PostDetailActivity.this);
                                     String videoName = Uri.parse(tradePost.getTradeVideoUrl()).getLastPathSegment();
-                                    Log.d("VName", Utils.getDownloadedVideo(videoName).toString());
+                                    //Log.d("VName", Utils.getDownloadedVideo(videoName).toString());
 
                                     if (!Utils.isVideoDownloaded(videoName)) { //download video if not yet downloaded
                                         rxDownloadManager.download(RxDownloadManager.request(Utils.getCleanUri(tradePost.getTradeVideoUrl()),
@@ -175,7 +179,6 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     protected void onPause() {
         super.onPause();
         player.pause();
-        //proxyCacheServer.unregisterCacheListener(this);
     }
 
     @Override
@@ -192,6 +195,13 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.details_item_menu, menu);
+        if (tradePost != null){
+            //setup like icon
+            if (tradePost.getLikes().size() > 0 && tradePost.getLikes().containsKey(user.getUserId())){
+                //turn like button on
+                menu.getItem(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_active, null));
+            }
+        }
         return true;
     }
 
@@ -201,6 +211,13 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         switch (item.getItemId()){
             case R.id.action_like:
                 //TODO. Perform like on Post
+                Map<String, Object> likeMap = new HashMap<>();
+                likeMap.put(user.getUserId(), tradePost.getLikes().containsKey(user.getUserId()) ? null:
+                        new HashMap<String, Boolean>().put(user.getUserId(), true));
+                FirebaseDatabase.getInstance().getReference("trades")
+                        .child(tradePost.getTradePostId()+"/likes")
+                        .updateChildren(likeMap);
+                item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_active, null));
                 return true;
             case R.id.action_share:
                 //Add correct link for app deep linking of this post page
