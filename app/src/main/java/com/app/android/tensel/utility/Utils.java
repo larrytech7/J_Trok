@@ -131,6 +131,15 @@ public class Utils {
         return getSdCard().getAbsolutePath() + "/Android/data/" + ctx.getPackageName() + "/media/videos";
     }
 
+    public static boolean isVideoDownloaded(String videoname){
+        File mfile = new File(getSdCard().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS, videoname);
+        return mfile.exists();
+    }
+
+    public static Uri getDownloadedVideo(String name){
+        return Uri.fromFile(new File(getSdCard().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS, name));
+    }
+
     public static String getFileName(@NonNull String file){
         File newfile = new File(file);
         return newfile.isFile() ? newfile.getName() : null;
@@ -218,7 +227,7 @@ public class Utils {
         String[] parts = pDesc.split("[ ]"); //split with spaces
         long amount = 0;
         String currency = "$";
-        Pattern pattern =  Pattern.compile("[0-9]{2,}[a-zA-Z.$]{0,5}");
+        Pattern pattern =  Pattern.compile("[0-9]{2,}[a-zA-Z.$]*");
         //loop through parts, to find a match
         for (String part : parts){
             if (pattern.matcher(part).matches()) { //matches an amount type
@@ -239,5 +248,14 @@ public class Utils {
             }
         }
         return new Price(amount, currency);
+    }
+
+    public static Uri getCleanUri(@NonNull String tradeVideoUrl) {
+        String newUrl = tradeVideoUrl.replace("%2F", "/");
+        String[] parts = tradeVideoUrl.split("[/]{2}");
+        String[] ssp = parts[1].split("[?]");
+
+        //return Uri.fromParts("https",ssp[0],ssp[1]);
+        return Uri.parse(tradeVideoUrl);
     }
 }

@@ -1,5 +1,6 @@
 package com.app.android.tensel.ui;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -33,11 +34,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
-import java.net.URISyntaxException;
-
+import berlin.volders.rxdownload.RxDownloadManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.functions.Action1;
 import uk.co.jakelee.vidsta.VidstaPlayer;
 import uk.co.jakelee.vidsta.listeners.FullScreenClickListener;
 import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
@@ -45,7 +46,8 @@ import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
 /**
  * Created by USER on 05/05/2017.
  */
-public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener, MediaPlayer.OnErrorListener {
+public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener,
+        VideoStateListeners.OnVideoBufferingListener, Action1<Uri>{
 
     private static final String TAG = "PostDetailActivity";
     private boolean isSheetShown = false;
@@ -70,6 +72,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     private FirebaseDatabase qDatabase;
     private TradePost tradePost;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private RxDownloadManager rxDownloadManager;
+    //private HttpProxyCacheServer proxyCacheServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +96,13 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                 ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/feed_id/chats/"), user, this));
+        //proxyCacheServer = SevenApp.getProxy(PostDetailActivity.this);
         // Grabs a reference to the player view
         //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
         player.setAutoLoop(false);
         player.setAutoPlay(true);
         player.setOnVideoErrorListener(this);
+        player.setOnVideoBufferingListener(this);
         player.setOnFullScreenClickListener(this);
         // From here, the player view will show a progress indicator until the player is prepared.
         // Once it's prepared, the progress indicator goes away and the controls become enabled for the user
@@ -124,17 +130,31 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                             tradePost = dataSnapshot.getValue(TradePost.class);
                             try {
                                 if (tradePost != null) {
-                                    player.setVideoSource(Uri.parse(Utils.getFilePath(PostDetailActivity.this,
-                                            Uri.parse(tradePost.getTradeVideoUrl()))));
+                                    //player.setVideoSource(Utils.getCleanUri(tradePost.getTradeVideoUrl()));
                                     authorNameTextView.setText(tradePost.getAuthorName());
                                     articleDescriptionTextView.setText(tradePost.getTradeDescription());
                                     Picasso.with(PostDetailActivity.this)
                                             .load(Uri.parse(tradePost.getAuthorProfileImage()))
                                             .placeholder(R.drawable.selling3)
                                             .into(authorImageView);
+                                    rxDownloadManager = RxDownloadManager.from(PostDetailActivity.this);
+                                    String videoName = Uri.parse(tradePost.getTradeVideoUrl()).getLastPathSegment();
+                                    Log.d("VName", Utils.getDownloadedVideo(videoName).toString());
 
+                                    if (!Utils.isVideoDownloaded(videoName)) { //download video if not yet downloaded
+                                        rxDownloadManager.download(RxDownloadManager.request(Utils.getCleanUri(tradePost.getTradeVideoUrl()),
+                                                videoName).setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN))
+                                                .subscribe(PostDetailActivity.this, new Action1<Throwable>() {
+                                                    @Override
+                                                    public void call(Throwable throwable) {
+                                                        throwable.printStackTrace();
+                                                    }
+                                                });
+                                    }else{
+                                        call(Utils.getDownloadedVideo(videoName));
+                                    }
                                 }
-                            }catch (URISyntaxException uriEx){
+                            }catch (NullPointerException uriEx){
                                 uriEx.printStackTrace();
                                 FirebaseCrash.report(uriEx.getCause());
                             }
@@ -155,6 +175,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     protected void onPause() {
         super.onPause();
         player.pause();
+        //proxyCacheServer.unregisterCacheListener(this);
     }
 
     @Override
@@ -256,9 +277,17 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     }
 
     @Override
-    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-
-        Log.e("VideoError", "Video Play error");
-        return false;
+    public void OnVideoBuffering(VidstaPlayer evp, int buffPercent) {
+        if (buffPercent == 100){
+            evp.start();
+        }
     }
+
+    @Override
+    public void call(Uri uri) {
+        if (uri != null){
+            player.setVideoSource(uri);
+        }
+    }
+
 }

@@ -23,6 +23,9 @@ android {
     }
 }
 
+ext {
+    rxDownloadManagerVersion = '0.1'
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -48,6 +51,8 @@ dependencies {
     compile 'com.joanfuentes:HintCaseAssets:1.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'uk.co.jakelee:vidsta:1.0.0'
+    //compile 'com.danikula:videocache:2.7.0'
+    compile "berlin.volders:rxDownloadManager:$rxDownloadManagerVersion"
     compile 'com.github.marlonlom:timeago:3.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-core:10.2.6'
