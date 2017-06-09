@@ -124,8 +124,12 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         viewHolder.shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Share article link via intent as deep link
-                String id = model.getTradePostId();
+                //Share article link via intent as deep link
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_string, model.getAuthorName(),
+                        " https://app.tensel.com/sell/"+model.getTradePostId()));
+                context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share)));
             }
         });
         viewHolder.commentButton.setOnClickListener(new View.OnClickListener() {
