@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name" tools:override="true">7Sel</string>
+    <string name="app_name" tools:override="true">10Sel</string>
     <string name="title_activity_registration_form">Register</string>
 
     <string name="title_activity_welcome">Home Screen</string>
@@ -41,7 +41,7 @@
     <string name="publish_description">(*) fields are obligatory. Pick categories to improve item visibility</string>
     <string name="price_hint">Price (*)</string>
     <string name="location_hint">Location</string>
-    <string name="message_sell">Have awesome stuff to sell? Sell your stuff in 7 seconds. It starts with this button!</string>
+    <string name="message_sell">Have awesome stuff to sell? Sell your stuff in 10 seconds. It starts with this button!</string>
     <string name="search_hint">Quickly search for cool stuff</string>
     <string name="search">%s, quickly find stuff here</string>
     <string name="preparing">preparing </string>
