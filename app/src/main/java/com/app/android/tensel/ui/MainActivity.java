@@ -1,5 +1,7 @@
 package com.app.android.tensel.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -8,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -17,8 +21,15 @@ import com.app.android.tensel.fragments.ProfileFragment;
 import com.app.android.tensel.fragments.SellingFragment;
 import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.joanfuentes.hintcase.HintCase;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
@@ -30,12 +41,14 @@ import com.joanfuentes.hintcaseassets.shapeanimators.UnrevealCircleShapeAnimator
 import com.joanfuentes.hintcaseassets.shapes.CircularShape;
 import com.popalay.tutors.Tutors;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String LOGTAG = "MAinActivity";
     Map<String, Fragment> fragments = new HashMap<>();
@@ -44,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseAuth mAuth;
+    private GoogleApiClient mgoogleApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
-                        FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         String fragment = "";
                         //toggleIcon(item);
                         switch (item.getItemId()) {
@@ -88,7 +102,47 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_layout, fragments.get("buying"), "buying")
                 .commit();
+        mgoogleApi = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(AppInvite.API)
+                .build();
+        //check if app is launched from Deep Link
+        boolean autoLaunchDl = false;
+        AppInvite.AppInviteApi.getInvitation(mgoogleApi, this, autoLaunchDl)
+                .setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
+                    @Override
+                    public void onResult(@NonNull AppInviteInvitationResult appInviteInvitationResult) {
+                        if (appInviteInvitationResult.getStatus().isSuccess()) {
+                            //deep link present, we can extract
+                            Intent intent = appInviteInvitationResult.getInvitationIntent();
+                            String deeplink = AppInviteReferral.getDeepLink(intent);
+                            //TODO: Use for refferal programmes and other gamification techniques (Gain more recording time)
+                            FirebaseCrash.log("Deep link activated");
+                        }
+                    }
+                });
 
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+
+        if (TextUtils.equals(appLinkAction, "android.intent.action.VIEW")) {
+            Uri appLinkData = appLinkIntent.getData();
+            Log.d(LOGTAG, "data path: "+appLinkData.getPath());
+            if (TextUtils.equals(appLinkData.getPath(), "/buy")){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, fragments.get("buying"), "buying")
+                        .commit();
+            }else if (TextUtils.equals(appLinkData.getPath(), "/sell")){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, fragments.get("selling"), "selling")
+                        .commit();
+            }else if (TextUtils.equals(appLinkData.getPath(), "/me")){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, fragments.get("profile"), "profile")
+                        .commit();
+            }
+        }
     }
 
     @Override
@@ -164,4 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

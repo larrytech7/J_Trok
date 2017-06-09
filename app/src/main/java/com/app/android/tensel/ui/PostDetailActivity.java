@@ -93,7 +93,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         qDatabase = FirebaseDatabase.getInstance();
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/feed_id/chats/"), user,this));
+                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/feed_id/chats/"), user, this));
         // Grabs a reference to the player view
         //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
         player.setAutoLoop(false);
@@ -102,7 +102,17 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         player.setOnFullScreenClickListener(this);
         // From here, the player view will show a progress indicator until the player is prepared.
         // Once it's prepared, the progress indicator goes away and the controls become enabled for the user
-        loadDetails(getIntent());
+
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        if (TextUtils.equals(appLinkAction, Intent.ACTION_VIEW)) {
+            Uri appLinkData = appLinkIntent.getData();
+            Log.d("PostDetail", appLinkData.getPath());
+            appLinkIntent.putExtra(Utils.FEED_DETAIL_ID, appLinkData.getLastPathSegment());
+         }
+        loadDetails(appLinkIntent);
+
     }
 
     private void loadDetails(Intent intent) {
