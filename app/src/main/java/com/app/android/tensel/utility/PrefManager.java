@@ -32,13 +32,13 @@ public class PrefManager {
         editor.commit();
     }
 
-    public void setVideoRecordingDuration(float duration){
-        editor.putFloat(Utils.PREF_RECORDING_DURATION, duration)
+    public void setVideoRecordingDuration(int duration){
+        editor.putInt(Utils.PREF_RECORDING_DURATION, duration)
                 .commit();
     }
 
-    public float getVideoRecordingDuration(){
-        return pref.getFloat(Utils.PREF_RECORDING_DURATION, 7.0f);
+    public int getVideoRecordingDuration(){
+        return pref.getInt(Utils.PREF_RECORDING_DURATION, 10);
     }
 
     public boolean isFirstTimeLaunch() {

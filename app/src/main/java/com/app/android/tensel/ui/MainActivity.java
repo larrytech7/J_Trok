@@ -41,8 +41,6 @@ import com.joanfuentes.hintcaseassets.shapeanimators.UnrevealCircleShapeAnimator
 import com.joanfuentes.hintcaseassets.shapes.CircularShape;
 import com.popalay.tutors.Tutors;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

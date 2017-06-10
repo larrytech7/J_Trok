@@ -96,6 +96,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private FirebaseStorage firebaseStorage;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private Uri videoUploadUri;
 
     public static BuyingFragment newInstance(FirebaseUser user) {
         BuyingFragment fragment = new BuyingFragment();
@@ -165,11 +166,17 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     @OnClick(R.id.fabCreatePost)
     public void startPostCreate(){
 
-        new MaterialCamera(this)
-                .qualityProfile(MaterialCamera.QUALITY_1080P)
+        /*new MaterialCamera(this)
+                .qualityProfile(MaterialCamera.QUALITY_HIGH)
                 .countdownSeconds(new PrefManager(getActivity()).getVideoRecordingDuration())
                 .saveDir(Utils.getVideoDirPath(getActivity()))
-                .start(CAMERA_RQ_VIDEO);
+                .start(CAMERA_RQ_VIDEO);*/
+        //use device camera app
+//        videoUploadUri = Utils.getVideoFileForUpload(getActivity());
+        Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        videoIntent.putExtra(MediaStore.EXTRA_OUTPUT,  Utils.getVideoDirPath(getActivity()));
+        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, new PrefManager(getActivity()).getVideoRecordingDuration() );
+        startActivityForResult(videoIntent, CAMERA_RQ_VIDEO);
     }
 
     @Override
@@ -313,8 +320,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         //create video thumbnail and upload post
         try {
             final MaterialDialog mProgressDialog = new MaterialDialog.Builder(getActivity())
-                    .progress(true, 0)
+                    .progress(true, 10)
                     .autoDismiss(false)
+                    .cancelable(false)
                     .widgetColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
                     .content(getString(R.string.publishing)).show();
 
@@ -392,6 +400,14 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        searchBox.toggleSearch();
+        //searchBox.hideCircularly(getActivity());
+        searchBox.clearResults();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -401,59 +417,64 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
             if (resultCode == RESULT_OK) {
                 String filePath = data.getDataString();
                 Toast.makeText(getActivity(), "Saved to: " + filePath, Toast.LENGTH_LONG).show();
-                //compress video at this point
-                new AsyncTask<Uri, Integer, Boolean>(){
-                    private ProgressDialog mPrograssDialog;
+                try {
+                    //compress video at this point
+                    new AsyncTask<Uri, Integer, Boolean>() {
+                        private ProgressDialog mPrograssDialog;
 
-                    @Override
-                    protected Boolean doInBackground(Uri... paths) {
-                        Log.e(LOGTAG, "path: "+paths[0].getPath());
-                        int progress = 0;
-                        boolean converted = false;
-                        try {
-                            converted = MediaController.getInstance()
-                                    .convertVideo(Utils.getFilePath(getActivity(), paths[0]),
-                                            new File(Utils.getVideoDirPath(getActivity())));
-                            publishProgress(++progress);
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
+                        @Override
+                        protected Boolean doInBackground(Uri... paths) {
+                            Log.e(LOGTAG, "path: " + paths[0].getPath());
+                            int progress = 0;
+                            boolean converted = false;
+                            try {
+                                converted = MediaController.getInstance()
+                                        .convertVideo(Utils.getFilePath(getActivity(), paths[0]),
+                                                new File(Utils.getVideoDirPath(getActivity())));
+                                publishProgress(++progress);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
+                            return converted;
                         }
-                        return converted;
-                    }
 
-                    @Override
-                    protected void onProgressUpdate(Integer... values) {
-                        super.onProgressUpdate(values);
-                        //Update progressdialog
-                        Log.d(LOGTAG, "Video compression Progress ... "+values[0]);
-                        mPrograssDialog.setSecondaryProgress(values[0] * 10);
-                        //mPrograssDialog.setProgress(values[0] * 10);
-                    }
-
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-                        mPrograssDialog = new ProgressDialog(getActivity());
-                        mPrograssDialog.setIndeterminate(true);
-                        mPrograssDialog.setMessage(getString(R.string.preparing));
-                        mPrograssDialog.setCancelable(false);
-                        mPrograssDialog.setCanceledOnTouchOutside(false);
-                        mPrograssDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        mPrograssDialog.show();
-                    }
-
-                    @Override
-                    protected void onPostExecute(Boolean isConverted) {
-                        mPrograssDialog.dismiss();
-                        if (isConverted){
-                            //log converted path
-                            Log.d(LOGTAG, "Path: "+MediaController.cachedFile.getPath());
-                            //upload this version of the file to the cloud. Here'd be a suitable place to call the showPublishDialog method
-                            showPublishDialog(MediaController.cachedFile.getPath());
+                        @Override
+                        protected void onProgressUpdate(Integer... values) {
+                            super.onProgressUpdate(values);
+                            //Update progressdialog
+                            Log.d(LOGTAG, "Video compression Progress ... " + values[0]);
+                            mPrograssDialog.setSecondaryProgress(values[0] * 10);
+                            //mPrograssDialog.setProgress(values[0] * 10);
                         }
-                        super.onPostExecute(isConverted);
-                    }
-                }.execute(data.getData());
+
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            mPrograssDialog = new ProgressDialog(getActivity());
+                            mPrograssDialog.setIndeterminate(true);
+                            mPrograssDialog.setMessage(getString(R.string.preparing));
+                            mPrograssDialog.setCancelable(false);
+                            mPrograssDialog.setCanceledOnTouchOutside(false);
+                            mPrograssDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            mPrograssDialog.show();
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean isConverted) {
+                            mPrograssDialog.dismiss();
+                            if (isConverted) {
+                                //log converted path
+                                Log.d(LOGTAG, "Path: " + MediaController.cachedFile.getPath());
+                                //upload this version of the file to the cloud. Here'd be a suitable place to call the showPublishDialog method
+                                showPublishDialog(MediaController.cachedFile.getPath());
+                            }
+                            super.onPostExecute(isConverted);
+                        }
+                    }.execute(data.getData());
+                }catch (Exception ex){
+                    FirebaseCrash.report(ex.getCause());
+                }
+
 
             } else if(data != null) {
                 Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);

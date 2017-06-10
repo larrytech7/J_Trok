@@ -21,7 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 
@@ -105,13 +108,7 @@ public class Utils {
             Log.d(TAG, "Deleting Empty Files in " + parentDir );
             for ( File file: files )
             {
-                if ( file.getName().endsWith( ".mp4" ) && file.length() == 0 )
-                {
-
-                    File myFile = new File( parentDir + "/" + file.getName() );
-                    Log.d(TAG, "Delete file: " + myFile.getAbsolutePath());
-                    myFile.delete();
-                }
+                file.delete();
             }
         }
     }
@@ -129,6 +126,11 @@ public class Utils {
     public static String getVideoDirPath( Context ctx )
     {
         return getSdCard().getAbsolutePath() + "/Android/data/" + ctx.getPackageName() + "/media/videos";
+    }
+
+    public static Uri getVideoFileForUpload(Context context){
+        return Uri.fromFile(new File(getVideoDirPath(context), "VID_"+ new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
+                .format(new Date())+".mp4"));
     }
 
     public static boolean isVideoDownloaded(String videoname){
