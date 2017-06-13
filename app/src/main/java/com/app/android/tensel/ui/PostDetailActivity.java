@@ -227,6 +227,17 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                         " https://app.tensel.com/sell/"+tradePost.getTradePostId()));
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
                 return true;
+            case R.id.action_call:
+                //TODO: Implement dialing author's number
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "+user.getUserPhoneNumber().trim()));
+                startActivity(callIntent);
+                return true;
+            case R.id.action_sms:
+                //TODO. Replace with author's phone number
+                Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("smsto:"+user.getUserPhoneNumber().trim()));
+                smsIntent.putExtra("sms_body", getString(R.string.sms_message));
+                startActivity(smsIntent);
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;

@@ -18,4 +18,16 @@
         app:showAsAction="always"
         android:title="@string/share"
         android:titleCondensed="@string/share_hint"/>
+    <item
+        android:id="@+id/action_call"
+        android:icon="@drawable/ic_call"
+        android:title="@string/call_author"
+        android:titleCondensed="@string/call"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_sms"
+        android:icon="@drawable/ic_sms"
+        android:title="@string/sms_author"
+        android:titleCondensed="@string/sms"
+        app:showAsAction="never" />
 </menu>
