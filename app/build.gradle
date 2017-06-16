@@ -60,7 +60,6 @@ dependencies {
     compile 'com.joanfuentes:HintCaseAssets:1.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'uk.co.jakelee:vidsta:1.0.0'
-    compile 'com.github.jd-alexander:LikeButton:0.2.1'
     //compile 'com.danikula:videocache:2.7.0'
     compile "berlin.volders:rxDownloadManager:$rxDownloadManagerVersion"
     compile 'com.github.marlonlom:timeago:3.0.1'

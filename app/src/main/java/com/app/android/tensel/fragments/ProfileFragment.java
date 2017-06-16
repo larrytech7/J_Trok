@@ -117,11 +117,19 @@ public class ProfileFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
                         try {
+                            mAuthenticatedUser.setUserPhoneNumber(user.getUserPhoneNumber());
+                            mAuthenticatedUser.setUserStatusText(user.getUserStatusText());
+                            mAuthenticatedUser.setUserCity(user.getUserCity());
+                            mAuthenticatedUser.setUserCountry(user.getUserCountry());
+                            mAuthenticatedUser.setSells(user.getSells());
+                            mAuthenticatedUser.setBuys(user.getBuys());
+
                             phoneTextView.setText(user.getUserPhoneNumber());
                             aboutTextView.setText(user.getUserStatusText());
                             locationTextView.setText(user.getUserCity());
                             userCountryTextView.setText(user.getUserCity()+"-"+user.getUserCountry());
                             salesTextView.setText(String.valueOf(user.getSells()));
+                            requestRequestTextView.setText(String.valueOf(user.getBuys()));
                         } catch (Exception e) {
                             e.printStackTrace();
                             FirebaseCrash.report(e.getCause());
@@ -227,6 +235,7 @@ public class ProfileFragment extends Fragment {
                 })
                 .show();
     }
+
     @OnClick(R.id.buttonEditStatus)
     public void editStatus(){
         new MaterialDialog.Builder(getContext())

@@ -24,7 +24,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.like.LikeButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -71,7 +70,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         @BindView(R.id.feedsImageView)
         ImageView feedsImageView;
         @BindView(R.id.likeButton)
-        LikeButton likeButton;
+        ImageButton likeButton;
         @BindView(R.id.commentButton)
         ImageButton commentButton;
         @BindView(R.id.shareButton)
@@ -111,8 +110,8 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
             //turn like button on
             viewHolder.likeButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_like_active, null));
         }*/
-        viewHolder.likeButton.setLiked(model.getLikes().get(mUser.getUserId()) == null ? false : model.getLikes().get(mUser.getUserId()));
-
+        viewHolder.likeButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), (model.getLikes().get(mUser.getUserId()) == null ? false : model.getLikes().get(mUser.getUserId())) ?
+                R.drawable.ic_like_active : R.drawable.ic_like_inactive,  null));
         //interaction listeners
         viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
