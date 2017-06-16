@@ -59,10 +59,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegistrationForm" />
-        <activity android:name=".IntroSlider" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ItemDetail" />
         <activity android:name=".ui.RegistrationActivity" />
         <activity android:name=".ui.IntroSliderActivity">
             <intent-filter>
