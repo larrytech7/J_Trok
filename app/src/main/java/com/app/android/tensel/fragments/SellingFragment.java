@@ -1,140 +1,50 @@
 package com.app.android.tensel.fragments;
 
-
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.afollestad.materialcamera.MaterialCamera;
 import com.app.android.tensel.R;
-import com.app.android.tensel.models.User;
-import com.app.android.tensel.utility.Utils;
-import com.google.firebase.auth.FirebaseUser;
-import com.iceteck.silicompressorr.SiliCompressor;
+import com.app.android.tensel.adapters.SalesAdpater;
 
-import java.io.File;
-import java.io.IOException;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
-import static android.app.Activity.RESULT_OK;
+import static com.app.android.tensel.R.layout.fragment_sell;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class SellingFragment extends Fragment {
-
-    private static final int CAMERA_RQ_IMAGE = 400;
-    private Unbinder unbinder;
-    User mAuthenticatedUser;
-
-    @BindView(R.id.imageView)
-    ImageView imageView;
-
-    public static SellingFragment newInstance(FirebaseUser user) {
+    public static SellingFragment newInstance() {
         SellingFragment fragment = new SellingFragment();
-        User muser = new User();
-        muser.setUserEmail(user.getEmail());
-        muser.setUserName(user.getDisplayName());
-        muser.setUserCountry("");
-        muser.setUserCity("");
-        muser.setUserId(user.getUid());
-        muser.setUserProfilePhoto(user.getPhotoUrl().toString());
-
-        Bundle args = new Bundle();
-        args.putSerializable(Utils.CURRENT_USER, muser);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null && mAuthenticatedUser == null){
-               mAuthenticatedUser = (User) getArguments().getSerializable(Utils.CURRENT_USER);
-        }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_sell, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        final View rootView = inflater.inflate(fragment_sell, container, false);
+
+
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        SalesAdpater adapter = new SalesAdpater(new String[]{"Item one", "Item two", "Item three", "Item four", "Item five", "Item six", "Item Seven", "Item eight", "Item nine", "Item ten"});
+        recyclerView.setAdapter(adapter);
+
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+
         return rootView;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(
-                Utils.getVideoDirPath(getActivity())+ File.separatorChar+"VIDEO_20170601_143338.mp4",
-                MediaStore.Video.Thumbnails.MICRO_KIND);
-        imageView.setImageBitmap(thumb);
-    }
-
-    @OnClick(R.id.btnValidate)
-    public void getPhotoShot(){
-        //take demo picture
-
-        new MaterialCamera(this)
-                .stillShot()
-                .saveDir(Utils.getImageDirPath(getActivity()))
-                .start(CAMERA_RQ_IMAGE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Received recording or error from MaterialCamera
-        if (requestCode == CAMERA_RQ_IMAGE && resultCode == RESULT_OK) {
-
-                String filePath = data.getDataString();
-                Toast.makeText(getActivity(), "Saved to: " + filePath, Toast.LENGTH_LONG).show();
-                //compress image
-            try {
-                Bitmap bitmap = SiliCompressor
-                        .with(getActivity())
-                        .getCompressBitmap(data.getDataString());
-                imageView.setImageBitmap(bitmap);
-                Log.d("ImageCompression", "Info: byte size->"+bitmap.getByteCount());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(Utils.CURRENT_USER, mAuthenticatedUser);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null)
-            mAuthenticatedUser = (User) savedInstanceState.getSerializable(Utils.CURRENT_USER);
-    }
 }
+
