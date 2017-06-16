@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -81,13 +81,24 @@
         android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
-        <ImageButton
+        <!--<ImageButton
             android:id="@+id/likeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_like_inactive"
             android:background="@android:color/transparent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"/>-->
+        <com.like.LikeButton
+            app:icon_type="heart"
+            app:icon_size="16dp"
+            app:liked="false"
+            app:is_enabled="true"
+            app:like_drawable="@drawable/ic_like_active"
+            app:unlike_drawable="@drawable/ic_like_inactive"
+            android:id="@+id/likeButton"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <ImageButton
             android:id="@+id/commentButton"

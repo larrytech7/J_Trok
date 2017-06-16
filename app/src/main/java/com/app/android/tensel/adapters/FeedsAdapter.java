@@ -24,6 +24,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.like.LikeButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         @BindView(R.id.feedsImageView)
         ImageView feedsImageView;
         @BindView(R.id.likeButton)
-        ImageButton likeButton;
+        LikeButton likeButton;
         @BindView(R.id.commentButton)
         ImageButton commentButton;
         @BindView(R.id.shareButton)
@@ -106,17 +107,18 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         viewHolder.priceTagTextView.setText(String.format(Locale.ENGLISH ,"%d %s", model.getTradeAmount(), model.getCurrency()));
         viewHolder.dateTextView.setText(TimeAgo.using(model.getTradeTime()));
 
-        if (model.getLikes().size() > 0 && model.getLikes().containsKey(mUser.getUserId())){
+        /*if (model.getLikes().get(mUser.getUserId()) == null ? false : model.getLikes().get(mUser.getUserId()) ){
             //turn like button on
             viewHolder.likeButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_like_active, null));
-        }
+        }*/
+        viewHolder.likeButton.setLiked(model.getLikes().get(mUser.getUserId()) == null ? false : model.getLikes().get(mUser.getUserId()));
+
         //interaction listeners
         viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Map<String, Object> likeMap = new HashMap<>();
-                likeMap.put(mUser.getUserId(), model.getLikes().containsKey(mUser.getUserId()) ? null:
-                        new HashMap<String, Boolean>().put(mUser.getUserId(), true));
+                likeMap.put(mUser.getUserId(), model.getLikes().get(mUser.getUserId()) == null || !model.getLikes().get(mUser.getUserId()));
                 FirebaseDatabase.getInstance().getReference("trades")
                         .child(model.getTradePostId()).child("likes")
                         .updateChildren(likeMap);

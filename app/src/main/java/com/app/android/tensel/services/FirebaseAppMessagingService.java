@@ -30,7 +30,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
 
     private int numMessages = 0;
     private ArrayList<String> messageList = new ArrayList<>();
-    private final static String LOGTAG = "7Sel_FCM";
+    private final static String LOGTAG = "10Sel_FCM";
     //notification Types
     private static final int NOTIFICATION_TYPE_FEED = 1;
     private static final int NOTIFICATION_TYPE_CHAT = 2;
@@ -82,19 +82,19 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         RemoteInput remoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
                                 .setLabel(getString(R.string.reply))
                                 .build();
-                        NotificationCompat.Action commentAction = new NotificationCompat.Action.Builder(R.drawable.ic_send,
+                        /*NotificationCompat.Action commentAction = new NotificationCompat.Action.Builder(R.drawable.ic_send,
                                 getString(R.string.reply),
                                 cbuilder.mNotification.contentIntent)
                                 .setAllowGeneratedReplies(true)
                                 .addRemoteInput(remoteInput)
-                                .build();
+                                .build();*/
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                         inboxStyle.setSummaryText(getString(R.string.new_comments, numMessages));
                         inboxStyle.setBigContentTitle(title);
                         for(String m : messageList){
                             inboxStyle.addLine(m);
                         }
-                        cbuilder.addAction(commentAction);
+                        //cbuilder.addAction(commentAction);
                         cbuilder.setStyle(inboxStyle);
                         cbuilder.setNumber(++numMessages);
 
@@ -160,7 +160,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.app_icon));
         builder.setContentIntent(pendingIntent);
         builder.setSound(Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.send_sound));
-        builder.setOngoing(true);
+        builder.setOngoing(false);
         builder.setAutoCancel(true);
         builder.setWhen(0);
         /*NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();

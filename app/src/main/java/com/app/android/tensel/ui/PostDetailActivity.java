@@ -214,7 +214,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         getMenuInflater().inflate(R.menu.details_item_menu, menu);
         if (tradePost != null){
             //setup like icon
-            if (tradePost.getLikes().size() > 0 && tradePost.getLikes().containsKey(user.getUserId())){
+            if (tradePost.getLikes().get(user.getUserId()) == null ? false : tradePost.getLikes().get(user.getUserId())){
                 //turn like button on
                 menu.getItem(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_active, null));
             }
@@ -227,12 +227,11 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
         switch (item.getItemId()){
             case R.id.action_like:
-                //TODO. Perform like on Post
+                //Perform like on Post
                 Map<String, Object> likeMap = new HashMap<>();
-                likeMap.put(user.getUserId(), tradePost.getLikes().containsKey(user.getUserId()) ? null:
-                        new HashMap<String, Boolean>().put(user.getUserId(), true));
+                likeMap.put(user.getUserId(), tradePost.getLikes().get(user.getUserId()) == null || !tradePost.getLikes().get(user.getUserId()));
                 FirebaseDatabase.getInstance().getReference("trades")
-                        .child(tradePost.getTradePostId()+"/likes")
+                        .child(tradePost.getTradePostId()).child("likes")
                         .updateChildren(likeMap);
                 item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_active, null));
                 return true;
@@ -330,8 +329,12 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
     @Override
     public void call(Uri uri) {
-        if (uri != null){
-            player.setVideoSource(uri);
+        try {
+            if (uri != null){
+                player.setVideoSource(uri);
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
     }
 
