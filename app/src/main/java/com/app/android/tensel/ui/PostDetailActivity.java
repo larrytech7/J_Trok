@@ -120,7 +120,24 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             appLinkIntent.putExtra(Utils.FEED_DETAIL_ID, appLinkData.getLastPathSegment());
          }
         loadDetails(appLinkIntent);
+        getUser();
 
+    }
+
+    private void getUser() {
+        qDatabase.getReference("users/"+user.getUserId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User muser = dataSnapshot.getValue(User.class);
+                user.setUserPhoneNumber(muser.getUserPhoneNumber());
+                user.setBuys(muser.getBuys());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void loadDetails(Intent intent) {

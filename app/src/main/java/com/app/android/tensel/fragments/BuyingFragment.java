@@ -156,7 +156,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         search.setLogoText(getString(R.string.search, mAuthenticatedUser.getUserName()));
         search.setLogoTextColor(R.color.bg_screen1);
         //search.setMenuVisibility(SearchBox.GONE);
-        search.enableVoiceRecognition(getActivity());
+        search.enableVoiceRecognition(this);
         search.setHint(getString(R.string.search_hint));
         search.setSearchListener(this);
 
@@ -405,6 +405,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         searchBox.toggleSearch();
         //searchBox.hideCircularly(getActivity());
         searchBox.clearResults();
+        searchBox.clearFocus();
     }
 
     @Override

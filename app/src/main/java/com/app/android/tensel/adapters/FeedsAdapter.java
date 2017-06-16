@@ -98,6 +98,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
                 .into(viewHolder.feedsImageView);
         Picasso.with(context)
                 .load(Uri.parse(model.getAuthorProfileImage()))
+                .placeholder(R.drawable.app_icon)
                 .resize(100,100)
                 .into(viewHolder.feedsAutorImageView);
 

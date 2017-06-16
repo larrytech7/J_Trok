@@ -98,7 +98,7 @@ public class ProfileFragment extends Fragment {
                 .load(mAuthenticatedUser.getUserProfilePhoto())
                 //.resize(120,120)
                 .placeholder(R.drawable.app_icon)
-                .error(R.drawable.crescent_bottom)
+                .error(R.drawable.ic_clear)
                 .into(profilePhotoImageView);
 
         //firebase
@@ -191,6 +191,9 @@ public class ProfileFragment extends Fragment {
 
     @OnClick(R.id.buttonEditLocation)
     public void editLocation(){
+        String city = mAuthenticatedUser.getUserCity() == null ? "" : mAuthenticatedUser.getUserCity();
+        String country = mAuthenticatedUser.getUserCountry() == null ? "" : mAuthenticatedUser.getUserCountry();
+
         new MaterialDialog.Builder(getContext())
                 .title(getString(R.string.location_hint))
                 .backgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen1, null))
@@ -198,7 +201,7 @@ public class ProfileFragment extends Fragment {
                 .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .inputRange(2,255, ResourcesCompat.getColor(getResources(), R.color.google_plus_red, null))
-                .input(getString(R.string.update_location), mAuthenticatedUser.getUserCity()+"-"+mAuthenticatedUser.getUserCountry(),
+                .input(getString(R.string.update_location), city +"-"+country,
                         false, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
