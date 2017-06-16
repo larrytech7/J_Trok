@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944512116081:android:8fefd21e01363a0d",
+        "android_client_info": {
+          "package_name": "com.app.android.tensel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944512116081-f2ao38n6jrr4pt9mi9ac7duclgaljcsg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.android.tensel",
+            "certificate_hash": "97444cd501ffc75d694b12a3a234b6365e4c8860"
+          }
+        },
+        {
+          "client_id": "944512116081-m43vae2ablhqpaijk3kdg6as87c7gst0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkBHP3zQXA7z4qglWmduSALLCimWMrPIo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944512116081-m43vae2ablhqpaijk3kdg6as87c7gst0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

@@ -4,7 +4,9 @@ android {
     compileSdkVersion 25
     buildToolsVersion '23.0.1'
     defaultConfig {
+
         applicationId "comn.example.user.j_trok"
+        applicationId "com.app.android.tensel"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
@@ -13,7 +15,6 @@ android {
         multiDexEnabled true
     }
     dexOptions {
-        incremental true
         javaMaxHeapSize "4g"
     }
     buildTypes {
@@ -24,10 +25,15 @@ android {
     }
 }
 
+ext {
+    rxDownloadManagerVersion = '0.1'
+}
+
 repositories {
     jcenter()
     maven { url "https://dl.bintray.com/drummer-aidan/maven" }
 }
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -53,6 +59,9 @@ dependencies {
     compile 'com.joanfuentes:HintCaseAssets:1.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'uk.co.jakelee:vidsta:1.0.0'
+    //compile 'com.danikula:videocache:2.7.0'
+    compile "berlin.volders:rxDownloadManager:$rxDownloadManagerVersion"
+    compile 'com.github.marlonlom:timeago:3.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-core:10.2.6'
     compile 'com.google.firebase:firebase-auth:10.2.6'
@@ -61,7 +70,11 @@ dependencies {
     compile 'com.firebaseui:firebase-ui-database:1.0.1'
     compile 'com.google.firebase:firebase-storage:10.2.6'
     compile 'com.google.firebase:firebase-messaging:10.2.6'
+
+    compile 'com.google.firebase:firebase-crash:10.2.6'
+    compile 'com.google.firebase:firebase-invites:10.2.6'
     testCompile 'junit:junit:4.12'
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }
 apply plugin: 'com.google.gms.google-services'

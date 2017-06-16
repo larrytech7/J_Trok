@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="comn.example.user.j_trok.ui.PostDetailActivity">
+    tools:context="com.app.android.tensel.ui.PostDetailActivity">
 
     <include layout="@layout/activity_item_detail"/>
 

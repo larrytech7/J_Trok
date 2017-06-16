@@ -25,12 +25,16 @@
             android:layout_height="match_parent"
             android:transitionName="article_shared"
             app:autoLoop="true"
-            app:autoPlay="true"
+            app:autoPlay="false"
             app:buttonTintColor="@color/bg_screen3"
             app:fullScreenButtonEnabled="true"
             app:fullScreenButtonVisible="true"
             app:setFullScreen="false"
             app:textColor="@color/colorPrimary" />
+        <!--<VideoView
+            android:id="@+id/vplayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />-->
 
         <TextView
             android:id="@+id/authorNameTextView"
