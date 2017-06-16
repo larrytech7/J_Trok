@@ -166,13 +166,11 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d(TAG, "User: "+user.getEmail());
                             goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(RegistrationActivity.this, getString(R.string.login_error, "Try again, please."),
                                     Toast.LENGTH_SHORT).show();
                         }

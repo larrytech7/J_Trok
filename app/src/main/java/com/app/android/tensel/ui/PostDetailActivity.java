@@ -129,8 +129,13 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User muser = dataSnapshot.getValue(User.class);
-                user.setUserPhoneNumber(muser.getUserPhoneNumber());
-                user.setBuys(muser.getBuys());
+                try {
+                    user.setUserPhoneNumber(muser.getUserPhoneNumber());
+                    user.setBuys(muser.getBuys());
+                    user.setSells(muser.getSells());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
