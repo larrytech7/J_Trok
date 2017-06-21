@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:attribute="http://schemas.android.com/apk/res-auto"
-    tools:context="comn.example.user.tensel.fragments.ProfileFragment">
+    tools:context="com.app.android.tensel.fragments.ProfileFragment">
 
     <RelativeLayout
         android:id="@+id/container"

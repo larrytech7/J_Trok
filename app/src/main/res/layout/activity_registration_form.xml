@@ -7,7 +7,7 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@drawable/buying"
-    tools:context="comn.example.user.tensel.ui.RegistrationActivity">
+    tools:context="com.app.android.tensel.ui.RegistrationActivity">
 
 
     <ImageView
