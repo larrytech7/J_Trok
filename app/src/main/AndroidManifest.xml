@@ -3,6 +3,7 @@
     package="com.app.android.tensel">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -59,6 +60,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.RegistrationActivity" />
         <activity android:name=".ui.IntroSliderActivity">
             <intent-filter>
