@@ -6,16 +6,22 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
+        android:layout_marginTop="@dimen/card_height"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addProduct"
+        android:id="@+id/buttonRequestStuff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_input_add" />
+
+    <com.quinny898.library.persistentsearch.SearchBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchbox" />
 
 </android.support.design.widget.CoordinatorLayout>

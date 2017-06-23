@@ -403,7 +403,6 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public void onResume() {
         super.onResume();
         searchBox.toggleSearch();
-        //searchBox.hideCircularly(getActivity());
         searchBox.clearResults();
         searchBox.clearFocus();
     }

@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 });
 
         fragments = new HashMap<>();
-       // fragments.put("selling", SellingFragment.newInstance(mAuth.getCurrentUser()));
+        fragments.put("selling", SellingFragment.newInstance(mAuth.getCurrentUser()));
         fragments.put("buying", BuyingFragment.newInstance(mAuth.getCurrentUser()));
         fragments.put("profile", ProfileFragment.newInstance(mAuth.getCurrentUser()));
         //Manually displaying the first fragment - one time only
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             //deep link present, we can extract
                             Intent intent = appInviteInvitationResult.getInvitationIntent();
                             String deeplink = AppInviteReferral.getDeepLink(intent);
-                            //TODO: Use for refferal programmes and other gamification techniques (Gain more recording time)
+                            //TODO: Use for referral programmes and other gamification techniques (Gain more recording time)
                             FirebaseCrash.log("Deep link activated");
                         }
                     }
