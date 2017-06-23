@@ -529,14 +529,19 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
     @Override
     public void onSearchTermChanged(String s) {
-        //TODO. Apply real-time update of the Adapter in the recyclerview
-
+        //Apply real-time update of the Adapter in the recyclerview
+        FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
+                firebaseDatabase.getReference("trades").orderByChild("tradeNameTitle").startAt(s), getActivity(), mAuthenticatedUser);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onSearch(String s) {
         Toast.makeText(getActivity(), "REGEX: "+Utils.fetchPrice(s), Toast.LENGTH_LONG).show();
-        //TODO. build new adapter and replace current one
+        //Build new adapter and replace current one
+        FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
+                firebaseDatabase.getReference("trades").orderByChild("tradeNameTitle").equalTo(s), getActivity(), mAuthenticatedUser);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
