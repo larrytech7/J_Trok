@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 });
 
         fragments = new HashMap<>();
-        fragments.put("selling", SellingFragment.newInstance(mAuth.getCurrentUser()));
+       // fragments.put("selling", SellingFragment.newInstance(mAuth.getCurrentUser()));
         fragments.put("buying", BuyingFragment.newInstance(mAuth.getCurrentUser()));
         fragments.put("profile", ProfileFragment.newInstance(mAuth.getCurrentUser()));
         //Manually displaying the first fragment - one time only

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.android.tensel">
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -58,6 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.RegistrationActivity" />
         <activity android:name=".ui.IntroSliderActivity">
             <intent-filter>
