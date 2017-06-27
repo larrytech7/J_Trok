@@ -18,6 +18,7 @@ public class User implements Serializable {
     private int buys; //number of stuffs user has had to request to buy
     private int sells; //number of stuffs, user has had to post for sell
     private String userPhoneNumber;
+    private long lastUpdatedTime;
 
     public User() {
     }
@@ -100,5 +101,13 @@ public class User implements Serializable {
 
     public void setUserPhoneNumber(String userPhoneNumber) {
         this.userPhoneNumber = userPhoneNumber;
+    }
+
+    public long getLastUpdatedTime() {
+        return lastUpdatedTime;
+    }
+
+    public void setLastUpdatedTime(long lastUpdatedTime) {
+        this.lastUpdatedTime = lastUpdatedTime;
     }
 }

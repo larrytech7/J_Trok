@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -48,7 +50,7 @@ import uk.co.jakelee.vidsta.listeners.FullScreenClickListener;
 import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
 
 /**
- * Created by USER on 05/05/2017.
+ * Created by Larry Akah on 05/05/2017.
  */
 public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener,
         VideoStateListeners.OnVideoBufferingListener, Action1<Uri>{
@@ -56,11 +58,14 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     private static final String TAG = "PostDetailActivity";
     private boolean isSheetShown = false;
     private FirebaseAuth firebaseAuth;
+    private BottomSheetBehavior bottomSheetBehavior;
 
     @BindView(R.id.player)
     VidstaPlayer player;
     @BindView(R.id.chatsRecyclerView)
     RecyclerView chatRecyclerView;
+    @BindView(R.id.chatHeadsRecyclerView)
+    RecyclerView participantsRecyclerView;
     @BindView(R.id.authorImageView)
     ImageView authorImageView;
     @BindView(R.id.authorNameTextView)
@@ -69,6 +74,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     TextView articleDescriptionTextView;
     @BindView(R.id.chatEditTextview)
     EditText chatEditTextView;
+    @BindView(R.id.bottomSheet)
+    View bottomSheetView;
     /*@BindView(R.id.vplayer)
     VideoView videoView;*/
 
@@ -95,7 +102,22 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
         user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
 
-        //setup chats RecyclerView
+        //configure bottom sheet
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                    bottomSheetBehavior.setPeekHeight(0);
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        //setup comments RecyclerView
         qDatabase = FirebaseDatabase.getInstance();
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
@@ -268,11 +290,11 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
     private void toggleBottomSheet() {
         if(isSheetShown){
-            //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             isSheetShown = false;
         }else{
             isSheetShown = true;
-            //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
@@ -280,6 +302,16 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     public void takePhoto(View view){
         //TODO. ADD photo to message chat
     }*/
+
+    @OnClick(R.id.authorImageView)
+    public void showChatHeads(){
+        //TODO: Load users/participants if author, else go to chat room
+        if (tradePost.getAuthorId().equals(user.getUserId())){
+            toggleBottomSheet();
+        }else{
+            ;//GOTO Chat room
+        }
+    }
 
     @OnClick(R.id.sendChatButton)
     public void sendChatMessage(View view){
@@ -291,6 +323,11 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                     message, System.currentTimeMillis(), "");
             qDatabase.getReference("chats/"+tradePost.getTradePostId())
             .push().setValue(userChat);
+            //push participant
+            user.setLastUpdatedTime(System.currentTimeMillis());
+            qDatabase.getReference("participants/"+tradePost.getTradePostId())
+                    .child(user.getUserId())
+                    .setValue(user);
             chatEditTextView.setText("");
             //play sound for this
             if (!player.isPlaying()){

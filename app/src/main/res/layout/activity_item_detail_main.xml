@@ -37,7 +37,7 @@
                     android:layout_marginEnd="@dimen/rightMargin"
                     android:background="@drawable/background_border"
                     android:padding="3dp"
-                    android:hint="@string/chat_hint"/>
+                    android:hint="@string/comment"/>
 <!--                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/send_chat"
                     android:layout_width="wrap_content"
@@ -61,6 +61,27 @@
                     android:background="@drawable/md_transparent"
                     android:layout_gravity="end|center_horizontal"/>
             </android.support.v7.widget.CardView>
-        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:clipToPadding="true"
+        app:behavior_hideable="true"
+        android:elevation="5dp"
+        android:background="@color/bg_screen1"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chatHeadsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:reverseLayout="false"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            tools:listitem="@layout/item_chat_incoming"/>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

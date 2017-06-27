@@ -105,5 +105,6 @@
     <string name="sms_author">SMS Author</string>
     <string name="sms_message">Hello i want to reach out to you for the product you posted on 10Sell</string>
     <string name="search_selling">%s, do you have any of these?</string>
+    <string name="comment">Drop a comment on this</string>
 
 </resources>
