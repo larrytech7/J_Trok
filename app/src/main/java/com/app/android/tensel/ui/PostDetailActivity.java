@@ -254,7 +254,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 .build();
         tutors.setListener(this);
         HashMap<String, View> tutorials = new HashMap<>();
-        tutorials.put(getString(R.string.message_sell), authorImageView);
+        tutorials.put(getString(R.string.pv_hint), authorImageView);
         iterator = tutorials.entrySet().iterator();
 
         if (new PrefManager(this).getShowPvHints()) {
