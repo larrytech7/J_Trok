@@ -50,7 +50,7 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
         viewHolder.dateTextView.setText(TimeAgo.using(model.getLastUpdatedTime()));
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.profileImageView)
         CircleImageView profileImageView;

@@ -57,6 +57,7 @@ public class Utils {
     public static final String ANALYTICS_PARAM_CHAT_CATEGORY = "CHAT_CATEGORY";
     public static final String INSTANT_REPLY = "INSTANT_REPLY";
     public static final String TOPIC_FEEDS = "trades";
+    public static final String PREF_SHOW_PV_HINTS = "PV_HINTS";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();

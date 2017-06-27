@@ -53,4 +53,13 @@ public class PrefManager {
         editor.putBoolean(Utils.PREF_SHOW_HINTS, val)
                 .commit();
     }
+
+    public void setShowPvHints(boolean val){
+        editor.putBoolean(Utils.PREF_SHOW_PV_HINTS, val)
+                .commit();
+    }
+
+    public boolean getShowPvHints(){
+        return pref.getBoolean(Utils.PREF_SHOW_PV_HINTS, true);
+    }
 }

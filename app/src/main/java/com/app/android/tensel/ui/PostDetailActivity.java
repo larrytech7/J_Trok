@@ -23,9 +23,11 @@ import android.widget.TextView;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.ChatBaseAdapter;
+import com.app.android.tensel.adapters.ParticipantsAdapter;
 import com.app.android.tensel.models.Chat;
 import com.app.android.tensel.models.TradePost;
 import com.app.android.tensel.models.User;
+import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,9 +37,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.popalay.tutors.TutorialListener;
+import com.popalay.tutors.Tutors;
+import com.popalay.tutors.TutorsBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import berlin.volders.rxdownload.RxDownloadManager;
@@ -53,7 +59,7 @@ import uk.co.jakelee.vidsta.listeners.VideoStateListeners;
  * Created by Larry Akah on 05/05/2017.
  */
 public class PostDetailActivity extends AppCompatActivity implements VideoStateListeners.OnVideoErrorListener, FullScreenClickListener,
-        VideoStateListeners.OnVideoBufferingListener, Action1<Uri>{
+        VideoStateListeners.OnVideoBufferingListener, Action1<Uri>, TutorialListener {
 
     private static final String TAG = "PostDetailActivity";
     private boolean isSheetShown = false;
@@ -84,6 +90,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     private TradePost tradePost;
     private FirebaseAnalytics mFirebaseAnalytics;
     private RxDownloadManager rxDownloadManager;
+    private Tutors tutors;
+    private Iterator<Map.Entry<String, View>> iterator;
     //private HttpProxyCacheServer proxyCacheServer;
 
     @Override
@@ -146,6 +154,16 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
     }
 
+    /**
+     * Get list of participants and display in recycler view bottom sheet
+     */
+    private void getParticipants() {
+        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, User.class, R.layout.participant_layout,
+                ParticipantsAdapter.MyViewHolder.class,
+                qDatabase.getReference("participants/" + tradePost.getTradePostId()));
+        participantsRecyclerView.setAdapter(participantsAdapter);
+    }
+
     private void getUser() {
         qDatabase.getReference("users/"+user.getUserId()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -201,6 +219,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                     }else{
                                         call(Utils.getDownloadedVideo(videoName));
                                     }
+                                    getParticipants();
                                 }
                             }catch (NullPointerException uriEx){
                                 uriEx.printStackTrace();
@@ -216,6 +235,30 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                     ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/"+key), user,this));
 
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        tutors = new TutorsBuilder()
+                .textColorRes(android.R.color.white)
+                .shadowColorRes(R.color.shadow)
+                .textSizeRes(R.dimen.textNormal)
+                .completeIconRes(R.drawable.ic_cross_24_white)
+                .nextButtonTextRes(R.string.action_next)
+                .completeButtonTextRes(R.string.action_got_it)
+                .spacingRes(R.dimen.spacingNormal)
+                .lineWidthRes(R.dimen.lineWidth)
+                .cancelable(true)
+                .build();
+        tutors.setListener(this);
+        HashMap<String, View> tutorials = new HashMap<>();
+        tutorials.put(getString(R.string.message_sell), authorImageView);
+        iterator = tutorials.entrySet().iterator();
+
+        if (new PrefManager(this).getShowPvHints()) {
+            showHint(iterator);
         }
     }
 
@@ -380,4 +423,32 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         }
     }
 
+    private void showHint(Iterator<Map.Entry<String, View>> iterator) {
+        if (iterator == null){
+            return;
+        }
+        if (iterator.hasNext()) {
+            Map.Entry<String, View> data = iterator.next();
+            tutors.show(getSupportFragmentManager(), data.getValue(),
+                    data.getKey(),
+                    !iterator.hasNext());
+        }
+    }
+
+    @Override
+    public void onNext() {
+        showHint(iterator);
+    }
+
+    @Override
+    public void onComplete() {
+        tutors.close();
+        new PrefManager(this).setShowPvHints(false);
+    }
+
+    @Override
+    public void onCompleteAll() {
+        tutors.close();
+        new PrefManager(this).setShowPvHints(false);
+    }
 }
