@@ -354,6 +354,9 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             toggleBottomSheet();
         }else{
             ;//GOTO Chat room
+            Intent intent = new Intent(this, PrivateChatActivity.class);
+            intent.putExtra(Utils.FEED_DETAIL_ID, tradePost != null ? tradePost.getTradePostId() : "");
+            startActivity(intent);
         }
     }
 

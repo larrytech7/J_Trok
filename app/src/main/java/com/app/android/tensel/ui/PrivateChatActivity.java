@@ -98,13 +98,13 @@ public class PrivateChatActivity extends AppCompatActivity {
                     FirebaseCrash.report(ex.getCause());
                 }
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_pv_incoming,
-                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("pvchats")
+                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
                         .child(itemId).child(user.getUserId()), current_user,this));
                 targetId = user.getUserId();
             }else{
                 //launched by participant [not Author]
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("pvchats")
+                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
                         .child(itemId).child(current_user.getUserId()), current_user,this));
                 targetId = current_user.getUserId();
 

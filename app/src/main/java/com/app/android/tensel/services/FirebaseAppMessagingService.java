@@ -10,12 +10,16 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.app.android.tensel.R;
+import com.app.android.tensel.models.User;
 import com.app.android.tensel.ui.MainActivity;
 import com.app.android.tensel.ui.PostDetailActivity;
+import com.app.android.tensel.ui.PrivateChatActivity;
 import com.app.android.tensel.utility.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -29,12 +33,14 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
 public class FirebaseAppMessagingService extends FirebaseMessagingService {
 
     private int numMessages = 0;
+    private int pvChats = 0;
     private ArrayList<String> messageList = new ArrayList<>();
     private final static String LOGTAG = "10Sel_FCM";
     //notification Types
     private static final int NOTIFICATION_TYPE_FEED = 1;
     private static final int NOTIFICATION_TYPE_CHAT = 2;
     private static final int NOTIFICATION_TYPE_ADS = 3;
+    private static final int NOTIFICATION_TYPE_PV = 4;
 
     public FirebaseAppMessagingService() {
     }
@@ -42,6 +48,9 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        User current_user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //process message payload
         Log.d(TAG, "From: " + remoteMessage.getFrom());
@@ -54,12 +63,13 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 String title = payload.getString("user");
                 String body = payload.getString("body");
                 int type = payload.getInt("type");
+                String key = payload.getString("key");
 
                 //configure notifications based on the type
                 switch (type){
                     case NOTIFICATION_TYPE_FEED:
                         NotificationCompat.Builder builder = getNotification(PostDetailActivity.class, this, title, body,
-                                Utils.FEED_DETAIL_ID,payload.getString("key"));
+                                Utils.FEED_DETAIL_ID, key);
                         builder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
                         bigTextStyle.bigText(body);
@@ -70,13 +80,13 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         Notification notif = builder.build();
                         notif.vibrate = new long[] { 100, 250, 100, 500};
                         notif.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-                        nm.notify(NOTIFICATION_TYPE_FEED, notif);
+                        if(!TextUtils.equals(title, current_user.getUserName()))
+                            nm.notify(NOTIFICATION_TYPE_FEED, notif);
                         break;
                     case NOTIFICATION_TYPE_CHAT:
                         messageList.add(body);
                         NotificationCompat.Builder cbuilder = getNotification(PostDetailActivity.class, this, title, body,
-                        Utils.FEED_DETAIL_ID, payload.getString("key"));
+                        Utils.FEED_DETAIL_ID, key);
                         cbuilder.setSmallIcon(R.drawable.ic_chat);
                         //set action button
                         RemoteInput remoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
@@ -102,8 +112,35 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         Notification notification = cbuilder.build();
                         notification.vibrate = new long[] { 100, 250, 100, 500};
                         notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        if(!TextUtils.equals(title, current_user.getUserName()))
+                            nm.notify(NOTIFICATION_TYPE_CHAT, notification);
 
-                        nm.notify(NOTIFICATION_TYPE_CHAT, notification);
+                        break;
+                    case NOTIFICATION_TYPE_PV:
+                        NotificationCompat.Builder mbuilder = getNotification(PrivateChatActivity.class, this, title, body,
+                                Utils.FEED_DETAIL_ID, key);
+                        mbuilder.setSmallIcon(R.drawable.ic_chat);
+                        //set action button
+                        RemoteInput mRemoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
+                                .setLabel(getString(R.string.reply))
+                                .build();
+                        /*NotificationCompat.Action commentAction = new NotificationCompat.Action.Builder(R.drawable.ic_send,
+                                getString(R.string.reply),
+                                cbuilder.mNotification.contentIntent)
+                                .setAllowGeneratedReplies(true)
+                                .addRemoteInput(remoteInput)
+                                .build();*/
+                        //cbuilder.addAction(commentAction);
+                        //cbuilder.setStyle(inboxStyle);
+                        mbuilder.setNumber(++pvChats);
+
+                        //fire
+                        Notification mnotification = mbuilder.build();
+                        mnotification.vibrate = new long[] { 100, 250, 100, 500};
+                        mnotification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        if(!TextUtils.equals(title, current_user.getUserName()))
+                            nm.notify(NOTIFICATION_TYPE_PV, mnotification);
+
                         break;
                 }
 
