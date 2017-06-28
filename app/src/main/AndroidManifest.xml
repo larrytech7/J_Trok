@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.android.tensel">
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -20,11 +21,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
-        android:name="com.app.android.tensel.SevenApp"
+        android:name=".SevenApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -37,7 +37,7 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -57,7 +57,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.RegistrationActivity" />
         <activity android:name=".ui.IntroSliderActivity">
             <intent-filter>
@@ -67,9 +66,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="app.tensel.com"
-                    android:path="/about" />
+                    android:path="/about"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity">
@@ -80,9 +79,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="app.tensel.com"
-                    android:path="/buy" />
+                    android:path="/buy"
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -91,9 +90,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="app.tensel.com"
-                    android:path="/sell" />
+                    android:path="/sell"
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -102,9 +101,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="app.tensel.com"
-                    android:path="/me" />
+                    android:path="/me"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -122,9 +121,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="app.tensel.com"
-                    android:pathPattern="/sell/.*" />
+                    android:pathPattern="/sell/.*"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -143,6 +142,12 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".ui.PrivateChatActivity"
+            android:parentActivityName=".ui.PostDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.PostDetailActivity" />
+        </activity>
     </application>
 
 </manifest>

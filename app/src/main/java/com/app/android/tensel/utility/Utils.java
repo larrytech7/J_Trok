@@ -51,13 +51,16 @@ public class Utils {
     public static final String CUSTOM_EVENT_ARTICLE_PUBLISHED = "ARTICLE_PUBLISHED";
     public static final String DATABASE_USERS = "users";
     public static final String FEED_DETAIL_ID = "FEED_ID";
-    public static final String CHAT_EVENT = "CHAT_EVENT";
-    public static final String ANALYTICS_PARAM_CHATS_ID = "CHAT_ID";
-    public static final String ANALYTICS_PARAM_CHAT_NAME = "CHAT_NAME";
+    public static final String CHAT_EVENT = "COMMENT_EVENT";
+    public static final String ANALYTICS_PARAM_CHATS_ID = "COMMENT_ID";
+    public static final String ANALYTICS_PARAM_CHAT_NAME = "COMMENT_NAME";
     public static final String ANALYTICS_PARAM_CHAT_CATEGORY = "CHAT_CATEGORY";
     public static final String INSTANT_REPLY = "INSTANT_REPLY";
     public static final String TOPIC_FEEDS = "trades";
     public static final String PREF_SHOW_PV_HINTS = "PV_HINTS";
+    public static final String USER = "USER";
+    public static final String ANALYTICS_PARAM_PV_CHATS_ID = "PV_CHAT_ID";
+    public static final String ANALYTICS_PARAM_PV_CHAT_NAME = "PV_CHAT_NAME";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();

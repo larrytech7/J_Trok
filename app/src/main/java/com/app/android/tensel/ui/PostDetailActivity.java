@@ -157,10 +157,11 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     /**
      * Get list of participants and display in recycler view bottom sheet
      */
-    private void getParticipants() {
+    private void getParticipants(String itemId) {
         ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, User.class, R.layout.participant_layout,
                 ParticipantsAdapter.MyViewHolder.class,
                 qDatabase.getReference("participants/" + tradePost.getTradePostId()));
+        participantsAdapter.setItemId(itemId);
         participantsRecyclerView.setAdapter(participantsAdapter);
     }
 
@@ -219,7 +220,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                     }else{
                                         call(Utils.getDownloadedVideo(videoName));
                                     }
-                                    getParticipants();
+                                    getParticipants(tradePost.getTradePostId());
                                 }
                             }catch (NullPointerException uriEx){
                                 uriEx.printStackTrace();

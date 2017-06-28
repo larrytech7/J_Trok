@@ -107,5 +107,7 @@
     <string name="search_selling">%s, do you have any of these?</string>
     <string name="comment">Drop a comment on this</string>
     <string name="pv_hint">Tap the author icon for private chat</string>
+    <string name="err_empty">Field cannot be empty</string>
+    <string name="pv">Private chat</string>
 
 </resources>

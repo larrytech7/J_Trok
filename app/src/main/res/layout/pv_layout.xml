@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_private_chat">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_screen1"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:title="@string/pv_hint" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pvRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/card_height"
+        app:reverseLayout="false"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+        tools:listitem="@layout/item_chat_incoming" />
+</merge>

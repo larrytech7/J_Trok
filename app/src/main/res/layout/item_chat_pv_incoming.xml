@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/textfield_padding_bottom"
+        android:layout_marginStart="@dimen/textfield_padding_bottom"
+        android:layout_marginLeft="@dimen/textfield_padding_bottom"
+        android:layout_marginEnd="@dimen/textfield_padding_bottom"
+        android:layout_marginBottom="@dimen/textfield_padding_bottom"
+        android:background="@drawable/balloon_incoming_normal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/chatUsernameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="me"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginLeft="@dimen/margin_30" />
+
+        <TextView
+            android:id="@+id/chatContentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chat_content_hint"
+            android:linksClickable="true"
+            android:textColorLink="@color/twitter_blue"
+            android:autoLink="all"
+            style="@style/ChatTextContentStyle"/>
+        <TextView
+            android:id="@+id/chatDateTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:drawableRight="@drawable/ic_check_sent"
+            android:drawableEnd="@drawable/ic_check_sent"
+            android:text="dateTime"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"/>
+</LinearLayout>

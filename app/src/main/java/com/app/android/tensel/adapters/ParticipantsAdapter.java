@@ -1,6 +1,7 @@
 package com.app.android.tensel.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.models.User;
+import com.app.android.tensel.ui.PrivateChatActivity;
+import com.app.android.tensel.utility.Utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.Query;
@@ -32,6 +35,7 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
      *                        combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
     private Context context;
+    private String itemId;
 
     public ParticipantsAdapter(Context c, Class<User> modelClass, int modelLayout, Class<MyViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -41,6 +45,7 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
     @Override
     protected void populateViewHolder(MyViewHolder viewHolder, User model, int position) {
 
+        final User user = model;
         Picasso.with(context)
                 .load(Uri.parse(model.getUserProfilePhoto()))
                 .placeholder(R.drawable.app_icon)
@@ -48,6 +53,21 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
                 .into(viewHolder.profileImageView);
         viewHolder.usernameTextView.setText(model.getUserName());
         viewHolder.dateTextView.setText(TimeAgo.using(model.getLastUpdatedTime()));
+        //listener
+        viewHolder.profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //start chat activity
+                Intent intent = new Intent(context, PrivateChatActivity.class);
+                intent.putExtra(Utils.USER, user);
+                intent.putExtra(Utils.FEED_DETAIL_ID, itemId);
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
