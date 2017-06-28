@@ -150,6 +150,11 @@ public class PrivateChatActivity extends AppCompatActivity {
                         pvEditTextView.setText("");
                     }
                 });
+                //push participant
+                current_user.setLastUpdatedTime(System.currentTimeMillis());
+                qDatabase.getReference("participants/"+itemId)
+                        .child(current_user.getUserId())
+                        .setValue(current_user);
                 //subscribe FCM for messages
                 FirebaseMessaging.getInstance().subscribeToTopic(targetId);
                 //NOW FIRE EVENT FOR THIS CHAT
