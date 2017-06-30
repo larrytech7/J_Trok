@@ -548,6 +548,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public void onResultClick(SearchResult searchResult) {
         //TODO. perform search with data from the searchResult object
         Toast.makeText(getActivity(), "Clicked: "+searchResult.toString(), Toast.LENGTH_LONG).show();
+        FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
+                firebaseDatabase.getReference("trades").orderByChild("tradeNameTitle").equalTo(searchResult.toString()), getActivity(), mAuthenticatedUser);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

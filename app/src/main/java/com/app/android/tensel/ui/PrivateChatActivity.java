@@ -98,13 +98,13 @@ public class PrivateChatActivity extends AppCompatActivity {
                     FirebaseCrash.report(ex.getCause());
                 }
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_pv_incoming,
-                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("pvchats")
+                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
                         .child(itemId).child(user.getUserId()), current_user,this));
                 targetId = user.getUserId();
             }else{
                 //launched by participant [not Author]
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("pvchats")
+                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
                         .child(itemId).child(current_user.getUserId()), current_user,this));
                 targetId = current_user.getUserId();
 
@@ -150,6 +150,11 @@ public class PrivateChatActivity extends AppCompatActivity {
                         pvEditTextView.setText("");
                     }
                 });
+                //push participant
+                current_user.setLastUpdatedTime(System.currentTimeMillis());
+                qDatabase.getReference("participants/"+itemId)
+                        .child(current_user.getUserId())
+                        .setValue(current_user);
                 //subscribe FCM for messages
                 FirebaseMessaging.getInstance().subscribeToTopic(targetId);
                 //NOW FIRE EVENT FOR THIS CHAT

@@ -1,6 +1,7 @@
 package com.app.android.tensel.ui;
 
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -85,7 +86,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     /*@BindView(R.id.vplayer)
     VideoView videoView;*/
 
-    private User user;
+    private User user, author;
     private FirebaseDatabase qDatabase;
     private TradePost tradePost;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -221,6 +222,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                         call(Utils.getDownloadedVideo(videoName));
                                     }
                                     getParticipants(tradePost.getTradePostId());
+                                    getAuthor(tradePost);
                                 }
                             }catch (NullPointerException uriEx){
                                 uriEx.printStackTrace();
@@ -236,7 +238,24 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                     ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/"+key), user,this));
 
+
         }
+    }
+
+    private void getAuthor(TradePost tradePost) {
+        qDatabase.getReference(Utils.DATABASE_USERS)
+                .child(tradePost.getAuthorId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                author = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -315,15 +334,27 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
                 return true;
             case R.id.action_call:
-                //TODO: Implement dialing author's number
-                Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "+user.getUserPhoneNumber().trim()));
-                startActivity(callIntent);
+                //Implement dialing author's number
+                try {
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", author.getUserPhoneNumber() == null ? "0" : author.getUserPhoneNumber().trim(), ""));
+                    startActivity(callIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                    FirebaseCrash.report(e.getCause());
+                    Utils.showMessage(this, getString(R.string.call_error));
+                }
                 return true;
             case R.id.action_sms:
-                //TODO. Replace with author's phone number
-                Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("smsto:"+user.getUserPhoneNumber().trim()));
-                smsIntent.putExtra("sms_body", getString(R.string.sms_message));
-                startActivity(smsIntent);
+                //Send SMS to author's phone number
+                try {
+                    Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms",author.getUserPhoneNumber() == null ? "0" : author.getUserPhoneNumber().trim(), ""));
+                    smsIntent.putExtra("sms_body", getString(R.string.sms_message));
+                    startActivity(smsIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                    FirebaseCrash.report(e.getCause());
+                    Utils.showMessage(this, getString(R.string.sms_error));
+                }
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -349,11 +380,14 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
     @OnClick(R.id.authorImageView)
     public void showChatHeads(){
-        //TODO: Load users/participants if author, else go to chat room
+        // Load users/participants if author, else go to chat room
         if (tradePost.getAuthorId().equals(user.getUserId())){
             toggleBottomSheet();
         }else{
-            ;//GOTO Chat room
+            //GOTO Chat room
+            Intent intent = new Intent(this, PrivateChatActivity.class);
+            intent.putExtra(Utils.FEED_DETAIL_ID, tradePost != null ? tradePost.getTradePostId() : "");
+            startActivity(intent);
         }
     }
 
@@ -367,11 +401,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                     message, System.currentTimeMillis(), "");
             qDatabase.getReference("chats/"+tradePost.getTradePostId())
             .push().setValue(userChat);
-            //push participant
-            user.setLastUpdatedTime(System.currentTimeMillis());
-            qDatabase.getReference("participants/"+tradePost.getTradePostId())
-                    .child(user.getUserId())
-                    .setValue(user);
+
             chatEditTextView.setText("");
             //play sound for this
             if (!player.isPlaying()){

@@ -109,5 +109,7 @@
     <string name="pv_hint">Tap the author icon for private chat</string>
     <string name="err_empty">Field cannot be empty</string>
     <string name="pv">Private chat</string>
+    <string name="sms_error">Unable to send SMS at the time.</string>
+    <string name="call_error">Unable to place call at the moment</string>
 
 </resources>
