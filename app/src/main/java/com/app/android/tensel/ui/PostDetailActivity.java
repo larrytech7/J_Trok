@@ -1,13 +1,16 @@
 package com.app.android.tensel.ui;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -63,6 +66,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         VideoStateListeners.OnVideoBufferingListener, Action1<Uri>, TutorialListener {
 
     private static final String TAG = "PostDetailActivity";
+    private static final int GRANT_WRITE_PERMISSION = 1;
     private boolean isSheetShown = false;
     private FirebaseAuth firebaseAuth;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -210,14 +214,20 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                     //Log.d("VName", Utils.getDownloadedVideo(videoName).toString());
 
                                     if (!Utils.isVideoDownloaded(videoName)) { //download video if not yet downloaded
-                                        rxDownloadManager.download(RxDownloadManager.request(Utils.getCleanUri(tradePost.getTradeVideoUrl()),
-                                                videoName).setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN))
-                                                .subscribe(PostDetailActivity.this, new Action1<Throwable>() {
-                                                    @Override
-                                                    public void call(Throwable throwable) {
-                                                        throwable.printStackTrace();
-                                                    }
-                                                });
+                                        //FOR ANDROID 6.0+ REQUEST PERMISSION TO STORE STUFF ON SECONDARY STORAGE
+                                        if (ActivityCompat.checkSelfPermission(PostDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                == PackageManager.PERMISSION_GRANTED) {
+                                            rxDownloadManager.download(RxDownloadManager.request(Utils.getCleanUri(tradePost.getTradeVideoUrl()),
+                                                    videoName).setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN))
+                                                    .subscribe(PostDetailActivity.this, new Action1<Throwable>() {
+                                                        @Override
+                                                        public void call(Throwable throwable) {
+                                                            throwable.printStackTrace();
+                                                        }
+                                                    });
+                                        }else{
+                                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GRANT_WRITE_PERMISSION);
+                                        }
                                     }else{
                                         call(Utils.getDownloadedVideo(videoName));
                                     }
@@ -451,6 +461,25 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == GRANT_WRITE_PERMISSION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //download the video
+                rxDownloadManager.download(RxDownloadManager.request(Utils.getCleanUri(tradePost.getTradeVideoUrl()),
+                        Uri.parse(tradePost.getTradeVideoUrl()).getLastPathSegment())
+                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN))
+                        .subscribe(PostDetailActivity.this, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        });
+            }
         }
     }
 

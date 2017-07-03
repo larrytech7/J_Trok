@@ -111,5 +111,7 @@
     <string name="pv">Private chat</string>
     <string name="sms_error">Unable to send SMS at the time.</string>
     <string name="call_error">Unable to place call at the moment</string>
+    <string name="notify_item_sale">Notify me for new stuff</string>
+    <string name="notify_comment">Notify me about deals i have participated in.</string>
 
 </resources>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/J_trok.iml" filepath="$PROJECT_DIR$/J_trok.iml" />
+      <module fileurl="file://$PROJECT_DIR$/J_Trok.iml" filepath="$PROJECT_DIR$/J_Trok.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
