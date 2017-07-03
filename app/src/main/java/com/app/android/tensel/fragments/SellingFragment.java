@@ -167,4 +167,3 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
 
     }
 }
-

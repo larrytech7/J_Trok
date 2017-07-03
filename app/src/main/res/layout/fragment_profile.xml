@@ -323,6 +323,40 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/discussionsNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification on discussions/comments"
+                android:textSize="12sp"
+                android:background="@android:color/transparent"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#666666"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/newSalesNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification on new posts"
+                android:textSize="12sp"
+                android:background="@android:color/transparent"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#666666"/>
+
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
