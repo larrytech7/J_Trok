@@ -1,11 +1,12 @@
 package com.app.android.tensel.utility;
 
 /**
- * Created by USER on 11/11/2016.
+ * Created by Larry Akah on 11/11/2016.
  */
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 public class PrefManager {
 
@@ -61,5 +62,25 @@ public class PrefManager {
 
     public boolean getShowPvHints(){
         return pref.getBoolean(Utils.PREF_SHOW_PV_HINTS, true);
+    }
+
+    /**
+     * Set a boolean preference
+     * @param key the key to use for this preference
+     * @param value the value set at
+     * @return whether result is saved or not
+     */
+    public boolean setBooleanPreference(@NonNull String key, boolean value){
+        return pref.edit().putBoolean(key, value).commit();
+    }
+
+    /**
+     * Retrieve a boolean preference
+     * @param key key of preference
+     * @param def default value to use
+     * @return boolean preference
+     */
+    public boolean getBooleanPreference(@NonNull String key, boolean def){
+        pref.getBoolean(key, def);
     }
 }

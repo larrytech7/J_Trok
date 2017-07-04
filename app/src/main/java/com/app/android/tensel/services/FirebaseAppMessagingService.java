@@ -18,6 +18,7 @@ import com.app.android.tensel.models.User;
 import com.app.android.tensel.ui.MainActivity;
 import com.app.android.tensel.ui.PostDetailActivity;
 import com.app.android.tensel.ui.PrivateChatActivity;
+import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -80,8 +81,10 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         Notification notif = builder.build();
                         notif.vibrate = new long[] { 100, 250, 100, 500};
                         notif.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        if(!TextUtils.equals(title, current_user.getUserName()))
-                            nm.notify(NOTIFICATION_TYPE_FEED, notif);
+                        if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false)) {
+                            if (!TextUtils.equals(title, current_user.getUserName()))
+                                nm.notify(NOTIFICATION_TYPE_FEED, notif);
+                        }
                         break;
                     case NOTIFICATION_TYPE_CHAT:
                         messageList.add(body);
@@ -112,8 +115,10 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         Notification notification = cbuilder.build();
                         notification.vibrate = new long[] { 100, 250, 100, 500};
                         notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        if(!TextUtils.equals(title, current_user.getUserName()))
-                            nm.notify(NOTIFICATION_TYPE_CHAT, notification);
+                        if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false)) {
+                            if (!TextUtils.equals(title, current_user.getUserName()))
+                                nm.notify(NOTIFICATION_TYPE_CHAT, notification);
+                        }
 
                         break;
                     case NOTIFICATION_TYPE_PV:
@@ -132,6 +137,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                                 .build();*/
                         //cbuilder.addAction(commentAction);
                         //cbuilder.setStyle(inboxStyle);
+                        mbuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
                         mbuilder.setNumber(++pvChats);
 
                         //fire

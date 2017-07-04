@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.android.tensel.R;
 import com.app.android.tensel.models.User;
+import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
@@ -93,9 +94,10 @@ public class ProfileFragment extends Fragment {
                 if (((SwitchCompat) view).isChecked()){
                     //save preference to turn on notifications for comments
                     Toast.makeText(getActivity(), "Comment switch", Toast.LENGTH_LONG).show();
+                    new PrefManager(getActivity()).setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true);
                 }else{
                     //Turn off preference
-
+                    new PrefManager(getActivity()).setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false);
                 }
             }
         });
@@ -105,9 +107,10 @@ public class ProfileFragment extends Fragment {
                 if (((SwitchCompat) view).isChecked()){
                     //save preference to turn on notifications for new items posted for sales
                     Toast.makeText(getActivity(), "Item switch", Toast.LENGTH_LONG).show();
+                    new PrefManager(getActivity()).setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true);
                 }else{
                     //turn off preference
-
+                    new PrefManager(getActivity()).setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false);
                 }
             }
         });

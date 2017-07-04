@@ -62,6 +62,8 @@ public class Utils {
     public static final String ANALYTICS_PARAM_PV_CHATS_ID = "PV_CHAT_ID";
     public static final String ANALYTICS_PARAM_PV_CHAT_NAME = "PV_CHAT_NAME";
     public static final String PV = "pvchats";
+    public static final String ITEM_NOTIFICATION_PREF = "ITEM_PREFERENCE_NOTIF";
+    public static final String COMMENT_NOTIFICATION_PREF = "COMMENT_PREFERENCE_NOTIF";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();
