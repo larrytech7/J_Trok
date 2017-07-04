@@ -81,6 +81,6 @@ public class PrefManager {
      * @return boolean preference
      */
     public boolean getBooleanPreference(@NonNull String key, boolean def){
-        pref.getBoolean(key, def);
+        return  pref.getBoolean(key, def);
     }
 }
