@@ -76,9 +76,6 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         SalesAdpater adapter = new SalesAdpater(new String[]{"Item one", "Item two", "Item three", "Item four", "Item five", "Item six", "Item Seven", "Item eight", "Item nine", "Item ten"});
         recyclerView.setAdapter(adapter);
 
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
         String[] categories = getResources().getStringArray(R.array.categories);
         for(String category : categories){
             SearchResult option = new SearchResult(category, getResources().getDrawable(R.drawable.ic_history));

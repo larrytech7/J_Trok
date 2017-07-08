@@ -531,25 +531,40 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public void onSearchTermChanged(String s) {
         //Apply real-time update of the Adapter in the recyclerview
         FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
-                firebaseDatabase.getReference("trades").orderByChild("tradeNameTitle").startAt(s), getActivity(), mAuthenticatedUser);
+                firebaseDatabase.getReference("trades")
+                        .orderByChild("tradeNameTitle")
+                        .startAt(s).endAt(s+"\uf8ff"), getActivity(), mAuthenticatedUser);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onSearch(String s) {
-        Toast.makeText(getActivity(), "REGEX: "+Utils.fetchPrice(s), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), "REGEX: "+Utils.fetchPrice(s), Toast.LENGTH_LONG).show();
         //Build new adapter and replace current one
         FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
-                firebaseDatabase.getReference("trades").orderByChild("tradeNameTitle").equalTo(s), getActivity(), mAuthenticatedUser);
-        recyclerView.setAdapter(adapter);
+                firebaseDatabase.getReference("trades")
+                        .orderByChild("tradeNameTitle")
+                        .startAt(s)
+                        .endAt(s+"\uf8ff"), getActivity(), mAuthenticatedUser);
+        if (adapter.getItemCount() > 0)
+            recyclerView.setAdapter(adapter);
+        else
+            recyclerView.setAdapter(new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
+                    firebaseDatabase.getReference("trades")
+                            .orderByChild("tradeNameTitle")
+                            .startAt("[a-zA-Z0-9]*")
+                            .endAt(s), getActivity(), mAuthenticatedUser));
     }
 
     @Override
     public void onResultClick(SearchResult searchResult) {
-        //TODO. perform search with data from the searchResult object
-        Toast.makeText(getActivity(), "Clicked: "+searchResult.toString(), Toast.LENGTH_LONG).show();
+        //perform search with data from the searchResult object
+        //Toast.makeText(getActivity(), "Clicked: "+searchResult.toString(), Toast.LENGTH_LONG).show();
         FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
-                firebaseDatabase.getReference("trades").orderByChild("tradeNameTitle").equalTo(searchResult.toString()), getActivity(), mAuthenticatedUser);
+                firebaseDatabase.getReference("trades")
+                        .orderByChild("tradeNameTitle")
+                        .startAt(searchResult.toString())
+                        .endAt(searchResult.toString()+"\uf8ff"), getActivity(), mAuthenticatedUser);
         recyclerView.setAdapter(adapter);
     }
 

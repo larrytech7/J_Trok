@@ -7,13 +7,17 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/itemDescriptionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:hint="author text"/>
+        android:alpha="1"
+        android:autoLink="all"
+        android:clickable="true"
+        android:textColorLink="@color/facebook_blue"
+        android:textIsSelectable="true"
+        android:hint="@string/content"/>
 
     <View
         android:layout_width="match_parent"
@@ -27,21 +31,24 @@
         android:orientation="horizontal"
         android:weightSum="2">
 
-
         <TextView
+            android:id="@+id/authorNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="normal_font"
-            android:hint="author name"
+            android:textSize="@dimen/normal_font"
+            android:hint="@string/author_name"
+            android:alpha="0.8"
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="normal_font"
+            android:textSize="@dimen/normal_font"
             android:textAlignment="viewEnd"
             android:layout_gravity="end"
-            android:hint="time"
+            android:hint="@string/timeinterval"
+            android:alpha="0.8"
             android:layout_weight="1"/>
 
     </LinearLayout>

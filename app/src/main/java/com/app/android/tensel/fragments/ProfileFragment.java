@@ -108,7 +108,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 if (((SwitchCompat) view).isChecked()){
                     //save preference to turn on notifications for comments
-                    Toast.makeText(getActivity(), "Comment switch", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "Comment switch", Toast.LENGTH_LONG).show();
                     prefManager.setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true);
                 }else{
                     //Turn off preference
@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 if (((SwitchCompat) view).isChecked()){
                     //save preference to turn on notifications for new items posted for sales
-                    Toast.makeText(getActivity(), "Item switch", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "Item switch", Toast.LENGTH_LONG).show();
                     prefManager.setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true);
                 }else{
                     //turn off preference
