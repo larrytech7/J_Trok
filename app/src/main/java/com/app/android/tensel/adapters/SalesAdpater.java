@@ -1,5 +1,6 @@
 package com.app.android.tensel.adapters;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,16 +24,16 @@ public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.card_view)
-        public CardView salesCardView;
-        @BindView(R.id.authorNameTextView)
-        TextView priceTagTextView;
-        @BindView(R.id.itemName)
-        public TextView itemTextView;
-        @BindView(R.id.feedsDateTextView)
+        @BindView(R.id.sellCard)
+        CardView salesCardView;
+        @Nullable @BindView(R.id.authorNameTextView)
+        TextView authorNameTextView;
+        @BindView(R.id.itemDescriptionTextView)
+        TextView itemTextView;
+        @BindView(R.id.dateTextView)
         TextView dateTextView;
-        @BindView(R.id.itemForSale)
-        ImageView item;
+        //@Nullable @BindView (R.id.itemForSale)
+        //ImageView item;
 
 
 
