@@ -64,6 +64,7 @@ public class Utils {
     public static final String PV = "pvchats";
     public static final String ITEM_NOTIFICATION_PREF = "ITEM_PREFERENCE_NOTIF";
     public static final String COMMENT_NOTIFICATION_PREF = "COMMENT_PREFERENCE_NOTIF";
+    public static final String FIREBASE_SELLS = "sells";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();
