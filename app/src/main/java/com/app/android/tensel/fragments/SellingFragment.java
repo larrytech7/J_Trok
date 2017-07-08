@@ -13,9 +13,12 @@ import android.view.ViewGroup;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.SalesAdpater;
+import com.app.android.tensel.models.SalePost;
 import com.app.android.tensel.models.User;
 import com.app.android.tensel.utility.Utils;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 
@@ -36,6 +39,7 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
     private Unbinder unbinder;
     @BindView(R.id.searchbox)
     public SearchBox searchBox;
+    private DatabaseReference mDatabaseRef;
 
     public static SellingFragment newInstance(FirebaseUser user) {
         SellingFragment fragment = new SellingFragment();
@@ -70,10 +74,13 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         View rootView = inflater.inflate(fragment_sell, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference(Utils.FIREBASE_SELLS);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        SalesAdpater adapter = new SalesAdpater(new String[]{"Item one", "Item two", "Item three", "Item four", "Item five", "Item six", "Item Seven", "Item eight", "Item nine", "Item ten"});
+        SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
+                R.layout.item_for_sale,
+                SalesAdpater.MyViewHolder.class,
+                mDatabaseRef);
         recyclerView.setAdapter(adapter);
 
         String[] categories = getResources().getStringArray(R.array.categories);
