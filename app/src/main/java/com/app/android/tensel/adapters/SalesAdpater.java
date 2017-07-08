@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.android.tensel.R;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder> {
+public class SalesAdpater extends FirebaseRecyclerAdapter<SalesAdpater.MyViewHolder> {
+
     private String[] mDataset;
 
     // Provide a reference to the views for each data item
@@ -48,11 +50,6 @@ public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder
         return mDataset.length;
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public SalesAdpater(String[] myDataset) {
-        mDataset = myDataset;
-    }
-
     // Create new views (invoked by the layout manager)
     @Override
     public SalesAdpater.MyViewHolder onCreateViewHolder(ViewGroup parent,
@@ -67,8 +64,9 @@ public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        //holder.mTextView.setText(mDataset[position]);
+    protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Object model, int position) {
 
     }
+
+
 }
