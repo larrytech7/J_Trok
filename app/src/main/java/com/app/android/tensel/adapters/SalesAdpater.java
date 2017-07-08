@@ -5,9 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.android.tensel.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder> {
@@ -17,14 +22,29 @@ public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public CardView mCardView;
-        public TextView mTextView;
+
+        @BindView(R.id.card_view)
+        public CardView salesCardView;
+        @BindView(R.id.authorNameTextView)
+        TextView priceTagTextView;
+        @BindView(R.id.itemName)
+        public TextView itemTextView;
+        @BindView(R.id.feedsDateTextView)
+        TextView dateTextView;
+        @BindView(R.id.itemForSale)
+        ImageView item;
+
+
+
         public MyViewHolder(View v) {
             super(v);
-
-            mCardView = (CardView) v.findViewById(R.id.item_to_sell);
-            mTextView = (TextView) v.findViewById(R.id.itemName);
+            ButterKnife.bind(this, v);
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mDataset.length;
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -47,20 +67,7 @@ public class SalesAdpater extends RecyclerView.Adapter<SalesAdpater.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
+        //holder.mTextView.setText(mDataset[position]);
 
-        /*
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ItemDetail.class);
-                v.getContext().startActivity(intent);
-            }
-        });*/
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDataset.length;
     }
 }
