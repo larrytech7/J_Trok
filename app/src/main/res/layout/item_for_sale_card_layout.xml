@@ -1,78 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <FrameLayout
-        android:id="@+id/itemImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/itemForSale"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/selling1"
-            android:scaleType="fitXY"
-            android:transitionName="article_shared"
-            android:adjustViewBounds="true"/>
-
-        <ImageView
-            android:layout_width="@dimen/margin_30"
-            android:layout_height="@dimen/margin_30"
-            android:src="@drawable/ic_play"
-            android:layout_gravity="center_vertical"/>
-
-        <TextView
-            android:id="@+id/priceTagTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="20sp"
-            android:layout_gravity="end"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="1dp"
-            android:elevation="3dp"
-            android:background="#dee"/>
-
-        <TextView
-            android:id="@+id/itemName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/normal_font"
-            android:textColor="@color/bg_screen3"
-            android:hint="@string/author_name"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:transitionName="username_shared"
-            android:layout_gravity="bottom"/>
-
-    </FrameLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/feedsAuthorImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginTop="-25dp"
-        android:src="@drawable/profile"
-        android:transitionName="profile_shared"
-        android:elevation="5dp"/>
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/feedsDateTextView"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_gravity="bottom"/>
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:hint="author text"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="#666666"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="normal_font"
+            android:hint="author name"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="normal_font"
+            android:textAlignment="viewEnd"
+            android:layout_gravity="end"
+            android:hint="time"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
 </LinearLayout>
