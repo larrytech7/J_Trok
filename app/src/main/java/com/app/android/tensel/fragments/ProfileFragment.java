@@ -67,6 +67,7 @@ public class ProfileFragment extends Fragment {
 
     private User mAuthenticatedUser;
     private FirebaseDatabase firebaseDatabase;
+    private PrefManager prefManager;
 
     public static ProfileFragment newInstance(FirebaseUser user) {
         ProfileFragment fragment = new ProfileFragment();
@@ -88,32 +89,6 @@ public class ProfileFragment extends Fragment {
         if (getArguments() != null && mAuthenticatedUser == null){
             mAuthenticatedUser = (User) getArguments().getSerializable(Utils.CURRENT_USER);
         }
-        commentSwitchSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((SwitchCompat) view).isChecked()){
-                    //save preference to turn on notifications for comments
-                    Toast.makeText(getActivity(), "Comment switch", Toast.LENGTH_LONG).show();
-                    new PrefManager(getActivity()).setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true);
-                }else{
-                    //Turn off preference
-                    new PrefManager(getActivity()).setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false);
-                }
-            }
-        });
-        itemSwitchSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((SwitchCompat) view).isChecked()){
-                    //save preference to turn on notifications for new items posted for sales
-                    Toast.makeText(getActivity(), "Item switch", Toast.LENGTH_LONG).show();
-                    new PrefManager(getActivity()).setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true);
-                }else{
-                    //turn off preference
-                    new PrefManager(getActivity()).setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false);
-                }
-            }
-        });
 
     }
 
@@ -123,9 +98,38 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         unbind = ButterKnife.bind(this, view);
+        prefManager = new PrefManager(getActivity());
+
         usernameTextView.setText(mAuthenticatedUser.getUserName());
         emailTextView.setText(mAuthenticatedUser.getUserEmail());
         userCountryTextView.setText(mAuthenticatedUser.getUserCountry());
+        commentSwitchSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (((SwitchCompat) view).isChecked()){
+                    //save preference to turn on notifications for comments
+                    Toast.makeText(getActivity(), "Comment switch", Toast.LENGTH_LONG).show();
+                    prefManager.setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true);
+                }else{
+                    //Turn off preference
+                    prefManager.setBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false);
+                }
+            }
+        });
+        itemSwitchSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (((SwitchCompat) view).isChecked()){
+                    //save preference to turn on notifications for new items posted for sales
+                    Toast.makeText(getActivity(), "Item switch", Toast.LENGTH_LONG).show();
+                    prefManager.setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true);
+                }else{
+                    //turn off preference
+                    prefManager.setBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false);
+                }
+            }
+        });
+        initSettings();
 
         Picasso.with(getContext())
                 .load(mAuthenticatedUser.getUserProfilePhoto())
@@ -177,6 +181,16 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
+    }
+
+    /**
+     * Restore user settings for these parameters to latest states
+     */
+    private void initSettings(){
+        boolean setComment = prefManager.getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false);
+        boolean setItem = prefManager.getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false);
+        itemSwitchSetting.setChecked(setItem);
+        commentSwitchSetting.setChecked(setComment);
     }
 
     @Override
