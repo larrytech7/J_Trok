@@ -142,12 +142,14 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.PrivateChatActivity"
+        <activity
+            android:name=".ui.PrivateChatActivity"
             android:parentActivityName=".ui.PostDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.PostDetailActivity" />
         </activity>
+        <activity android:name=".ui.SalesPostDetails"></activity>
     </application>
 
 </manifest>
