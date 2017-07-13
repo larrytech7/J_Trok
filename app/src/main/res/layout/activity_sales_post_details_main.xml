@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true"
+tools:context="com.app.android.tensel.ui.SalesPostDetails">
+
+<include layout="@layout/activity_sales_post_details"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="bottom"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="true">
+            <EditText
+                android:id="@+id/chatEditTextview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|bottom"
+                android:layout_marginRight="@dimen/rightMargin"
+                android:layout_marginEnd="@dimen/rightMargin"
+                android:background="@drawable/background_border"
+                android:padding="3dp"
+                android:hint="@string/comment"/>
+
+            <ImageButton
+                android:id="@+id/sendChatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_send"
+                android:background="@drawable/md_transparent"
+                android:layout_gravity="end|center_horizontal"/>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:clipToPadding="true"
+        app:behavior_hideable="true"
+        android:elevation="5dp"
+        android:background="@color/bg_screen1"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chatHeadsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:reverseLayout="false"
+            app:layoutManager="StaggeredGridLayoutManager"
+            app:spanCount="3"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            tools:listitem="@layout/item_chat_incoming"/>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
