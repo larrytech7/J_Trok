@@ -3,14 +3,19 @@ package com.app.android.tensel.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.SalesAdpater;
 import com.app.android.tensel.models.SalePost;
@@ -23,6 +28,8 @@ import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,7 +126,35 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
 
     @OnClick(R.id.buttonRequestStuff)
     public void sellStuff(){
-        //post stuff for sell
+        //TODO: post stuff for sell
+        new MaterialDialog.Builder(getContext())
+                .title(getString(R.string.title_selling))
+                .backgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen1, null))
+                .icon(getResources().getDrawable(R.drawable.ic_status))
+                .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(getString(R.string.desc_selling), mAuthenticatedUser.getUserStatusText(), false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        Log.d("SELLING", ""+input);
+                    }
+                })
+                .positiveColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
+                .positiveText(getString(R.string.send))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        String status = dialog.getInputEditText().getText().toString();
+                        Map<String, Object> update = new HashMap<>();
+                        update.put("userStatusText", status);
+                        mDatabaseRef.child(Utils.DATABASE_USERS)
+                                .child(mAuthenticatedUser.getUserId())
+                                .updateChildren(update);
+                    }
+                })
+                .show();
+
     }
 
     @Override

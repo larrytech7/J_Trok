@@ -114,5 +114,8 @@
     <string name="notify_item_sale">Notify me for new stuff</string>
     <string name="notify_comment">Notify me about deals i have participated in.</string>
     <string name="content">Content Data</string>
+    <string name="title_selling">Request what you need</string>
+    <string name="send">Post</string>
+    <string name="desc_selling">Describe what you are looking for.</string>
 
 </resources>
