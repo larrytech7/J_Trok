@@ -214,7 +214,7 @@ public class SalesPostDetails extends AppCompatActivity {
     @OnClick(R.id.authorImageView)
     public void showChatHeads(){
         // Load users/participants if author, else go to chat room
-        if (salePost.getAuthorId().equals(user.getUserId())){
+        if (salePost.getAuthorId().contentEquals(user.getUserId())){
             toggleBottomSheet();
         }else{
             //GOTO Chat room
