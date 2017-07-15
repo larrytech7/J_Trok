@@ -173,5 +173,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
                 }
             }
         });
+
+        //TODO: Enable authors tap and hold card
     }
 }

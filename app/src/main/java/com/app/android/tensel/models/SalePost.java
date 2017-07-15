@@ -12,8 +12,24 @@ public class SalePost implements Serializable {
     String authorId;
     String content;
     long timestamp;
+    String postId;
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
 
     public SalePost() {
+    }
+
+    public SalePost(String authorName, String authorId, String content, long timestamp) {
+        this.authorName = authorName;
+        this.authorId = authorId;
+        this.content = content;
+        this.timestamp = timestamp;
     }
 
     public String getAuthorName() {

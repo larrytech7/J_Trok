@@ -18,7 +18,7 @@ tools:context="com.app.android.tensel.ui.SalesPostDetails">
     <FrameLayout
         android:id="@+id/imageFrame"
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/authorNameTextView"
@@ -27,12 +27,17 @@ tools:context="com.app.android.tensel.ui.SalesPostDetails">
             android:layout_gravity="top"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
+            android:layout_marginRight="@dimen/margin_50"
+            android:layout_marginEnd="@dimen/margin_50"
             android:layout_marginTop="@dimen/margin_10"
             android:hint="@string/author_name"
-            android:text="authora"
+            android:paddingRight="@dimen/margin_50"
+            android:paddingEnd="@dimen/margin_50"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
             android:textColor="@color/twitter_blue"
             android:textSize="@dimen/normal_font"
-            android:transitionName="username_shared" />
+            android:transitionName="author_shared" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/authorImageView"
@@ -46,17 +51,36 @@ tools:context="com.app.android.tensel.ui.SalesPostDetails">
             android:layout_marginTop="@dimen/textfield_padding_bottom"
             android:src="@drawable/profile"
             android:transitionName="profile_shared" />
+        <TextView
+            android:id="@+id/contentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_50"
+            android:layout_marginEnd="@dimen/margin_50"
+            android:layout_marginTop="@dimen/margin_50"
+            android:textScaleX="1"
+            android:textSize="24sp"
+            android:textStyle="italic"
+            style="@style/ChatTextContentStyle"
+            android:hint="details"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:transitionName="content_shared"/>
+        <TextView
+            android:id="@+id/dateDetailTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="80dp"
+            android:gravity="right|end"
+            android:hint="date"
+            android:padding="@dimen/margin_10"
+            android:textColor="@color/twitter_blue"
+            android:textSize="@dimen/normal_font"
+            android:transitionName="date_shared" />
 
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/articleDescriptionTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/ChatTextContentStyle"
-        android:hint="details"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chatsRecyclerView"

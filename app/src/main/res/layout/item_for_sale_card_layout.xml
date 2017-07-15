@@ -17,7 +17,8 @@
         android:clickable="true"
         android:textColorLink="@color/facebook_blue"
         android:textIsSelectable="true"
-        android:hint="@string/content"/>
+        android:hint="@string/content"
+        android:transitionName="content_shared" />
 
     <View
         android:layout_width="match_parent"
@@ -38,7 +39,8 @@
             android:textSize="@dimen/normal_font"
             android:hint="@string/author_name"
             android:alpha="0.8"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:transitionName="author_shared"/>
 
         <TextView
             android:id="@+id/dateTextView"
@@ -49,7 +51,8 @@
             android:layout_gravity="end"
             android:hint="@string/timeinterval"
             android:alpha="0.8"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:transitionName="date_shared"/>
 
     </LinearLayout>
 

@@ -21,6 +21,8 @@ import com.app.android.tensel.adapters.SalesAdpater;
 import com.app.android.tensel.models.SalePost;
 import com.app.android.tensel.models.User;
 import com.app.android.tensel.utility.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,6 +48,8 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
     private Unbinder unbinder;
     @BindView(R.id.searchbox)
     public SearchBox searchBox;
+    @BindView(R.id.recycler_view)
+    public RecyclerView recyclerView;
     private DatabaseReference mDatabaseRef;
 
     public static SellingFragment newInstance(FirebaseUser user) {
@@ -81,13 +85,12 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         View rootView = inflater.inflate(fragment_sell, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference(Utils.FIREBASE_SELLS);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         recyclerView.setHasFixedSize(true);
         SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
                 R.layout.item_for_sale,
                 SalesAdpater.MyViewHolder.class,
-                mDatabaseRef);
+                mDatabaseRef.child(Utils.FIREBASE_SELLS).orderByPriority());
         recyclerView.setAdapter(adapter);
 
         String[] categories = getResources().getStringArray(R.array.categories);
@@ -126,13 +129,13 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
 
     @OnClick(R.id.buttonRequestStuff)
     public void sellStuff(){
-        //TODO: post stuff for sell
+        //post stuff for sell
         new MaterialDialog.Builder(getContext())
                 .title(getString(R.string.title_selling))
                 .backgroundColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen1, null))
                 .icon(getResources().getDrawable(R.drawable.ic_status))
                 .widgetColor(ResourcesCompat.getColor(getResources(), R.color.white, null))
-                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE)
                 .input(getString(R.string.desc_selling), mAuthenticatedUser.getUserStatusText(), false, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
@@ -145,12 +148,26 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        String status = dialog.getInputEditText().getText().toString();
+                        String request = dialog.getInputEditText().getText().toString();
+                        SalePost salePost = new SalePost(mAuthenticatedUser.getUserName(), mAuthenticatedUser.getUserId(), request, System.currentTimeMillis());
                         Map<String, Object> update = new HashMap<>();
-                        update.put("userStatusText", status);
+                        update.put("buys", mAuthenticatedUser.getBuys()+1);
                         mDatabaseRef.child(Utils.DATABASE_USERS)
                                 .child(mAuthenticatedUser.getUserId())
                                 .updateChildren(update);
+                        String id = mDatabaseRef.child(Utils.FIREBASE_SELLS)
+                                .push().getKey();
+                        salePost.setPostId(id);
+                        mDatabaseRef.child(Utils.FIREBASE_SELLS)
+                                .child(id)
+                                .setValue(salePost)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isComplete())
+                                    Utils.showMessage(getActivity(), getString(R.string.success));
+                            }
+                        });
                     }
                 })
                 .show();

@@ -1,20 +1,27 @@
 package com.app.android.tensel.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.models.SalePost;
 import com.app.android.tensel.models.User;
+import com.app.android.tensel.ui.PostDetailActivity;
+import com.app.android.tensel.ui.SalesPostDetails;
+import com.app.android.tensel.utility.Utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.Query;
 
 import butterknife.BindView;
@@ -24,7 +31,7 @@ import butterknife.ButterKnife;
 public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater.MyViewHolder> {
 
     private Context context;
-    User mUser;
+    private User mUser;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -33,7 +40,7 @@ public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater
 
         @BindView(R.id.sellCard)
         CardView salesCardView;
-        @Nullable @BindView(R.id.authorNameTextView)
+        @BindView(R.id.authorNameTextView)
         TextView authorNameTextView;
         @BindView(R.id.itemDescriptionTextView)
         TextView itemTextView;
@@ -72,8 +79,34 @@ public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater
     }
 
     @Override
-    protected void populateViewHolder(MyViewHolder viewHolder, SalePost model, int position) {
+    protected void populateViewHolder(final MyViewHolder viewHolder, final SalePost model, int position) {
 
+
+        viewHolder.authorNameTextView.setText(model.getAuthorName());
+        viewHolder.itemTextView.setText(model.getContent());
+        viewHolder.dateTextView.setText(TimeAgo.using(model.getTimestamp()));
+
+        viewHolder.salesCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SalesPostDetails.class);
+                intent.putExtra(Utils.SELL_DETAIL_ID, model.getPostId());
+                Pair[] pairs = new Pair[3];
+
+                pairs[0] = new Pair<View, String>(viewHolder.itemTextView, "content_shared");
+                pairs[1] = new Pair<View, String>(viewHolder.authorNameTextView, "author_shared");
+                pairs[2] = new Pair<View, String>(viewHolder.dateTextView, "date_shared");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation((Activity)context, pairs);
+                    context.startActivity(intent, optionsCompat.toBundle());
+                }else{
+                    v.getContext().startActivity(intent);
+                }
+            }
+        });
+
+        //TODO: Enable authors delete their posts
     }
 
 
