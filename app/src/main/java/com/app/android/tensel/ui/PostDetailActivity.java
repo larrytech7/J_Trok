@@ -68,7 +68,6 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     private static final String TAG = "PostDetailActivity";
     private static final int GRANT_WRITE_PERMISSION = 1;
     private boolean isSheetShown = false;
-    private FirebaseAuth firebaseAuth;
     private BottomSheetBehavior bottomSheetBehavior;
 
     @BindView(R.id.player)
@@ -110,7 +109,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         user = Utils.getUserConfig(firebaseAuth.getCurrentUser());

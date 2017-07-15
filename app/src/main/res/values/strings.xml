@@ -118,5 +118,6 @@
     <string name="send">Post</string>
     <string name="desc_selling">Nicely describe what you are need.</string>
     <string name="success">Posted</string>
+    <string name="no_data">No data available. But you can still engage</string>
 
 </resources>

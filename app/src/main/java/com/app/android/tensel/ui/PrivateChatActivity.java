@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,9 @@ import com.app.android.tensel.models.Chat;
 import com.app.android.tensel.models.User;
 import com.app.android.tensel.utility.Utils;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
@@ -136,6 +139,8 @@ public class PrivateChatActivity extends AppCompatActivity {
             Snackbar.make(pvEditTextView, getString(R.string.err_empty), Snackbar.LENGTH_LONG).show();
             pvEditTextView.setError(getString(R.string.err_empty));
         }else{
+            pvEditTextView.setEnabled(false);
+            btnSendChat.setEnabled(false);
             //Send message
             if (itemId != null && targetId != null){
                 Chat userChat = new Chat(current_user.getUserName(), current_user.getUserId(), current_user.getUserProfilePhoto(),
@@ -147,6 +152,14 @@ public class PrivateChatActivity extends AppCompatActivity {
                 .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        pvEditTextView.setText("");
+                    }
+                }).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isComplete())
+                            pvEditTextView.setEnabled(true);
+                        btnSendChat.setEnabled(true);
                         pvEditTextView.setText("");
                     }
                 });

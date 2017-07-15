@@ -67,7 +67,6 @@ public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_for_sale, parent, false);
-
         // set the view's size, margins, paddings and layout parameters
         return new MyViewHolder(v);
     }

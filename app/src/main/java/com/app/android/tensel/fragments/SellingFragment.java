@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -46,6 +47,8 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
 
     private User mAuthenticatedUser;
     private Unbinder unbinder;
+    //@BindView(R.id.empty_view)
+    //LinearLayout emptyLayoutView;
     @BindView(R.id.searchbox)
     public SearchBox searchBox;
     @BindView(R.id.recycler_view)
@@ -79,7 +82,6 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(fragment_sell, container, false);

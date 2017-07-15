@@ -16,6 +16,28 @@
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         tools:listitem="@layout/item_for_sale">
     </android.support.v7.widget.RecyclerView>
+<!--
+    <LinearLayout
+        android:id="@+id/empty_view"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_50"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.rey.material.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty"
+            app:srcCompat="@drawable/empty"
+            android:layout_margin="@dimen/margin_10"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:text="@string/no_data"/>
+    </LinearLayout>-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/buttonRequestStuff"
