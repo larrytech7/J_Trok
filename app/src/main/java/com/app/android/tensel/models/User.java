@@ -110,4 +110,9 @@ public class User implements Serializable {
     public void setLastUpdatedTime(long lastUpdatedTime) {
         this.lastUpdatedTime = lastUpdatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "username: "+getUserName()+", email: "+getUserEmail()+", id: "+getUserId()+", Phone: "+getUserPhoneNumber();
+    }
 }

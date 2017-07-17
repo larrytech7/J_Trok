@@ -113,6 +113,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
             }
             //setup recyclerView
+            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
 
         }
 
@@ -125,11 +126,17 @@ public class PrivateChatActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getItemId() == android.R.id.home){
             onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return super.getSupportParentActivityIntent();
     }
 
     @OnClick(R.id.sendChatButton)

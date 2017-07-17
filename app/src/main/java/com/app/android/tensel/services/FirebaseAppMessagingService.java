@@ -18,6 +18,7 @@ import com.app.android.tensel.models.User;
 import com.app.android.tensel.ui.MainActivity;
 import com.app.android.tensel.ui.PostDetailActivity;
 import com.app.android.tensel.ui.PrivateChatActivity;
+import com.app.android.tensel.ui.SalesPostDetails;
 import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +40,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
     private final static String LOGTAG = "10Sel_FCM";
     //notification Types
     private static final int NOTIFICATION_TYPE_FEED = 1;
+    private static final int NOTIFICATION_TYPE_SELLS = 5;
     private static final int NOTIFICATION_TYPE_CHAT = 2;
     private static final int NOTIFICATION_TYPE_ADS = 3;
     private static final int NOTIFICATION_TYPE_PV = 4;
@@ -84,6 +86,24 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
                                 nm.notify(NOTIFICATION_TYPE_FEED, notif);
+                        }
+                        break;
+                    case NOTIFICATION_TYPE_SELLS:
+                        NotificationCompat.Builder sbuilder = getNotification(SalesPostDetails.class, this, title, body,
+                                Utils.FEED_DETAIL_ID, key);
+                        sbuilder.setNumber(++numMessages);
+                        NotificationCompat.BigTextStyle sbigTextStyle = new NotificationCompat.BigTextStyle();
+                        sbigTextStyle.bigText(body);
+                        sbigTextStyle.setSummaryText(getString(R.string.new_posts, numMessages));
+                        sbuilder.setStyle(sbigTextStyle);
+                        sbuilder.setSmallIcon(R.drawable.app_icon);
+                        //fire
+                        Notification snotif = sbuilder.build();
+                        snotif.vibrate = new long[] { 100, 250, 100, 500};
+                        snotif.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false)) {
+                            if (!TextUtils.equals(title, current_user.getUserName()))
+                                nm.notify(NOTIFICATION_TYPE_FEED, snotif);
                         }
                         break;
                     case NOTIFICATION_TYPE_CHAT:

@@ -63,4 +63,9 @@ public class SalePost implements Serializable {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return authorName+", "+authorId+" "+content+", "+timestamp;
+    }
 }

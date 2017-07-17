@@ -14,9 +14,7 @@
         android:textSize="20sp"
         android:alpha="1"
         android:autoLink="all"
-        android:clickable="true"
         android:textColorLink="@color/facebook_blue"
-        android:textIsSelectable="true"
         android:hint="@string/content"
         android:transitionName="content_shared" />
 

@@ -5,10 +5,10 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.app.android.tensel.R;
 import com.app.android.tensel.models.SalePost;
 import com.app.android.tensel.models.User;
-import com.app.android.tensel.ui.PostDetailActivity;
 import com.app.android.tensel.ui.SalesPostDetails;
 import com.app.android.tensel.utility.Utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -28,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater.MyViewHolder> {
+public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater.MyViewHolder>{
 
     private Context context;
     private User mUser;
@@ -85,11 +84,11 @@ public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater
         viewHolder.itemTextView.setText(model.getContent());
         viewHolder.dateTextView.setText(TimeAgo.using(model.getTimestamp()));
 
-        viewHolder.salesCardView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.authorNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SalesPostDetails.class);
-                intent.putExtra(Utils.SELL_DETAIL_ID, model.getPostId());
+                intent.putExtra(Utils.FEED_DETAIL_ID, model.getPostId());
                 Pair[] pairs = new Pair[3];
 
                 pairs[0] = new Pair<View, String>(viewHolder.itemTextView, "content_shared");
@@ -102,6 +101,32 @@ public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater
                 }else{
                     v.getContext().startActivity(intent);
                 }
+            }
+        });
+        viewHolder.salesCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SalesPostDetails.class);
+                intent.putExtra(Utils.FEED_DETAIL_ID, model.getPostId());
+                Pair[] pairs = new Pair[3];
+
+                pairs[0] = new Pair<View, String>(viewHolder.itemTextView, "content_shared");
+                pairs[1] = new Pair<View, String>(viewHolder.authorNameTextView, "author_shared");
+                pairs[2] = new Pair<View, String>(viewHolder.dateTextView, "date_shared");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation((Activity)context, pairs);
+                    context.startActivity(intent, optionsCompat.toBundle());
+                }else{
+                    v.getContext().startActivity(intent);
+                }
+            }
+        });
+
+        viewHolder.salesCardView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                Utils.showMessage(context, "Context created");
             }
         });
 

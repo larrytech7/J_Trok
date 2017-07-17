@@ -180,6 +180,17 @@ public class ProfileFragment extends Fragment {
                         //databaseError.toException().printStackTrace();
                     }
                 });
+        //update user profile
+        //. TODO Consider updating account earlier than here
+        Map<String, Object> update = new HashMap<>();
+        update.put("userId", mAuthenticatedUser.getUserId());
+        update.put("userName", mAuthenticatedUser.getUserName());
+        update.put("userProfilePhoto", mAuthenticatedUser.getUserProfilePhoto());
+        update.put("userEmail", mAuthenticatedUser.getUserEmail());
+        FirebaseDatabase.getInstance().getReference()
+                .child(Utils.DATABASE_USERS)
+                .child(mAuthenticatedUser.getUserId())
+                .updateChildren(update);
 
     }
 
