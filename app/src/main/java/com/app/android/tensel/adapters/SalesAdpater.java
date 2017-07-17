@@ -84,7 +84,7 @@ public class SalesAdpater extends FirebaseRecyclerAdapter<SalePost, SalesAdpater
         viewHolder.itemTextView.setText(model.getContent());
         viewHolder.dateTextView.setText(TimeAgo.using(model.getTimestamp()));
 
-        viewHolder.authorNameTextView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.itemTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SalesPostDetails.class);

@@ -210,12 +210,12 @@ public class SalesPostDetails extends AppCompatActivity {
                         author = dataSnapshot.getValue(User.class);
                         Log.d("SalesPOSTUSER", "User: "+author.toString());
                         //load author image profile
-/*                        Picasso.with(SalesPostDetails.this)
+                        Picasso.with(SalesPostDetails.this)
                                 .load(author == null ? Uri.parse("") : Uri.parse(author.getUserProfilePhoto()))
                                 .placeholder(R.drawable.app_icon)
                                 .error(R.drawable.chip)
                                 .resize(200, 200)
-                                .into(authorImageView);*/
+                                .into(authorImageView);
                     }
 
                     @Override
