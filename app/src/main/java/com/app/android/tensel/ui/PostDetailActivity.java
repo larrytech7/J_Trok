@@ -192,6 +192,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
     private void loadDetails(Intent intent) {
         if (intent != null){
+            authorImageView.setEnabled(false);
+            authorImageView.setActivated(false);
             String key = intent.getStringExtra(Utils.FEED_DETAIL_ID);
             qDatabase.getReference("trades")
                     .child(key)
@@ -233,6 +235,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                                     getParticipants(tradePost.getTradePostId());
                                     getAuthor(tradePost);
                                 }
+                                authorImageView.setEnabled(true);
+                                authorImageView.setActivated(true);
                             }catch (NullPointerException uriEx){
                                 uriEx.printStackTrace();
                                 FirebaseCrash.report(uriEx.getCause());

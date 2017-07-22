@@ -180,6 +180,8 @@ public class SalesPostDetails extends AppCompatActivity {
     private void loadDetails(Intent intent) {
         if (intent != null){
             String key = intent.getStringExtra(Utils.FEED_DETAIL_ID);
+            authorImageView.setEnabled(false);
+            authorImageView.setActivated(false);
             qDatabase.getReference(Utils.FIREBASE_SELLS)
                     .child(key)
                     .addValueEventListener(new ValueEventListener() {
@@ -201,6 +203,8 @@ public class SalesPostDetails extends AppCompatActivity {
                                 uriEx.printStackTrace();
                                 FirebaseCrash.report(uriEx.getCause());
                             }
+                            authorImageView.setEnabled(true);
+                            authorImageView.setActivated(true);
                         }
 
                         @Override
