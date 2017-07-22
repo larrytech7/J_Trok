@@ -114,7 +114,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
             }
             //setup recyclerView
-            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
+            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount());
 
         }
 

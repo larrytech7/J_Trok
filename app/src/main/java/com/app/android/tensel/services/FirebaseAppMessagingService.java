@@ -38,11 +38,12 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
     private int numMessages = 0;
     private int pvChats = 0;
     private ArrayList<String> messageList = new ArrayList<>();
-    private final static String LOGTAG = "10Sel_FCM";
+    private final static String LOGTAG = "FirebaseCloudMessaging";
     //notification Types
     private static final int NOTIFICATION_TYPE_FEED = 1;
     private static final int NOTIFICATION_TYPE_SELLS = 5;
-    private static final int NOTIFICATION_TYPE_COMMENT = 2;
+    private static final int NOTIFICATION_TYPE_COMMENT_POST = 2;
+    private static final int NOTIFICATION_TYPE_COMMENT_SALE = 6;
     private static final int NOTIFICATION_TYPE_ADS = 3;
     private static final int NOTIFICATION_TYPE_PV = 4;
     private User current_user;
@@ -71,6 +72,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 String key = payload.getString("key");
                 String userid = payload.getString("userid");
 
+                Log.e(LOGTAG, payload.toString(2));
                 //configure notifications based on the type
                 switch (type){
                     case NOTIFICATION_TYPE_FEED:
@@ -109,7 +111,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                                 nm.notify(NOTIFICATION_TYPE_FEED, snotif);
                         }
                         break;
-                    case NOTIFICATION_TYPE_COMMENT:
+                    case NOTIFICATION_TYPE_COMMENT_POST:
                         messageList.add(body);
                         NotificationCompat.Builder cbuilder = getNotification(PostDetailActivity.class, this, title, body,
                         Utils.FEED_DETAIL_ID, key, "");
@@ -118,12 +120,6 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         RemoteInput remoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
                                 .setLabel(getString(R.string.reply))
                                 .build();
-                        /*NotificationCompat.Action commentAction = new NotificationCompat.Action.Builder(R.drawable.ic_send,
-                                getString(R.string.reply),
-                                cbuilder.mNotification.contentIntent)
-                                .setAllowGeneratedReplies(true)
-                                .addRemoteInput(remoteInput)
-                                .build();*/
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                         inboxStyle.setSummaryText(getString(R.string.new_comments, numMessages));
                         inboxStyle.setBigContentTitle(title);
@@ -140,7 +136,36 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
-                                nm.notify(NOTIFICATION_TYPE_COMMENT, notification);
+                                nm.notify(NOTIFICATION_TYPE_COMMENT_POST, notification);
+                        }
+
+                        break;
+                    case NOTIFICATION_TYPE_COMMENT_SALE:
+                        messageList.add(body);
+                        NotificationCompat.Builder salebuilder = getNotification(SalesPostDetails.class, this, title, body,
+                                Utils.FEED_DETAIL_ID, key, "");
+                        salebuilder.setSmallIcon(R.drawable.ic_chat);
+                        //set action button
+                        RemoteInput sremoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
+                                .setLabel(getString(R.string.reply))
+                                .build();
+                        NotificationCompat.InboxStyle sinboxStyle = new NotificationCompat.InboxStyle();
+                        sinboxStyle.setSummaryText(getString(R.string.new_comments, numMessages));
+                        sinboxStyle.setBigContentTitle(title);
+                        for(String m : messageList){
+                            sinboxStyle.addLine(m);
+                        }
+                        //cbuilder.addAction(commentAction);
+                        salebuilder.setStyle(sinboxStyle);
+                        salebuilder.setNumber(++numMessages);
+
+                        //fire
+                        Notification snotification = salebuilder.build();
+                        snotification.vibrate = new long[] { 100, 250, 100, 500};
+                        snotification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false)) {
+                            if (!TextUtils.equals(title, current_user.getUserName()))
+                                nm.notify(NOTIFICATION_TYPE_COMMENT_SALE, snotification);
                         }
 
                         break;
@@ -215,12 +240,12 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
     private NotificationCompat.Builder getNotification(Class c, Context context, String title,
                                   String content, String extraKey, String extraValue, String userid){
         Intent intent1 = new Intent(context, c);
-        intent1.putExtra(extraKey, extraValue);
+        intent1.putExtra(extraKey, extraValue);/*
         if (!TextUtils.isEmpty(userid) &&
-                TextUtils.equals(userid, current_user.getUserId()))
+                TextUtils.equals(title, current_user.getUserName()))*/
             intent1.putExtra(Utils.USER, current_user);
 
-        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
@@ -234,7 +259,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
         builder.setTicker(context.getString(R.string.app_name));
         builder.setContentTitle(title);
         builder.setContentText(content);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.app_icon));
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentIntent(pendingIntent);
         builder.setSound(Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.send_sound));
         builder.setOngoing(false);

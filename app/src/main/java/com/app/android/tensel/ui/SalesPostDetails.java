@@ -106,7 +106,7 @@ public class SalesPostDetails extends AppCompatActivity {
         //setup comments RecyclerView
         qDatabase = FirebaseDatabase.getInstance();
         chatsRecyclerview.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/chats/"), currentUser, this));
+                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("/c/chats/sells"), currentUser, this));
 
         Intent appLinkIntent = getIntent();
         String appLinkAction = appLinkIntent.getAction();
@@ -213,7 +213,7 @@ public class SalesPostDetails extends AppCompatActivity {
                         }
                     });
             chatsRecyclerview.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/"+key), currentUser,this));
+                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/sells/"+key), currentUser,this));
 
         }
     }
@@ -279,7 +279,7 @@ public class SalesPostDetails extends AppCompatActivity {
             //push chat
             Chat userChat = new Chat(currentUser.getUserName(), currentUser.getUserId(), currentUser.getUserProfilePhoto(),
                     message, System.currentTimeMillis(), "");
-            qDatabase.getReference("chats/"+salePost.getPostId())
+            qDatabase.getReference("chats/sells/"+salePost.getPostId())
                     .push().setValue(userChat);
 
                 MediaPlayer mp = MediaPlayer.create(this, R.raw.send_sound);

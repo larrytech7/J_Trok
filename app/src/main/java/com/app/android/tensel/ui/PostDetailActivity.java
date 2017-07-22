@@ -133,7 +133,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         qDatabase = FirebaseDatabase.getInstance();
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("feeds/feed_id/chats/"), user, this));
+                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("p/chats/posts"), user, this));
         //proxyCacheServer = SevenApp.getProxy(PostDetailActivity.this);
         // Grabs a reference to the player view
         //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
@@ -249,7 +249,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                         }
                     });
             chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/"+key), user,this));
+                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/posts/"+key), user,this));
 
 
         }
@@ -412,7 +412,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             //push chat
             Chat userChat = new Chat(user.getUserName(), user.getUserId(), user.getUserProfilePhoto(),
                     message, System.currentTimeMillis(), "");
-            qDatabase.getReference("chats/"+tradePost.getTradePostId())
+            qDatabase.getReference("chats/posts/"+tradePost.getTradePostId())
             .push().setValue(userChat);
 
             chatEditTextView.setText("");
