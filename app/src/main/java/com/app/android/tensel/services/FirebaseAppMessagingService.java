@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -41,9 +42,10 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
     //notification Types
     private static final int NOTIFICATION_TYPE_FEED = 1;
     private static final int NOTIFICATION_TYPE_SELLS = 5;
-    private static final int NOTIFICATION_TYPE_CHAT = 2;
+    private static final int NOTIFICATION_TYPE_COMMENT = 2;
     private static final int NOTIFICATION_TYPE_ADS = 3;
     private static final int NOTIFICATION_TYPE_PV = 4;
+    private User current_user;
 
     public FirebaseAppMessagingService() {
     }
@@ -53,7 +55,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        User current_user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
+        current_user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //process message payload
         Log.d(TAG, "From: " + remoteMessage.getFrom());
@@ -67,12 +69,13 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 String body = payload.getString("body");
                 int type = payload.getInt("type");
                 String key = payload.getString("key");
+                String userid = payload.getString("userid");
 
                 //configure notifications based on the type
                 switch (type){
                     case NOTIFICATION_TYPE_FEED:
                         NotificationCompat.Builder builder = getNotification(PostDetailActivity.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key);
+                                Utils.FEED_DETAIL_ID, key, "");
                         builder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
                         bigTextStyle.bigText(body);
@@ -90,7 +93,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         break;
                     case NOTIFICATION_TYPE_SELLS:
                         NotificationCompat.Builder sbuilder = getNotification(SalesPostDetails.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key);
+                                Utils.FEED_DETAIL_ID, key, "");
                         sbuilder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle sbigTextStyle = new NotificationCompat.BigTextStyle();
                         sbigTextStyle.bigText(body);
@@ -106,10 +109,10 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                                 nm.notify(NOTIFICATION_TYPE_FEED, snotif);
                         }
                         break;
-                    case NOTIFICATION_TYPE_CHAT:
+                    case NOTIFICATION_TYPE_COMMENT:
                         messageList.add(body);
                         NotificationCompat.Builder cbuilder = getNotification(PostDetailActivity.class, this, title, body,
-                        Utils.FEED_DETAIL_ID, key);
+                        Utils.FEED_DETAIL_ID, key, "");
                         cbuilder.setSmallIcon(R.drawable.ic_chat);
                         //set action button
                         RemoteInput remoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
@@ -137,13 +140,14 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
-                                nm.notify(NOTIFICATION_TYPE_CHAT, notification);
+                                nm.notify(NOTIFICATION_TYPE_COMMENT, notification);
                         }
 
                         break;
                     case NOTIFICATION_TYPE_PV:
-                        NotificationCompat.Builder mbuilder = getNotification(PrivateChatActivity.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key);
+                        NotificationCompat.Builder mbuilder = getNotification(PrivateChatActivity.class, this,
+                                title, body,
+                                Utils.FEED_DETAIL_ID, key, userid);
                         mbuilder.setSmallIcon(R.drawable.ic_chat);
                         //set action button
                         RemoteInput mRemoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
@@ -179,7 +183,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
             //extract Data and send Notification
             String title = remoteMessage.getNotification().getTitle();
             String body =remoteMessage.getNotification().getBody();
-            NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body, "","");
+            NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body, "","", "");
             builder.setSmallIcon(R.mipmap.ic_launcher);
             nm.notify(NOTIFICATION_TYPE_ADS, builder.build());
         }
@@ -205,16 +209,26 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
      * @param content notification content/body
      * @param extraKey extra intent key for data to the intent
      * @param extraValue value of extra data to the intent
+     * @param userid userid of user in the data payload
      * @return a builder for customization of the given notification
      */
     private NotificationCompat.Builder getNotification(Class c, Context context, String title,
-                                  String content, String extraKey, String extraValue){
+                                  String content, String extraKey, String extraValue, String userid){
         Intent intent1 = new Intent(context, c);
         intent1.putExtra(extraKey, extraValue);
-        intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (!TextUtils.isEmpty(userid) &&
+                TextUtils.equals(userid, current_user.getUserId()))
+            intent1.putExtra(Utils.USER, current_user);
+
+        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
+        taskStackBuilder.addParentStack(MainActivity.class);
+        taskStackBuilder.addNextIntent(intent1);
+
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                //PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setTicker(context.getString(R.string.app_name));
@@ -226,26 +240,6 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
         builder.setOngoing(false);
         builder.setAutoCancel(true);
         builder.setWhen(0);
-        /*NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.bigText(content);
-        bigTextStyle.setSummaryText(getString(R.string.new_comments, numMessages));
-        builder.setStyle(bigTextStyle);*/
-
-        /*NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.setSummaryText(getString(R.string.new_comments, numMessages));
-        inboxStyle.setBigContentTitle(title);
-        for(String m : messageList){
-            inboxStyle.addLine(m);
-        }*/
-        //builder.setStyle(inboxStyle);
-
-        /*
-        Notification notif = builder.build();
-        notif.vibrate = new long[] { 100, 250, 100, 500};
-        notif.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        */
-
-        //nm.notify(notificationId, notif);
 
         return builder;
     }

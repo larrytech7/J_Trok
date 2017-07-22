@@ -49,7 +49,6 @@ public class PrivateChatActivity extends AppCompatActivity {
     EditText pvEditTextView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    private FirebaseAuth firebaseAuth;
     private FirebaseAnalytics mFirebaseAnalytics;
     private User current_user;
     private FirebaseDatabase qDatabase;
@@ -67,7 +66,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         qDatabase = FirebaseDatabase.getInstance();
 
@@ -106,6 +105,8 @@ public class PrivateChatActivity extends AppCompatActivity {
                 targetId = user.getUserId();
             }else{
                 //launched by participant [not Author]
+                toolbar.setTitle("Author"); //TODO: Should be set with author's name
+                toolbar.setSubtitle(TimeAgo.using(System.currentTimeMillis()));
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                         ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
                         .child(itemId).child(current_user.getUserId()), current_user,this));
@@ -168,6 +169,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                             pvEditTextView.setEnabled(true);
                         btnSendChat.setEnabled(true);
                         pvEditTextView.setText("");
+                        mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
                     }
                 });
                 //push participant

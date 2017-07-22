@@ -149,7 +149,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.PostDetailActivity" />
         </activity>
-        <activity android:name=".ui.SalesPostDetails"></activity>
+        <activity android:name=".ui.SalesPostDetails"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
