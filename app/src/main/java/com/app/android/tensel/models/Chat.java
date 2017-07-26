@@ -14,6 +14,7 @@ public class Chat implements Serializable {
     private String chatText;
     private long chatDateTime;
     private String chatExtraImageUrl;
+    private String itemAuthorId; //this is the item (tradepost or sale) user is chatting on
 
     public Chat() {
     }
@@ -73,5 +74,13 @@ public class Chat implements Serializable {
 
     public void setChatExtraImageUrl(String chatExtraImageUrl) {
         this.chatExtraImageUrl = chatExtraImageUrl;
+    }
+
+    public String getItemAuthorId() {
+        return itemAuthorId;
+    }
+
+    public void setItemAuthorId(String itemAuthorId) {
+        this.itemAuthorId = itemAuthorId;
     }
 }

@@ -91,6 +91,7 @@ tools:context="com.app.android.tensel.ui.SalesPostDetails">
         android:layout_marginBottom="@dimen/card_height"
         android:transitionName="date_shared"
         app:reverseLayout="false"
+        app:stackFromEnd="true"
         app:layoutManager="LinearLayoutManager"
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         tools:listitem="@layout/item_chat_incoming" />

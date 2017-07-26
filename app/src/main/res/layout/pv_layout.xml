@@ -19,6 +19,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="@dimen/card_height"
         app:reverseLayout="false"
+        app:stackFromEnd="true"
         app:layoutManager="LinearLayoutManager"
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         tools:listitem="@layout/item_chat_incoming" />

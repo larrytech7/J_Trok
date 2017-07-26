@@ -153,6 +153,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             if (itemId != null && targetId != null){
                 Chat userChat = new Chat(current_user.getUserName(), current_user.getUserId(), current_user.getUserProfilePhoto(),
                         pvEditTextView.getText().toString(), System.currentTimeMillis(), "");
+                //TODO: Set itemAuthorId for this item before sending chat
                 qDatabase.getReference("pvchats")
                         .child(itemId)
                         .child(targetId)

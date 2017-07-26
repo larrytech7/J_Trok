@@ -240,9 +240,9 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
     private NotificationCompat.Builder getNotification(Class c, Context context, String title,
                                   String content, String extraKey, String extraValue, String userid){
         Intent intent1 = new Intent(context, c);
-        intent1.putExtra(extraKey, extraValue);/*
+        intent1.putExtra(extraKey, extraValue);
         if (!TextUtils.isEmpty(userid) &&
-                TextUtils.equals(title, current_user.getUserName()))*/
+                TextUtils.equals(userid, current_user.getUserId()))
             intent1.putExtra(Utils.USER, current_user);
 
         //intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
