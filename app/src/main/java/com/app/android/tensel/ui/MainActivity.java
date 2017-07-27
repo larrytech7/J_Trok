@@ -32,7 +32,10 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.joanfuentes.hintcase.HintCase;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onStart() {
         super.onStart();
+        updateUser(mAuth.getCurrentUser());
         boolean showHints = new PrefManager(this).getShouldShowHints();
         if (showHints)
             new Handler().postDelayed(new Runnable() {
@@ -222,5 +226,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    private void updateUser(@NonNull final FirebaseUser user) throws IllegalArgumentException, NullPointerException{
+
+        FirebaseDatabase.getInstance()
+                .getReference(Utils.DATABASE_USERS)
+                .child(user.getUid())
+                .child("lastUpdatedTime")
+                .setValue(System.currentTimeMillis());
     }
 }

@@ -59,7 +59,7 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
             public void onClick(View view) {
                 //start chat activity
                 Intent intent = new Intent(context, PrivateChatActivity.class);
-                intent.putExtra(Utils.USER, user);
+                intent.putExtra(Utils.USER, user.getUserId());
                 intent.putExtra(Utils.FEED_DETAIL_ID, itemId);
                 context.startActivity(intent);
             }

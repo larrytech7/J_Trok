@@ -1,9 +1,6 @@
 package com.app.android.tensel.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -12,12 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.ChatBaseAdapter;
@@ -30,10 +26,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +63,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         qDatabase = FirebaseDatabase.getInstance();
@@ -80,41 +78,28 @@ public class PrivateChatActivity extends AppCompatActivity {
             if (dataIntent.hasExtra(Utils.USER)) {
                 //intent launched by author
                 //setup actionBar/toolbar
-                User user = (User) dataIntent.getSerializableExtra(Utils.USER);
-                toolbar.setTitle(user != null ? user.getUserName() : getString(R.string.chat));
-                toolbar.setSubtitle(TimeAgo.using(user == null ? 0 : user.getLastUpdatedTime()));
-                ImageView img = new ImageView(this);
-                img.setAdjustViewBounds(true);
-                img.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
-                img.setMaxWidth(200);
-                try {
-                    Bitmap bitmap = Picasso.with(this)
-                            .load(Uri.parse(user.getUserProfilePhoto()))
-                            .placeholder(R.drawable.app_icon)
-                            .error(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_clear, null))
-                            .resize(200, 200)
-                            .get();
-                    toolbar.setLogo(new BitmapDrawable(getResources(), bitmap));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    FirebaseCrash.report(ex.getCause());
-                }
+                String userid = dataIntent.getStringExtra(Utils.USER);
+                Log.e("PV", "user: "+userid);
+                //toolbar.setTitle(userid != null ? user.getUserName() : getString(R.string.chat));
+                //toolbar.setSubtitle(TimeAgo.using(user == null ? 0 : user.getLastUpdatedTime()));
+
+                targetId = userid; //user.getUserId();
+
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_pv_incoming,
                         ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
-                        .child(itemId).child(user.getUserId()), current_user,this));
-                targetId = user.getUserId();
+                        .child(itemId).child(targetId), current_user,this));
+
             }else{
                 //launched by participant [not Author]
                 toolbar.setTitle("Author"); //TODO: Should be set with author's name
-                toolbar.setSubtitle(TimeAgo.using(System.currentTimeMillis()));
-                mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
-                        .child(itemId).child(current_user.getUserId()), current_user,this));
+                toolbar.setSubtitle("--");
                 targetId = current_user.getUserId();
 
+                mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
+                        ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
+                        .child(itemId).child(targetId), current_user,this));
+
             }
-            //setup recyclerView
-            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount());
 
         }
 
@@ -191,4 +176,28 @@ public class PrivateChatActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //TODO: This logo is to be replaced with profile image of peer
+        toolbar.setLogo(ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_launcher, null));
+        //Load user/peer profile to the status bar. Catch errors
+        qDatabase.getReference().child(Utils.DATABASE_USERS)
+                .child(targetId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null){
+                            toolbar.setTitle(user.getUserName());
+                            toolbar.setSubtitle(TimeAgo.using(user.getLastUpdatedTime()));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
 }
