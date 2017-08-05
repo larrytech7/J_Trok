@@ -148,6 +148,10 @@ public class SalesPostDetails extends AppCompatActivity {
         participantsAdapter.setItemId(itemId);
         participantsAdapter.setItemAuthorId(salePost.getAuthorId());
         participantsRecyclerView.setAdapter(participantsAdapter);
+
+        if (!TextUtils.equals(salePost.getAuthorId(), currentUser.getUserId()))
+            //subscribe FCM for messages
+            FirebaseMessaging.getInstance().subscribeToTopic(currentUser.getUserId());
     }
 
     /**
@@ -191,6 +195,9 @@ public class SalesPostDetails extends AppCompatActivity {
                             salePost = dataSnapshot.getValue(SalePost.class);
                             try {
                                 if (salePost != null) {
+                                    //subscribe FCM for messages
+                                    FirebaseMessaging.getInstance().subscribeToTopic(salePost.getPostId());
+
                                     authorNameTextView.setText(
                                             String.format("%s - %s", salePost.getAuthorName(),
                                                     TimeAgo.using(salePost.getTimestamp()) ));
@@ -288,8 +295,7 @@ public class SalesPostDetails extends AppCompatActivity {
                 mp.setVolume(0.3f,0.4f);
                 mp.start();
 
-            //subscribe FCM for messages
-            FirebaseMessaging.getInstance().subscribeToTopic(salePost.getPostId());
+
             //NOW FIRE EVENT FOR THIS CHAT
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Utils.ANALYTICS_PARAM_CHATS_ID);

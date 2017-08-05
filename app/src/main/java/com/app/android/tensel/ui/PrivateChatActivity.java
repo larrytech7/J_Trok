@@ -112,7 +112,8 @@ public class PrivateChatActivity extends AppCompatActivity {
                         .child(itemId).child(targetId), current_user,this));
 
             }
-
+            //subscribe FCM for messages
+            FirebaseMessaging.getInstance().subscribeToTopic(targetId);
         }
 
     }
@@ -192,13 +193,13 @@ public class PrivateChatActivity extends AppCompatActivity {
                         mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
                     }
                 });
-                //update participant
+                //update participant only if not author
                 current_user.setLastUpdatedTime(System.currentTimeMillis());
+                if (!TextUtils.equals(itemAuthorId, current_user.getUserId()))
                 qDatabase.getReference("participants/"+itemId)
                         .child(current_user.getUserId())
                         .setValue(current_user);
-                //subscribe FCM for messages
-                FirebaseMessaging.getInstance().subscribeToTopic(targetId);
+
                 //NOW FIRE EVENT FOR THIS CHAT
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Utils.ANALYTICS_PARAM_PV_CHATS_ID);

@@ -168,6 +168,11 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         participantsAdapter.setItemId(itemId);
         participantsAdapter.setItemAuthorId(tradePost.getAuthorId());
         participantsRecyclerView.setAdapter(participantsAdapter);
+
+        //determine which location to listen for FCM
+        if (!TextUtils.equals(tradePost.getAuthorId(), user.getUserId()))
+            //subscribe FCM for messages
+            FirebaseMessaging.getInstance().subscribeToTopic(user.getUserId());
     }
 
     private void getUser() {
@@ -204,6 +209,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                             tradePost = dataSnapshot.getValue(TradePost.class);
                             try {
                                 if (tradePost != null) {
+                                    //subscribe FCM for messages
+                                    FirebaseMessaging.getInstance().subscribeToTopic(tradePost.getTradePostId());
                                     //player.setVideoSource(Utils.getCleanUri(tradePost.getTradeVideoUrl()));
                                     authorNameTextView.setText(tradePost.getAuthorName());
                                     articleDescriptionTextView.setText(tradePost.getTradeDescription());
@@ -426,8 +433,6 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 mp.setVolume(0.3f,0.4f);
                 mp.start();
             }
-            //subscribe FCM for messages
-            FirebaseMessaging.getInstance().subscribeToTopic(tradePost.getTradePostId());
             //NOW FIRE EVENT FOR THIS CHAT
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Utils.ANALYTICS_PARAM_CHATS_ID);
