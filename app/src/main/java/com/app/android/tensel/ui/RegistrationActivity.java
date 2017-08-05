@@ -95,6 +95,15 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
             }
         });
 
+        new FirebaseAuth.AuthStateListener(){
+
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser != null)
+                    goToHome();
+            }
+        };
     }
 
     private void handleFacebookAccessToken(AccessToken accessToken) {
@@ -108,7 +117,7 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            //FirebaseUser user = mAuth.getCurrentUser();
                             goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -137,7 +146,6 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
 
@@ -150,8 +158,7 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
                 // Google Sign In failed, update UI appropriately
                 // ...97444cd501ffc75d694b12a3a234b6365e4c8860
             }
-        }else if (requestCode == FB_SIGN_IN){
-            // Pass the activity result back to the Facebook SDK
+        }else{
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }

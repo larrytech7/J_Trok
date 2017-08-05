@@ -198,8 +198,8 @@ public class ProfileFragment extends Fragment {
      * Restore user settings for these parameters to latest states
      */
     private void initSettings(){
-        boolean setComment = prefManager.getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false);
-        boolean setItem = prefManager.getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false);
+        boolean setComment = prefManager.getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true);
+        boolean setItem = prefManager.getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true);
         itemSwitchSetting.setChecked(setItem);
         commentSwitchSetting.setChecked(setComment);
     }

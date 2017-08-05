@@ -10,6 +10,7 @@ public class SalePost implements Serializable {
 
     String authorName;
     String authorId;
+    String authorProfileImage;
     String content;
     long timestamp;
     String postId;
@@ -30,6 +31,14 @@ public class SalePost implements Serializable {
         this.authorId = authorId;
         this.content = content;
         this.timestamp = timestamp;
+    }
+
+    public String getAuthorProfileImage() {
+        return authorProfileImage;
+    }
+
+    public void setAuthorProfileImage(String authorProfileImage) {
+        this.authorProfileImage = authorProfileImage;
     }
 
     public String getAuthorName() {

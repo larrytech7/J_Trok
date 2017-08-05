@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -92,7 +91,7 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
                 R.layout.item_for_sale,
                 SalesAdpater.MyViewHolder.class,
-                mDatabaseRef.child(Utils.FIREBASE_SELLS).orderByPriority());
+                mDatabaseRef.child(Utils.FIREBASE_SELLS));
         recyclerView.setAdapter(adapter);
 
         String[] categories = getResources().getStringArray(R.array.categories);
@@ -160,6 +159,7 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
                         String id = mDatabaseRef.child(Utils.FIREBASE_SELLS)
                                 .push().getKey();
                         salePost.setPostId(id);
+                        salePost.setAuthorProfileImage(mAuthenticatedUser.getUserProfilePhoto());
                         mDatabaseRef.child(Utils.FIREBASE_SELLS)
                                 .child(id)
                                 .setValue(salePost)

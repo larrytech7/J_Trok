@@ -76,19 +76,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment selectedFragment = null;
+                        Fragment selectedFragment;
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         String fragment = "";
                         //toggleIcon(item);
                         switch (item.getItemId()) {
                             case R.id.action_buying:
                                 fragment = "buying";
+                                item.setIcon(R.drawable.ic_shop_selected);
                                 break;
                             case R.id.action_selling:
                                 fragment = "selling";
+                                item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sell_selected, null));
                                 break;
                             case R.id.action_profile:
                                 fragment = "profile";
+                                item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_profile_selected, null));
                                 break;
                         }
                         selectedFragment = fragments.get(fragment);
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             //deep link present, we can extract
                             Intent intent = appInviteInvitationResult.getInvitationIntent();
                             String deeplink = AppInviteReferral.getDeepLink(intent);
-                            //TODO: Use for referral programmes and other gamification techniques (Gain more recording time)
+                            //TODO: Use for referral programs and other gamification techniques (Gain more recording time)
                             FirebaseCrash.log("Deep link activated");
                         }
                     }

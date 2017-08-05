@@ -45,8 +45,8 @@
     <string name="search_hint">Quickly search for cool stuff</string>
     <string name="search">%s, quickly find stuff here</string>
     <string name="preparing">preparing </string>
-    <string name="buying">Buying</string>
-    <string name="selling">Selling</string>
+    <string name="buying">Purchases</string>
+    <string name="selling">Needs</string>
     <string name="profile">Profile</string>
     <string name="username">\@ %s Username</string>
     <string name="chat_content_hint">This is one of the chat content data testing 798-756-4545-543 at the email, larryakah@gmail.com creator of site www.iceteck.com</string>
@@ -78,7 +78,7 @@
 
     <string name="timeinterval" formatted="false" translatable="false">%d %s</string>
 
-    <string name="fb_login_protocol_scheme">fb1643272769025679</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1643272769025679</string>
     <string name="facebook_app_id" translatable="false">1643272769025679</string>
     <string name="login_error">Login error! %s</string>
     <string name="upload_error">Error uploading thumbnail. Please try again</string>

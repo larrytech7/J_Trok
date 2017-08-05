@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -19,16 +20,24 @@ import com.app.android.tensel.models.User;
 import com.app.android.tensel.ui.MainActivity;
 import com.app.android.tensel.ui.PostDetailActivity;
 import com.app.android.tensel.ui.PrivateChatActivity;
+import com.app.android.tensel.ui.ReplyActivity;
 import com.app.android.tensel.ui.SalesPostDetails;
 import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.facebook.login.widget.ProfilePictureView.TAG;
@@ -56,6 +65,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
         current_user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //process message payload
@@ -71,42 +81,61 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 int type = payload.getInt("type");
                 String key = payload.getString("key");
                 String userid = payload.getString("userid");
+                String profile = payload.getString("profile");
 
                 Log.e(LOGTAG, payload.toString(2));
                 //configure notifications based on the type
                 switch (type){
                     case NOTIFICATION_TYPE_FEED:
                         NotificationCompat.Builder builder = getNotification(PostDetailActivity.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key, "");
+                                Utils.FEED_DETAIL_ID, key, "", "");
                         builder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
                         bigTextStyle.bigText(body);
                         bigTextStyle.setSummaryText(getString(R.string.new_posts, numMessages));
                         builder.setStyle(bigTextStyle);
                         builder.setSmallIcon(R.drawable.ic_play);
+
+                        //get profile picture
+                        try {
+                            Bitmap profileBitmap = Picasso.with(this).load(profile).get();
+                            builder.setLargeIcon(profileBitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         //fire
                         Notification notif = builder.build();
                         notif.vibrate = new long[] { 100, 250, 100, 500};
                         notif.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false)) {
+                        if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
                                 nm.notify(NOTIFICATION_TYPE_FEED, notif);
                         }
                         break;
                     case NOTIFICATION_TYPE_SELLS:
                         NotificationCompat.Builder sbuilder = getNotification(SalesPostDetails.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key, "");
+                                Utils.FEED_DETAIL_ID, key, "", "");
                         sbuilder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle sbigTextStyle = new NotificationCompat.BigTextStyle();
                         sbigTextStyle.bigText(body);
                         sbigTextStyle.setSummaryText(getString(R.string.new_posts, numMessages));
                         sbuilder.setStyle(sbigTextStyle);
-                        sbuilder.setSmallIcon(R.drawable.app_icon);
+                        sbuilder.setSmallIcon(R.mipmap.ic_send);
+
+                        //get profile picture
+                        try {
+                            Bitmap profileBitmap = Picasso.with(this).load(profile).get();
+                            sbuilder.setLargeIcon(profileBitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         //fire
                         Notification snotif = sbuilder.build();
                         snotif.vibrate = new long[] { 100, 250, 100, 500};
                         snotif.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, false)) {
+                        if (new PrefManager(this).getBooleanPreference(Utils.ITEM_NOTIFICATION_PREF, true)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
                                 nm.notify(NOTIFICATION_TYPE_FEED, snotif);
                         }
@@ -114,8 +143,8 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                     case NOTIFICATION_TYPE_COMMENT_POST:
                         messageList.add(body);
                         NotificationCompat.Builder cbuilder = getNotification(PostDetailActivity.class, this, title, body,
-                        Utils.FEED_DETAIL_ID, key, "");
-                        cbuilder.setSmallIcon(R.drawable.ic_chat);
+                        Utils.FEED_DETAIL_ID, key, "", "");
+                        cbuilder.setSmallIcon(R.mipmap.ic_launcher);
                         //set action button
                         RemoteInput remoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
                                 .setLabel(getString(R.string.reply))
@@ -130,11 +159,19 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         cbuilder.setStyle(inboxStyle);
                         cbuilder.setNumber(++numMessages);
 
+                        //get profile picture
+                        try {
+                            Bitmap profileBitmap = Picasso.with(this).load(profile).get();
+                            cbuilder.setLargeIcon(profileBitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         //fire
                         Notification notification = cbuilder.build();
                         notification.vibrate = new long[] { 100, 250, 100, 500};
                         notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false)) {
+                        if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
                                 nm.notify(NOTIFICATION_TYPE_COMMENT_POST, notification);
                         }
@@ -143,8 +180,8 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                     case NOTIFICATION_TYPE_COMMENT_SALE:
                         messageList.add(body);
                         NotificationCompat.Builder salebuilder = getNotification(SalesPostDetails.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key, "");
-                        salebuilder.setSmallIcon(R.drawable.ic_chat);
+                                Utils.FEED_DETAIL_ID, key, "", "");
+                        salebuilder.setSmallIcon(R.mipmap.ic_launcher);
                         //set action button
                         RemoteInput sremoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
                                 .setLabel(getString(R.string.reply))
@@ -159,37 +196,57 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         salebuilder.setStyle(sinboxStyle);
                         salebuilder.setNumber(++numMessages);
 
+                        //get profile picture
+                        try {
+                            Bitmap profileBitmap = Picasso.with(this).load(profile).get();
+                            salebuilder.setLargeIcon(profileBitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         //fire
                         Notification snotification = salebuilder.build();
                         snotification.vibrate = new long[] { 100, 250, 100, 500};
                         snotification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, false)) {
+                        if (new PrefManager(this).getBooleanPreference(Utils.COMMENT_NOTIFICATION_PREF, true)) {
                             if (!TextUtils.equals(title, current_user.getUserName()))
                                 nm.notify(NOTIFICATION_TYPE_COMMENT_SALE, snotification);
                         }
 
                         break;
                     case NOTIFICATION_TYPE_PV:
-                        NotificationCompat.Builder mbuilder = getNotification(PrivateChatActivity.class, this,
+
+                        final NotificationCompat.Builder mbuilder = getNotification(PrivateChatActivity.class, this,
                                 title, body,
-                                Utils.FEED_DETAIL_ID, key, userid);
+                                Utils.FEED_DETAIL_ID, key, userid, profile);
                         mbuilder.setSmallIcon(R.drawable.ic_chat);
+                        PendingIntent replyPendingIntent = PendingIntent
+                                .getActivity(this, 1, new Intent(this, ReplyActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
                         //set action button
                         RemoteInput mRemoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
                                 .setLabel(getString(R.string.reply))
                                 .build();
-                        /*NotificationCompat.Action commentAction = new NotificationCompat.Action.Builder(R.drawable.ic_send,
+                        NotificationCompat.Action commentAction = new NotificationCompat.Action.Builder(R.drawable.ic_send,
                                 getString(R.string.reply),
-                                cbuilder.mNotification.contentIntent)
+                                replyPendingIntent)
                                 .setAllowGeneratedReplies(true)
-                                .addRemoteInput(remoteInput)
-                                .build();*/
-                        //cbuilder.addAction(commentAction);
+                                .addRemoteInput(mRemoteInput)
+                                .build();
+                        mbuilder.addAction(commentAction);
                         //cbuilder.setStyle(inboxStyle);
                         mbuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
                         mbuilder.setNumber(++pvChats);
 
-                        //fire
+                        //get profile picture
+                        try {
+                            Bitmap profileBitmap = Picasso.with(this).load(profile).get();
+                            mbuilder.setLargeIcon(profileBitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            FirebaseCrash.report(e.getCause()); //report Error for profile image errors
+                        }
+
+                        //fire the notification
                         Notification mnotification = mbuilder.build();
                         mnotification.vibrate = new long[] { 100, 250, 100, 500};
                         mnotification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -208,7 +265,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
             //extract Data and send Notification
             String title = remoteMessage.getNotification().getTitle();
             String body =remoteMessage.getNotification().getBody();
-            NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body, "","", "");
+            NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body, "","", "", "");
             builder.setSmallIcon(R.mipmap.ic_launcher);
             nm.notify(NOTIFICATION_TYPE_ADS, builder.build());
         }
@@ -238,10 +295,11 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
      * @return a builder for customization of the given notification
      */
     private NotificationCompat.Builder getNotification(Class c, Context context, String title,
-                                  String content, String extraKey, String extraValue, String userid){
+                                  String content, String extraKey, String extraValue, String userid, String userProfile){
         Intent intent1 = new Intent(context, c);
         intent1.putExtra(extraKey, extraValue);
-            intent1.putExtra(Utils.USER, userid);
+        intent1.putExtra(Utils.USER, userid);
+        intent1.putExtra(Utils.PROFILE_IMG, userProfile);
 
         //intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

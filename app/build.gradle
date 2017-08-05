@@ -44,7 +44,6 @@ dependencies {
     })
     compile "berlin.volders:rxDownloadManager:$rxDownloadManagerVersion"
     compile 'com.afollestad:material-camera:0.4.4'
-    compile 'com.afollestad:material-camera:0.4.4'
     compile "com.android.support:appcompat-v7:$apiSupportVersion"
     compile "com.android.support:cardview-v7:$apiSupportVersion"
     compile "com.android.support:recyclerview-v7:$apiSupportVersion"

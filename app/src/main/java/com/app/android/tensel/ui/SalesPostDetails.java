@@ -266,6 +266,7 @@ public class SalesPostDetails extends AppCompatActivity {
         }else{
             //GOTO Chat room
             Intent intent = new Intent(this, PrivateChatActivity.class);
+            intent.putExtra(Utils.PROFILE_IMG, author.getUserProfilePhoto());
             intent.putExtra(Utils.FEED_DETAIL_ID, salePost != null ? salePost.getPostId() : "");
             startActivity(intent);
         }

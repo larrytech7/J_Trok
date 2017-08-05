@@ -399,6 +399,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         }else{
             //GOTO Chat room
             Intent intent = new Intent(this, PrivateChatActivity.class);
+            intent.putExtra(Utils.PROFILE_IMG, author.getUserProfilePhoto());
             intent.putExtra(Utils.FEED_DETAIL_ID, tradePost != null ? tradePost.getTradePostId() : "");
             startActivity(intent);
         }
@@ -416,6 +417,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             .push().setValue(userChat);
 
             chatEditTextView.setText("");
+            chatEditTextView.clearFocus();
             //play sound for this
             if (!player.isPlaying()){
                 MediaPlayer mp = MediaPlayer.create(this, R.raw.send_sound);

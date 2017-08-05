@@ -66,6 +66,7 @@ public class Utils {
     public static final String COMMENT_NOTIFICATION_PREF = "COMMENT_PREFERENCE_NOTIF";
     public static final String FIREBASE_SELLS = "sells";
     public static final String SELL_DETAIL_ID = "SELLS_DETAIL_ID";
+    public static final String PROFILE_IMG = "USER_PROFILE_PHOTO";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();
