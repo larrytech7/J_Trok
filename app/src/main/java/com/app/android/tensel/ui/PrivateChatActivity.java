@@ -118,6 +118,26 @@ public class PrivateChatActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("itemid", itemId );
+        outState.putString("target", targetId);
+        outState.putString("profile", profile);
+        outState.putString("itemAuthor", itemAuthorId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            itemId = savedInstanceState.getString("itemid");
+            targetId = savedInstanceState.getString("target");
+            profile = savedInstanceState.getString("profile");
+            itemAuthorId = savedInstanceState.getString("itemAuthor");
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
     }

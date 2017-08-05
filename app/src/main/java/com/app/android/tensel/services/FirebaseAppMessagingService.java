@@ -81,6 +81,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 int type = payload.getInt("type");
                 String key = payload.getString("key");
                 String userid = payload.getString("userid");
+                String authorId = payload.getString("authorid");
                 String profile = payload.getString("profile");
 
                 Log.e(LOGTAG, payload.toString(2));
@@ -88,7 +89,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                 switch (type){
                     case NOTIFICATION_TYPE_FEED:
                         NotificationCompat.Builder builder = getNotification(PostDetailActivity.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key, "", "");
+                                Utils.FEED_DETAIL_ID, key, "", "", "");
                         builder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
                         bigTextStyle.bigText(body);
@@ -115,7 +116,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         break;
                     case NOTIFICATION_TYPE_SELLS:
                         NotificationCompat.Builder sbuilder = getNotification(SalesPostDetails.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key, "", "");
+                                Utils.FEED_DETAIL_ID, key, "", "", "");
                         sbuilder.setNumber(++numMessages);
                         NotificationCompat.BigTextStyle sbigTextStyle = new NotificationCompat.BigTextStyle();
                         sbigTextStyle.bigText(body);
@@ -143,7 +144,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                     case NOTIFICATION_TYPE_COMMENT_POST:
                         messageList.add(body);
                         NotificationCompat.Builder cbuilder = getNotification(PostDetailActivity.class, this, title, body,
-                        Utils.FEED_DETAIL_ID, key, "", "");
+                        Utils.FEED_DETAIL_ID, key, "", "", "");
                         cbuilder.setSmallIcon(R.mipmap.ic_launcher);
                         //set action button
                         RemoteInput remoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
@@ -180,7 +181,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                     case NOTIFICATION_TYPE_COMMENT_SALE:
                         messageList.add(body);
                         NotificationCompat.Builder salebuilder = getNotification(SalesPostDetails.class, this, title, body,
-                                Utils.FEED_DETAIL_ID, key, "", "");
+                                Utils.FEED_DETAIL_ID, key, "", "", "");
                         salebuilder.setSmallIcon(R.mipmap.ic_launcher);
                         //set action button
                         RemoteInput sremoteInput = new RemoteInput.Builder(Utils.INSTANT_REPLY)
@@ -218,7 +219,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
 
                         final NotificationCompat.Builder mbuilder = getNotification(PrivateChatActivity.class, this,
                                 title, body,
-                                Utils.FEED_DETAIL_ID, key, userid, profile);
+                                Utils.FEED_DETAIL_ID, key, userid, authorId, profile);
                         mbuilder.setSmallIcon(R.drawable.ic_chat);
                         PendingIntent replyPendingIntent = PendingIntent
                                 .getActivity(this, 1, new Intent(this, ReplyActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -265,7 +266,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
             //extract Data and send Notification
             String title = remoteMessage.getNotification().getTitle();
             String body =remoteMessage.getNotification().getBody();
-            NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body, "","", "", "");
+            NotificationCompat.Builder builder = getNotification(MainActivity.class, this, title, body, "","", "", "", "");
             builder.setSmallIcon(R.mipmap.ic_launcher);
             nm.notify(NOTIFICATION_TYPE_ADS, builder.build());
         }
@@ -295,10 +296,12 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
      * @return a builder for customization of the given notification
      */
     private NotificationCompat.Builder getNotification(Class c, Context context, String title,
-                                  String content, String extraKey, String extraValue, String userid, String userProfile){
+                                  String content, String extraKey, String extraValue, String userid,
+                                                       String authorId, String userProfile){
         Intent intent1 = new Intent(context, c);
         intent1.putExtra(extraKey, extraValue);
-        intent1.putExtra(Utils.AUTHOR_ID, userid);
+        intent1.putExtra(Utils.USER, userid);
+        intent1.putExtra(Utils.AUTHOR_ID, authorId);
         intent1.putExtra(Utils.PROFILE_IMG, userProfile);
 
         //intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
