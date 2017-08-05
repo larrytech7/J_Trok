@@ -298,7 +298,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                                   String content, String extraKey, String extraValue, String userid, String userProfile){
         Intent intent1 = new Intent(context, c);
         intent1.putExtra(extraKey, extraValue);
-        intent1.putExtra(Utils.USER, userid);
+        intent1.putExtra(Utils.AUTHOR_ID, userid);
         intent1.putExtra(Utils.PROFILE_IMG, userProfile);
 
         //intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

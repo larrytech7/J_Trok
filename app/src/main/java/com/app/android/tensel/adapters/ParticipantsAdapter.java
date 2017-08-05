@@ -36,6 +36,7 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
      */
     private Context context;
     private String itemId;
+    private String itemAuthorId;
 
     public ParticipantsAdapter(Context c, Class<User> modelClass, int modelLayout, Class<MyViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -61,10 +62,19 @@ public class ParticipantsAdapter extends FirebaseRecyclerAdapter<User, Participa
                 Intent intent = new Intent(context, PrivateChatActivity.class);
                 intent.putExtra(Utils.PROFILE_IMG, user.getUserProfilePhoto());
                 intent.putExtra(Utils.USER, user.getUserId());
+                intent.putExtra(Utils.AUTHOR_ID, itemAuthorId);
                 intent.putExtra(Utils.FEED_DETAIL_ID, itemId);
                 context.startActivity(intent);
             }
         });
+    }
+
+    public String getItemAuthorId() {
+        return itemAuthorId;
+    }
+
+    public void setItemAuthorId(String itemAuthorId) {
+        this.itemAuthorId = itemAuthorId;
     }
 
     public void setItemId(String itemId) {

@@ -60,6 +60,7 @@ public class PrivateChatActivity extends AppCompatActivity {
     private String itemId; //the id of the item (Posted item) under consideration in the private chat
     private String targetId; //id of the user to send message to. can be seen as a shared key or common point of chat
     private String profile;
+    private String itemAuthorId; //id of author of the item (post/sale)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +85,9 @@ public class PrivateChatActivity extends AppCompatActivity {
         if (dataIntent != null ){
             itemId = dataIntent.getStringExtra(Utils.FEED_DETAIL_ID);
             profile = dataIntent.getStringExtra(Utils.PROFILE_IMG);
+            itemAuthorId = dataIntent.getStringExtra(Utils.AUTHOR_ID);
 
-            if (dataIntent.hasExtra(Utils.USER)) {
+            if (TextUtils.equals(itemAuthorId, current_user.getUserId())) {
                 //intent launched by author
                 //setup actionBar/toolbar
                 String userid = dataIntent.getStringExtra(Utils.USER);
@@ -149,6 +151,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                 Chat userChat = new Chat(current_user.getUserName(), current_user.getUserId(), current_user.getUserProfilePhoto(),
                         pvEditTextView.getText().toString(), System.currentTimeMillis(), "");
                 //TODO: Set itemAuthorId for this item before sending chat
+                userChat.setItemAuthorId(itemAuthorId);
                 qDatabase.getReference("pvchats")
                         .child(itemId)
                         .child(targetId)
@@ -221,7 +224,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
         //Load user/peer profile to the status bar. Catch errors
         qDatabase.getReference().child(Utils.DATABASE_USERS)
-                .child(targetId)
+                .child(TextUtils.equals(itemAuthorId, current_user.getUserId()) ? targetId : itemAuthorId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

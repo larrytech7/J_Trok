@@ -14,7 +14,7 @@ public class Chat implements Serializable {
     private String chatText;
     private long chatDateTime;
     private String chatExtraImageUrl;
-    private String itemAuthorId; //this is the item (tradepost or sale) user is chatting on
+    private String itemAuthorId; //this is the userid of the author/owner of the item (tradepost or sale) user is chatting on
 
     public Chat() {
     }

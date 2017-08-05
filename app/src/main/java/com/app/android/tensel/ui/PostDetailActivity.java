@@ -166,6 +166,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 ParticipantsAdapter.MyViewHolder.class,
                 qDatabase.getReference("participants/" + tradePost.getTradePostId()));
         participantsAdapter.setItemId(itemId);
+        participantsAdapter.setItemAuthorId(tradePost.getAuthorId());
         participantsRecyclerView.setAdapter(participantsAdapter);
     }
 
@@ -400,6 +401,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             //GOTO Chat room
             Intent intent = new Intent(this, PrivateChatActivity.class);
             intent.putExtra(Utils.PROFILE_IMG, author.getUserProfilePhoto());
+            intent.putExtra(Utils.AUTHOR_ID, author.getUserId());
             intent.putExtra(Utils.FEED_DETAIL_ID, tradePost != null ? tradePost.getTradePostId() : "");
             startActivity(intent);
         }

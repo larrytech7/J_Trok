@@ -146,6 +146,7 @@ public class SalesPostDetails extends AppCompatActivity {
                 ParticipantsAdapter.MyViewHolder.class,
                 qDatabase.getReference("participants/" + salePost.getPostId()));
         participantsAdapter.setItemId(itemId);
+        participantsAdapter.setItemAuthorId(salePost.getAuthorId());
         participantsRecyclerView.setAdapter(participantsAdapter);
     }
 
@@ -259,14 +260,14 @@ public class SalesPostDetails extends AppCompatActivity {
     @OnClick(R.id.authorImageView)
     public void showChatHeads(){
         // Load users/participants if author, else go to chat room
-        Log.d("SalesPostDetails", "author: "+salePost.getAuthorId() + ", currentuser: "+currentUser.getUserEmail());
-        //return;
+
         if (TextUtils.equals(salePost.getAuthorId(), currentUser.getUserId())){
             toggleBottomSheet();
         }else{
             //GOTO Chat room
             Intent intent = new Intent(this, PrivateChatActivity.class);
             intent.putExtra(Utils.PROFILE_IMG, author.getUserProfilePhoto());
+            intent.putExtra(Utils.AUTHOR_ID, author.getUserId());
             intent.putExtra(Utils.FEED_DETAIL_ID, salePost != null ? salePost.getPostId() : "");
             startActivity(intent);
         }
