@@ -69,9 +69,8 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         if (getItemViewType(position) == VIEW_TYPE_INCOMING)
             Picasso.with(context)
                     .load(model.getAuthorProfileImage())
-                    .resize(70,70)
                     .placeholder(R.drawable.app_icon)
-                    .error(R.drawable.crescent_bottom)
+                    .resize(70,70)
                     .into(viewHolder.userChatImageView);
     }
 

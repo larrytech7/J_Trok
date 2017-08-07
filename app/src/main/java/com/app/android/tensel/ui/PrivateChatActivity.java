@@ -42,8 +42,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.attr.author;
-
 public class PrivateChatActivity extends AppCompatActivity {
 
     @BindView(R.id.pvRecyclerView)
@@ -60,7 +58,7 @@ public class PrivateChatActivity extends AppCompatActivity {
     private String itemId; //the id of the item (Posted item) under consideration in the private chat
     private String targetId; //id of the user to send message to. can be seen as a shared key or common point of chat
     private String profile;
-    private String itemAuthorId; //id of author of the item (post/sale)
+    private String itemAuthorId; //id of author of the item (purchase/need)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +70,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setLogo(ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_launcher, null));
         }
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -216,32 +215,33 @@ public class PrivateChatActivity extends AppCompatActivity {
         super.onStart();
 
         //get profile picture
-        new AsyncTask<String, Void, Bitmap>(){
+            new AsyncTask<String, Void, Bitmap>(){
 
-            @Override
-            protected Bitmap doInBackground(String... params) {
+                @Override
+                protected Bitmap doInBackground(String... params) {
 
-                Bitmap profileBitmap = null;
-                try {
-                    profileBitmap = Picasso.with(PrivateChatActivity.this).load(profile).error(R.mipmap.ic_launcher).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    Bitmap profileBitmap = null;
+                    try {
+                        profileBitmap = Picasso.with(PrivateChatActivity.this)
+                                .load(profile)
+                                .error(R.mipmap.ic_launcher)
+                                .resize(50,50)
+                                .get();
+                    } catch (IOException | IllegalArgumentException e) {
+                        e.printStackTrace();
+                    }
+
+                    return profileBitmap;
                 }
 
-                return profileBitmap;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bmp) {
-                super.onPostExecute(bmp);
-                try {
-                    toolbar.setLogo(new BitmapDrawable(getResources(), bmp));
-                } catch (Exception e) {
-                    toolbar.setLogo(ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_launcher, null));
-                    e.printStackTrace();
+                @Override
+                protected void onPostExecute(Bitmap bmp) {
+                    super.onPostExecute(bmp);
+                    if (bmp != null){
+                        toolbar.setLogo(new BitmapDrawable(getResources(), bmp));
+                    }
                 }
-            }
-        }.execute(profile);
+            }.execute(profile);
 
         //Load user/peer profile to the status bar. Catch errors
         qDatabase.getReference().child(Utils.DATABASE_USERS)

@@ -96,6 +96,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         bigTextStyle.setSummaryText(getString(R.string.new_posts, numMessages));
                         builder.setStyle(bigTextStyle);
                         builder.setSmallIcon(R.drawable.ic_play);
+                        builder.setGroup("posts");
 
                         //get profile picture
                         try {
@@ -123,6 +124,8 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         sbigTextStyle.setSummaryText(getString(R.string.new_posts, numMessages));
                         sbuilder.setStyle(sbigTextStyle);
                         sbuilder.setSmallIcon(R.mipmap.ic_send);
+                        sbuilder.setGroup("posts");
+                        sbuilder.setGroupSummary(true);
 
                         //get profile picture
                         try {
@@ -159,6 +162,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         //cbuilder.addAction(commentAction);
                         cbuilder.setStyle(inboxStyle);
                         cbuilder.setNumber(++numMessages);
+                        cbuilder.setGroup("comments");
 
                         //get profile picture
                         try {
@@ -196,6 +200,8 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         //cbuilder.addAction(commentAction);
                         salebuilder.setStyle(sinboxStyle);
                         salebuilder.setNumber(++numMessages);
+                        salebuilder.setGroup("comments");
+                        salebuilder.setGroupSummary(true);
 
                         //get profile picture
                         try {
@@ -237,6 +243,8 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
                         //cbuilder.setStyle(inboxStyle);
                         mbuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
                         mbuilder.setNumber(++pvChats);
+                        mbuilder.setGroup("chats");
+                        mbuilder.setGroupSummary(true);
 
                         //get profile picture
                         try {
@@ -308,7 +316,7 @@ public class FirebaseAppMessagingService extends FirebaseMessagingService {
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
-        taskStackBuilder.addParentStack(MainActivity.class);
+        taskStackBuilder.addParentStack(c);
         taskStackBuilder.addNextIntent(intent1);
 
         PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

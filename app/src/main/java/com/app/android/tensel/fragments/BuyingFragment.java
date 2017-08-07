@@ -48,6 +48,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -75,10 +76,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
-import static com.app.android.tensel.R.id.aboutTextView;
-import static com.app.android.tensel.R.id.locationTextView;
-import static com.app.android.tensel.R.id.phoneTextView;
-import static com.app.android.tensel.R.id.userCountryTextView;
 
 public class BuyingFragment extends Fragment implements TutorialListener, SearchBox.SearchListener {
 
@@ -87,10 +84,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private Unbinder unbinder;
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
-    private SearchBox search;
     private User mAuthenticatedUser;
     @BindView(R.id.searchbox)
-    public SearchBox searchBox;
+    public SearchBox search;
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
     private FirebaseStorage firebaseStorage;
@@ -365,6 +361,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             DatabaseReference ref = firebaseDatabase.getReference().child(Utils.DATABASE_TRADES).push();
                             String key = ref.getKey();
                             tradePost.setTradePostId(key);
+                            //subscribe FCM for messages on this item
+                            FirebaseMessaging.getInstance().subscribeToTopic(key);
+
                             ref.setValue(tradePost).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -402,9 +401,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     @Override
     public void onResume() {
         super.onResume();
-        searchBox.toggleSearch();
-        searchBox.clearResults();
-        searchBox.clearFocus();
+        search.toggleSearch();
+        search.clearResults();
+        search.clearFocus();
     }
 
     @Override

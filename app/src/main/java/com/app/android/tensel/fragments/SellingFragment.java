@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 
@@ -159,6 +160,9 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
                         String id = mDatabaseRef.child(Utils.FIREBASE_SELLS)
                                 .push().getKey();
                         salePost.setPostId(id);
+                        //subscribe FCM for messages
+                        FirebaseMessaging.getInstance().subscribeToTopic(id);
+
                         salePost.setAuthorProfileImage(mAuthenticatedUser.getUserProfilePhoto());
                         mDatabaseRef.child(Utils.FIREBASE_SELLS)
                                 .child(id)

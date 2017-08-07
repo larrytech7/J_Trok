@@ -197,7 +197,15 @@ public class SalesPostDetails extends AppCompatActivity {
                                 if (salePost != null) {
                                     //subscribe FCM for messages
                                     FirebaseMessaging.getInstance().subscribeToTopic(salePost.getPostId());
-
+                                    //load author image profile
+                                    try {
+                                        Picasso.with(SalesPostDetails.this)
+                                                .load(Uri.parse(salePost.getAuthorProfileImage()))
+                                                .placeholder(R.drawable.app_icon)
+                                                .into(authorImageView);
+                                    } catch (IllegalArgumentException e) {
+                                        e.printStackTrace();
+                                    }
                                     authorNameTextView.setText(
                                             String.format("%s - %s", salePost.getAuthorName(),
                                                     TimeAgo.using(salePost.getTimestamp()) ));
@@ -238,13 +246,6 @@ public class SalesPostDetails extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         author = dataSnapshot.getValue(User.class);
                         Log.d("SalesPOSTUSER", "User: "+author.toString());
-                        //load author image profile
-                        Picasso.with(SalesPostDetails.this)
-                                .load(author == null ? Uri.parse("") : Uri.parse(author.getUserProfilePhoto()))
-                                .placeholder(R.drawable.app_icon)
-                                .error(R.drawable.chip)
-                                .resize(200, 200)
-                                .into(authorImageView);
                     }
 
                     @Override
