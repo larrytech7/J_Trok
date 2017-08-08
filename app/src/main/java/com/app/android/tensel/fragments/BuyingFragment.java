@@ -401,7 +401,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     @Override
     public void onResume() {
         super.onResume();
-        search.toggleSearch();
+        //search.toggleSearch();
         search.clearResults();
         search.clearFocus();
     }

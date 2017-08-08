@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/activity_item_detail">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_screen1"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <FrameLayout
+        android:id="@+id/imageFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <uk.co.jakelee.vidsta.VidstaPlayer
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="article_shared"
+            app:autoLoop="true"
+            app:autoPlay="false"
+            app:buttonTintColor="@color/bg_screen3"
+            app:fullScreenButtonEnabled="true"
+            app:fullScreenButtonVisible="true"
+            app:setFullScreen="false"
+            app:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/authorNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="@dimen/margin_10"
+            android:textColor="@color/twitter_blue"
+            android:textSize="@dimen/normal_font"
+            android:transitionName="username_shared" />
+
+        <TextView
+            android:id="@+id/articleDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            style="@style/ChatTextContentStyle"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authorImageView"
+            android:layout_width="@dimen/margin_50"
+            android:layout_height="@dimen/margin_50"
+            android:layout_gravity="top|end"
+            android:layout_marginEnd="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="@dimen/textfield_padding_bottom"
+            android:src="@drawable/app_icon"
+            android:transitionName="profile_shared" />
+
+    </FrameLayout>
+
+</LinearLayout>

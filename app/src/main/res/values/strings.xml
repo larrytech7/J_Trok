@@ -49,7 +49,7 @@
     <string name="selling">Needs</string>
     <string name="profile">Profile</string>
     <string name="username">\@ %s Username</string>
-    <string name="chat_content_hint">This is one of the chat content data testing 798-756-4545-543 at the email, larryakah@gmail.com creator of site www.iceteck.com</string>
+    <string name="chat_content_hint">chat</string>
 
     <string-array name="categories">
         <item>Phones</item>
@@ -119,5 +119,9 @@
     <string name="desc_selling">Nicely describe what you are need.</string>
     <string name="success">Posted</string>
     <string name="no_data">No data available. But you can still engage</string>
+    <string name="posted">Posted</string>
+    <string name="address">City.Country</string>
+    <string name="requests">Requests</string>
+    <string name="zero">0</string>
 
 </resources>

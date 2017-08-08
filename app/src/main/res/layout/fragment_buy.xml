@@ -18,7 +18,27 @@
     <com.quinny898.library.persistentsearch.SearchBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/searchbox" />
+        android:id="@+id/searchbox"/>
+
+    <!--<com.adroitandroid.chipcloud.ChipCloud
+        xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/select_tag"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/margin_60"
+        chipcloud:deselectedColor="@color/bg_screen1"
+        chipcloud:deselectedFontColor="@color/light_grey"
+        chipcloud:selectedColor="@color/colorAccent"
+        chipcloud:selectedFontColor="@color/white"
+        chipcloud:deselectTransitionMS="400"
+        chipcloud:selectTransitionMS="500"
+        chipcloud:labels="@array/categories"
+        chipcloud:selectMode="single"
+        chipcloud:gravity="left"
+        chipcloud:layout_anchorGravity="left"
+        chipcloud:layout_behavior="@string/appbar_scrolling_view_behavior"
+        chipcloud:minHorizontalSpacing="8dp"
+        chipcloud:verticalSpacing="5dp"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -26,6 +46,6 @@
         android:layout_height="match_parent"
         app:reverseLayout="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="@dimen/card_height" />
+        android:layout_marginTop="@dimen/margin_50" />
 
 </android.support.design.widget.CoordinatorLayout>
