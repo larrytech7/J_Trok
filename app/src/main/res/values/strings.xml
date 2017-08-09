@@ -123,5 +123,6 @@
     <string name="address">City.Country</string>
     <string name="requests">Requests</string>
     <string name="zero">0</string>
+    <string name="buytime">Buy more posting time</string>
 
 </resources>

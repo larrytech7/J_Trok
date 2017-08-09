@@ -225,7 +225,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                         profileBitmap = Picasso.with(PrivateChatActivity.this)
                                 .load(profile)
                                 .error(R.mipmap.ic_launcher)
-                                .resize(50,50)
+                                .resize(120,120)
                                 .get();
                     } catch (IOException | IllegalArgumentException e) {
                         e.printStackTrace();

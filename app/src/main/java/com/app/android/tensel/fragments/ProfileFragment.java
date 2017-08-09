@@ -4,6 +4,7 @@ package com.app.android.tensel.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.SwitchCompat;
@@ -12,9 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -38,7 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-
 public class ProfileFragment extends Fragment {
 
     private Unbinder unbind;
@@ -60,6 +60,8 @@ public class ProfileFragment extends Fragment {
     TextView aboutTextView;
     @BindView(R.id.locationTextView)
     TextView locationTextView;
+    @BindView(R.id.buttonBuyTime)
+    Button buyTimeButton;
     @BindView(R.id.commentNotificationSwitch)
     SwitchCompat commentSwitchSetting;
     @BindView(R.id.itemNotificationSwitch)
@@ -103,6 +105,7 @@ public class ProfileFragment extends Fragment {
         usernameTextView.setText(mAuthenticatedUser.getUserName());
         emailTextView.setText(mAuthenticatedUser.getUserEmail());
         userCountryTextView.setText(mAuthenticatedUser.getUserCountry());
+
         commentSwitchSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +119,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
         itemSwitchSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +133,15 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
+        buyTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO. Issue payment request to add recording time
+                Snackbar.make(itemSwitchSetting, "Sending payment request", Snackbar.LENGTH_INDEFINITE);
+            }
+        });
+
         initSettings();
 
         Picasso.with(getContext())
