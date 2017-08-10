@@ -105,7 +105,7 @@
     <string name="sms_author">SMS Author</string>
     <string name="sms_message">Hello i want to reach out to you for the product you posted on 10Sell</string>
     <string name="search_selling">%s, do you have any of these?</string>
-    <string name="comment">Drop a comment on this</string>
+    <string name="comment">Comment</string>
     <string name="pv_hint">Tap the author icon for private chat</string>
     <string name="err_empty">Field cannot be empty</string>
     <string name="pv">Private chat</string>
@@ -124,5 +124,7 @@
     <string name="requests">Requests</string>
     <string name="zero">0</string>
     <string name="buytime">Buy more posting time</string>
+    <string name="get_image">Pick Image</string>
+    <string name="uploading">uploading</string>
 
 </resources>

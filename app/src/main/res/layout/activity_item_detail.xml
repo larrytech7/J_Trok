@@ -31,10 +31,6 @@
             app:fullScreenButtonVisible="true"
             app:setFullScreen="false"
             app:textColor="@color/colorPrimary" />
-        <!--<VideoView
-            android:id="@+id/vplayer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />-->
 
         <TextView
             android:id="@+id/authorNameTextView"
@@ -63,16 +59,17 @@
             android:src="@drawable/app_icon"
             android:transitionName="profile_shared" />
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/articleDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            style="@style/ChatTextContentStyle"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp" />
 
-    <TextView
-        android:id="@+id/articleDescriptionTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/ChatTextContentStyle"
-        android:hint="details"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp" />
+    </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chatsRecyclerView"

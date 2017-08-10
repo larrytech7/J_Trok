@@ -415,7 +415,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
             if (resultCode == RESULT_OK) {
                 String filePath = data.getDataString();
-                Toast.makeText(getActivity(), "Saved to: " + filePath, Toast.LENGTH_LONG).show();
+                Log.d(LOGTAG, "Saved to: " + filePath);
                 try {
                     //compress video at this point
                     new AsyncTask<Uri, Integer, Boolean>() {

@@ -18,8 +18,6 @@ import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -30,7 +28,6 @@ import butterknife.ButterKnife;
 public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapter.ViewHolder> {
 
     private Context context;
-    private List<Chat> chats;
     private User localUser;
     private final int VIEW_TYPE_INCOMING = 1;
     private final int VIEW_TYPE_OUTGOING = -1;
@@ -41,7 +38,6 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
                            DatabaseReference ref, User me,Context _ctx) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         this.context = _ctx;
-        this.chats = null;
         this.localUser = me;
         setHasStableIds(true);
     }
@@ -55,6 +51,12 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
             case VIEW_TYPE_OUTGOING: //return outgoing view layout
                 return new ViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_outgoing, parent, false));
+            case VIEW_TYPE_INCOMING_WITH_IMAGE:
+                return new ViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_incoming_image, parent, false));
+            case VIEW_TYPE_OUTGOING_WITH_IMAGE:
+                return new ViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_outgoing_image, parent, false));
         }
         return super.onCreateViewHolder(parent, viewType);
     }
@@ -72,14 +74,25 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
                     .placeholder(R.drawable.app_icon)
                     .resize(70,70)
                     .into(viewHolder.userChatImageView);
+
+        if (model.isHasImage()){
+            Picasso.with(context)
+                    .load(model.getChatExtraImageUrl())
+                    .placeholder(R.drawable.empty)
+                    .centerCrop()
+                    .resize(400, viewHolder.itemImageView.getMeasuredHeight())
+                    .into(viewHolder.itemImageView);
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        //TODO: Will have to add new viewTypes when integrating images into sending chats
+        //Add new viewTypes when integrating images into sending chats
         Chat chat = getItem(position);
         return TextUtils.equals(chat.getAuthorId() , localUser.getUserId()) ?
-                VIEW_TYPE_OUTGOING : VIEW_TYPE_INCOMING;
+                chat.isHasImage() ? VIEW_TYPE_OUTGOING_WITH_IMAGE : VIEW_TYPE_OUTGOING
+                :
+                chat.isHasImage() ? VIEW_TYPE_INCOMING_WITH_IMAGE : VIEW_TYPE_INCOMING;
     }
 
     @Override
@@ -97,6 +110,8 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         TextView chatDateTimeTextview;
         @Nullable @BindView(R.id.userChatPhoto)
         ImageView userChatImageView;
+        @Nullable @BindView(R.id.chatItemImageView)
+        ImageView itemImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);

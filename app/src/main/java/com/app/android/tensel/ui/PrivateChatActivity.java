@@ -1,10 +1,14 @@
 package com.app.android.tensel.ui;
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
@@ -18,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.ChatBaseAdapter;
 import com.app.android.tensel.models.Chat;
@@ -29,14 +34,23 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
+import com.iceteck.silicompressorr.SiliCompressor;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +58,7 @@ import butterknife.OnClick;
 
 public class PrivateChatActivity extends AppCompatActivity {
 
+    private static final int RC_GET_IMAGE = 100;
     @BindView(R.id.pvRecyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.sendChatButton)
@@ -52,6 +67,8 @@ public class PrivateChatActivity extends AppCompatActivity {
     EditText pvEditTextView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.captureImageButton)
+    ImageButton captureImage;
     private FirebaseAnalytics mFirebaseAnalytics;
     private User current_user;
     private FirebaseDatabase qDatabase;
@@ -59,12 +76,14 @@ public class PrivateChatActivity extends AppCompatActivity {
     private String targetId; //id of the user to send message to. can be seen as a shared key or common point of chat
     private String profile;
     private String itemAuthorId; //id of author of the item (purchase/need)
+    private Chat userChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_private_chat);
         ButterKnife.bind(this);
+        userChat = new Chat();
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -91,8 +110,6 @@ public class PrivateChatActivity extends AppCompatActivity {
                 //setup actionBar/toolbar
                 String userid = dataIntent.getStringExtra(Utils.USER);
                 Log.e("PV", "user: "+userid);
-                //toolbar.setTitle(userid != null ? user.getUserName() : getString(R.string.chat));
-                //toolbar.setSubtitle(TimeAgo.using(user == null ? 0 : user.getLastUpdatedTime()));
 
                 targetId = userid; //user.getUserId();
 
@@ -168,9 +185,9 @@ public class PrivateChatActivity extends AppCompatActivity {
             btnSendChat.setEnabled(false);
             //Send message
             if (itemId != null && targetId != null){
-                Chat userChat = new Chat(current_user.getUserName(), current_user.getUserId(), current_user.getUserProfilePhoto(),
+                userChat = new Chat(current_user.getUserName(), current_user.getUserId(), current_user.getUserProfilePhoto(),
                         pvEditTextView.getText().toString(), System.currentTimeMillis(), "");
-                //TODO: Set itemAuthorId for this item before sending chat
+                //Set itemAuthorId for this item before sending chat
                 userChat.setItemAuthorId(itemAuthorId);
                 qDatabase.getReference("pvchats")
                         .child(itemId)
@@ -208,6 +225,108 @@ public class PrivateChatActivity extends AppCompatActivity {
                 mFirebaseAnalytics.logEvent(Utils.CHAT_EVENT, bundle);
             }
         }
+    }
+
+    @OnClick(R.id.captureImageButton)
+    public void setGetImage(){
+        //Enable image selection or capture by user
+        Intent imageIntent = new Intent();
+        imageIntent.setType("image/*");
+        //imageIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        //imageIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        imageIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        imageIntent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(imageIntent, getString(R.string.get_image)), RC_GET_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            if (requestCode == RC_GET_IMAGE){
+                //parse selected images
+                List<Uri> imageList = new ArrayList<>();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                //process retrieved image(s) and compress
+                ClipData clipDataImages = data.getClipData();
+                if (clipDataImages != null) {
+                    for (int i=0; i < clipDataImages.getItemCount(); i++){
+                        ClipData.Item item = clipDataImages.getItemAt(i);
+                        Uri uri = item.getUri();
+                        imageList.add(uri);
+                        //cursor
+                        /*Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
+                        int colIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        imageList.add(cursor.getString(colIndex));
+                        cursor.close();*/
+                        Log.e("PV", "ClipData selected: "+imageList.size());
+                    }
+                }else if (data.getData() != null){
+                    imageList.add(data.getData());
+                    Log.e("PV", "Data selected: "+imageList.size());
+                }
+                //upload selected images
+                uploadImages(imageList);
+            }
+        }
+    }
+
+    private void uploadImages(List<Uri> images){
+        MaterialDialog mProgressDialog = new MaterialDialog.Builder(this)
+                .progress(true, 10)
+                .autoDismiss(false)
+                .cancelable(false)
+                .widgetColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
+                .content(getString(R.string.uploading))
+                .show();
+        for (int i = 0; i < images.size(); i++)
+            try {
+                String imgUri = SiliCompressor.with(this).compress(images.get(i).toString());
+                InputStream imageStream = new FileInputStream(new File(imgUri));
+                //upload each compressed image
+                FirebaseStorage.getInstance()
+                        .getReference()
+                        .child(Utils.STORAGE_REF_IMAGES+File.separatorChar+Utils.getFileName(new File(imgUri).toString()))
+                        .putStream(imageStream)
+                        .addOnCompleteListener(this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    Uri downloadLink = task.getResult().getDownloadUrl();
+                                    userChat.setChatExtraImageUrl(downloadLink.toString());
+                                    userChat.setAuthorId(current_user.getUserId());
+                                    userChat.setAuthorName(current_user.getUserName());
+                                    userChat.setAuthorProfileImage(current_user.getUserProfilePhoto());
+                                    userChat.setChatText("image");
+                                    userChat.setChatDateTime(System.currentTimeMillis());
+                                    userChat.setHasImage(true);
+                                    //Set itemAuthorId for this item before sending chat
+                                    userChat.setItemAuthorId(itemAuthorId);
+                                    qDatabase.getReference("pvchats")
+                                            .child(itemId)
+                                            .child(targetId)
+                                            .push().setValue(userChat)
+                                            .addOnCompleteListener(PrivateChatActivity.this, new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isComplete())
+                                            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
+                                        }
+                                    });
+                                    //update participant only if not author
+                                    current_user.setLastUpdatedTime(System.currentTimeMillis());
+                                    if (!TextUtils.equals(itemAuthorId, current_user.getUserId()))
+                                        qDatabase.getReference("participants/"+itemId)
+                                                .child(current_user.getUserId())
+                                                .setValue(current_user);
+                                }
+                            }
+                        });
+            } catch (IOException e) {
+                e.printStackTrace();
+                FirebaseCrash.report(e.getCause());
+            }
+            mProgressDialog.dismiss();
     }
 
     @Override

@@ -15,6 +15,7 @@ public class Chat implements Serializable {
     private long chatDateTime;
     private String chatExtraImageUrl;
     private String itemAuthorId; //this is the userid of the author/owner of the item (tradepost or sale) user is chatting on
+    private boolean hasImage;
 
     public Chat() {
     }
@@ -82,5 +83,13 @@ public class Chat implements Serializable {
 
     public void setItemAuthorId(String itemAuthorId) {
         this.itemAuthorId = itemAuthorId;
+    }
+
+    public boolean isHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 }

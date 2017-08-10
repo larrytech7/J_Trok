@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/margin_10"
+    android:paddingStart="@dimen/margin_10"
+    android:paddingRight="@dimen/margin_10"
+    android:paddingEnd="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/textfield_padding_bottom">
+
+    <!--<android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dots_height"
+        app:cardCornerRadius="@dimen/margin_10">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dots_height"
+        android:background="@drawable/round_border"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/chatUsernameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:layout_marginStart="@dimen/size_70"
+            android:layout_marginLeft="@dimen/size_70"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textSize="12sp"/>
+        <TextView
+            android:id="@+id/chatDateTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dateTime"
+            android:layout_marginStart="@dimen/size_70"
+            android:layout_marginLeft="@dimen/size_70"/>
+
+        <ImageView
+            android:id="@+id/chatItemImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:adjustViewBounds="true"
+            android:src="@drawable/buying"
+            android:background="@drawable/empty"/>
+
+        <TextView
+            android:id="@+id/chatContentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chat_content_hint"
+            android:linksClickable="true"
+            android:textColorLink="@color/twitter_blue"
+            android:autoLink="all"
+            android:layout_marginBottom="@dimen/margin_10"
+            style="@style/ChatTextContentStyle"/>
+
+    </LinearLayout>
+    <!-- </android.support.v7.widget.CardView>-->
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userChatPhoto"
+        android:layout_width="@dimen/margin_50"
+        android:layout_height="@dimen/margin_50"
+        android:src="@drawable/app_icon"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:elevation="5dp"/>
+</FrameLayout>

@@ -68,6 +68,7 @@ public class Utils {
     public static final String SELL_DETAIL_ID = "SELLS_DETAIL_ID";
     public static final String PROFILE_IMG = "USER_PROFILE_PHOTO";
     public static final String AUTHOR_ID = "AUTHOR_ID";
+    public static final String STORAGE_REF_IMAGES = "media/images";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();
