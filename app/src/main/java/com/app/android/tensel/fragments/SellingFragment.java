@@ -216,16 +216,38 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
 
     @Override
     public void onSearchTermChanged(String s) {
+        SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
+                R.layout.item_for_sale,
+                SalesAdpater.MyViewHolder.class,
+                mDatabaseRef.child(Utils.FIREBASE_SELLS)
+                        .orderByChild("content")
+                        .startAt(s)
+                        .endAt(s+"\uf8ff"));
+        recyclerView.setAdapter(adapter);
 
     }
 
     @Override
     public void onSearch(String s) {
-
+        SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
+                R.layout.item_for_sale,
+                SalesAdpater.MyViewHolder.class,
+                mDatabaseRef.child(Utils.FIREBASE_SELLS)
+                        .orderByChild("content")
+                        .startAt(s)
+                        .endAt(s+"\uf8ff"));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onResultClick(SearchResult searchResult) {
-
+        SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
+                R.layout.item_for_sale,
+                SalesAdpater.MyViewHolder.class,
+                mDatabaseRef.child(Utils.FIREBASE_SELLS)
+                        .orderByChild("content")
+                        .startAt(searchResult.toString())
+                        .endAt(searchResult.toString()+"\uf8ff"));
+        recyclerView.setAdapter(adapter);
     }
 }
