@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/bg_screen1"
+        android:transitionName="profile_shared"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <FrameLayout

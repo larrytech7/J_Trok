@@ -1,8 +1,10 @@
 package com.app.android.tensel.ui;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -11,10 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.app.android.tensel.R;
@@ -46,8 +50,8 @@ public class SalesPostDetails extends AppCompatActivity {
     RecyclerView chatsRecyclerview;
     @BindView(R.id.authorNameTextView)
     TextView authorNameTextView;
-/*    @BindView(R.id.dateDetailTextView)
-    TextView textViewDate;*/
+    @BindView(R.id.sendChatButton)
+    ImageButton sendChatButton;
     @BindView(R.id.contentTextView)
     TextView contentTextView;
     @BindView(R.id.authorImageView)
@@ -277,7 +281,16 @@ public class SalesPostDetails extends AppCompatActivity {
             intent.putExtra(Utils.PROFILE_IMG, author.getUserProfilePhoto());
             intent.putExtra(Utils.AUTHOR_ID, author.getUserId());
             intent.putExtra(Utils.FEED_DETAIL_ID, salePost != null ? salePost.getPostId() : "");
-            startActivity(intent);
+            //prepare content transition
+            Pair[] pairs = new Pair[2];
+            pairs[0] = new Pair<View, String>(sendChatButton, "button_shared");
+            pairs[1] = new Pair<View, String>(toolbar, "profile_shared");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation(this, pairs);
+                startActivity(intent, optionsCompat.toBundle());
+            }else {
+                startActivity(intent);
+            }
         }
     }
 

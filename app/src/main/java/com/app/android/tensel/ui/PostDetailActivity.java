@@ -1,12 +1,14 @@
 package com.app.android.tensel.ui;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -18,10 +20,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -86,6 +91,10 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     EditText chatEditTextView;
     @BindView(R.id.bottomSheet)
     View bottomSheetView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.sendChatButton)
+    ImageButton sendChatButton;
     /*@BindView(R.id.vplayer)
     VideoView videoView;*/
 
@@ -103,7 +112,6 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail_main);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -410,6 +418,16 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             intent.putExtra(Utils.PROFILE_IMG, author.getUserProfilePhoto());
             intent.putExtra(Utils.AUTHOR_ID, author.getUserId());
             intent.putExtra(Utils.FEED_DETAIL_ID, tradePost != null ? tradePost.getTradePostId() : "");
+
+            Pair[] pairs = new Pair[2];
+            pairs[0] = new Pair<View, String>(sendChatButton, "button_shared");
+            pairs[1] = new Pair<View, String>(toolbar, "profile_shared");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation(this, pairs);
+                startActivity(intent, optionsCompat.toBundle());
+            }else {
+                startActivity(intent);
+            }
             startActivity(intent);
         }
     }
