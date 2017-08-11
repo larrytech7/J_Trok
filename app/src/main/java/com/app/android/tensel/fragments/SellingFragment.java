@@ -92,7 +92,7 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
                 R.layout.item_for_sale,
                 SalesAdpater.MyViewHolder.class,
-                mDatabaseRef.child(Utils.FIREBASE_SELLS));
+                mDatabaseRef.child(Utils.FIREBASE_SELLS).orderByChild("timestamp"));
         recyclerView.setAdapter(adapter);
 
         String[] categories = getResources().getStringArray(R.array.categories);
