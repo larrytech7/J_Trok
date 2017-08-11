@@ -44,8 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10"
             android:adjustViewBounds="true"
-            android:src="@drawable/buying"
-            android:background="@drawable/empty"/>
+            android:src="@drawable/loader"
+            android:background="@drawable/md_transparent"/>
 
         <TextView
             android:id="@+id/chatContentTextView"

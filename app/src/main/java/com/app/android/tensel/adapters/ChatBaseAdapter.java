@@ -1,9 +1,11 @@
 package com.app.android.tensel.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +65,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
 
     @Override
     protected void populateViewHolder(ViewHolder viewHolder, Chat model, int position) {
-        //setviews data here
+        //set views data here
         viewHolder.userNameTextView.setText(model.getAuthorName());
         viewHolder.chatContentTextView.setText(model.getChatText());
         viewHolder.chatDateTimeTextview.setText(TimeAgo.using(model.getChatDateTime()));
@@ -77,11 +79,12 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
 
         if (model.isHasImage()){
             Picasso.with(context)
-                    .load(model.getChatExtraImageUrl())
-                    .placeholder(R.drawable.empty)
-                    .centerCrop()
+                    .load(Uri.parse(model.getChatExtraImageUrl()))
+                    .placeholder(R.drawable.loader)
+                    //.centerCrop()
                     .resize(400, viewHolder.itemImageView.getMeasuredHeight())
                     .into(viewHolder.itemImageView);
+            Log.d("ChatBaseAdapter", "img url: "+model.getChatExtraImageUrl());
         }
     }
 

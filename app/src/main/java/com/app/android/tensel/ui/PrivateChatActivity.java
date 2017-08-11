@@ -2,13 +2,11 @@ package com.app.android.tensel.ui;
 
 import android.content.ClipData;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
@@ -19,10 +17,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.ChatBaseAdapter;
 import com.app.android.tensel.models.Chat;
@@ -43,6 +41,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import com.iceteck.silicompressorr.SiliCompressor;
+import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -69,6 +68,9 @@ public class PrivateChatActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.captureImageButton)
     ImageButton captureImage;
+    @BindView(R.id.loadingProgressView)
+    ProgressView loadingProgressView;
+
     private FirebaseAnalytics mFirebaseAnalytics;
     private User current_user;
     private FirebaseDatabase qDatabase;
@@ -246,7 +248,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             if (requestCode == RC_GET_IMAGE){
                 //parse selected images
                 List<Uri> imageList = new ArrayList<>();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                //String[] filePathColumn = { MediaStore.Images.Media.DATA };
                 //process retrieved image(s) and compress
                 ClipData clipDataImages = data.getClipData();
                 if (clipDataImages != null) {
@@ -272,13 +274,8 @@ public class PrivateChatActivity extends AppCompatActivity {
     }
 
     private void uploadImages(List<Uri> images){
-        MaterialDialog mProgressDialog = new MaterialDialog.Builder(this)
-                .progress(true, 10)
-                .autoDismiss(false)
-                .cancelable(false)
-                .widgetColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
-                .content(getString(R.string.uploading))
-                .show();
+        loadingProgressView.setVisibility(View.VISIBLE);
+
         for (int i = 0; i < images.size(); i++)
             try {
                 String imgUri = SiliCompressor.with(this).compress(images.get(i).toString());
@@ -310,7 +307,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isComplete())
-                                            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
+                                            mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount());
                                         }
                                     });
                                     //update participant only if not author
@@ -320,13 +317,13 @@ public class PrivateChatActivity extends AppCompatActivity {
                                                 .child(current_user.getUserId())
                                                 .setValue(current_user);
                                 }
+                                loadingProgressView.setVisibility(View.GONE);
                             }
                         });
             } catch (IOException e) {
                 e.printStackTrace();
                 FirebaseCrash.report(e.getCause());
             }
-            mProgressDialog.dismiss();
     }
 
     @Override
