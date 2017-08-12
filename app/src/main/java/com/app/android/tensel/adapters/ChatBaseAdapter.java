@@ -9,12 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.models.Chat;
 import com.app.android.tensel.models.User;
+import com.app.android.tensel.utility.Utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.database.DatabaseReference;
@@ -64,7 +66,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
     }
 
     @Override
-    protected void populateViewHolder(ViewHolder viewHolder, Chat model, int position) {
+    protected void populateViewHolder(final ViewHolder viewHolder, Chat model, int position) {
         //set views data here
         viewHolder.userNameTextView.setText(model.getAuthorName());
         viewHolder.chatContentTextView.setText(model.getChatText());
@@ -85,6 +87,19 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
                     .resize(400, viewHolder.itemImageView.getMeasuredHeight())
                     .into(viewHolder.itemImageView);
             Log.d("ChatBaseAdapter", "img url: "+model.getChatExtraImageUrl());
+        }
+
+        try {
+            viewHolder.userChatImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageView iView = (ImageView) v;
+                    Utils.zoomImageFromThumb(iView, iView.getDrawable(), viewHolder.frameLayout,
+                            context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -115,6 +130,8 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
         ImageView userChatImageView;
         @Nullable @BindView(R.id.chatItemImageView)
         ImageView itemImageView;
+        @Nullable @BindView(R.id.chatFrameLayout)
+        FrameLayout frameLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);

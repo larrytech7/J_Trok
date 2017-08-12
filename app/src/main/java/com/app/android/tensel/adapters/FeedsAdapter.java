@@ -10,6 +10,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
 
     private Context context;
     User mUser;
+    View mainLayoutView;
 
     /**
      * @param modelClass      Firebase will marshall the data at a location into an instance of a class that you provide
@@ -50,6 +52,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         super(modelClass, modelLayout, viewHolderClass, ref);
         this.context = ctx;
         this.mUser = user;
+        mainLayoutView = LayoutInflater.from(context).inflate(R.layout.fragment_buy, null);
     }
 
     // Provide a reference to the views for each data item
@@ -106,6 +109,14 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         viewHolder.priceTagTextView.setText(String.format(Locale.ENGLISH ,"%d %s", model.getTradeAmount(), model.getCurrency()));
         viewHolder.dateTextView.setText(TimeAgo.using(model.getTradeTime()));
 
+        viewHolder.feedsAutorImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView imgThumb = (ImageView) v;
+                Utils.zoomImageFromThumb(imgThumb, imgThumb.getDrawable(), viewHolder.mCardView,
+                        context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+            }
+        });
         /*if (model.getLikes().get(mUser.getUserId()) == null ? false : model.getLikes().get(mUser.getUserId()) ){
             //turn like button on
             viewHolder.likeButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_like_active, null));

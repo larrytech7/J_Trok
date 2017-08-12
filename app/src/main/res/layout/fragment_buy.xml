@@ -48,4 +48,10 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="@dimen/margin_50" />
 
+    <!--<ImageView
+        android:id="@+id/expanded_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"/>-->
+
 </android.support.design.widget.CoordinatorLayout>
