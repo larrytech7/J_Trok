@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/activity_sales_post_details"
+    tools:showIn="@layout/activity_sales_post_details"
     tools:context="com.app.android.tensel.ui.SalesPostDetails">
 
     <android.support.v7.widget.Toolbar

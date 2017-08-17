@@ -60,8 +60,8 @@ public class ProfileFragment extends Fragment {
     TextView aboutTextView;
     @BindView(R.id.locationTextView)
     TextView locationTextView;
-    @BindView(R.id.buttonBuyTime)
-    Button buyTimeButton;
+    //@BindView(R.id.buttonBuyTime)
+    //Button buyTimeButton;
     @BindView(R.id.commentNotificationSwitch)
     SwitchCompat commentSwitchSetting;
     @BindView(R.id.itemNotificationSwitch)
@@ -134,13 +134,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        buyTimeButton.setOnClickListener(new View.OnClickListener() {
+        /*buyTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO. Issue payment request to add recording time
                 Snackbar.make(itemSwitchSetting, "Sending payment request", Snackbar.LENGTH_INDEFINITE);
             }
-        });
+        });*/
 
         initSettings();
 
