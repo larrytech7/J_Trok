@@ -125,6 +125,7 @@ public class SalesPostDetails extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+        //TODO: add menu for removing item
     }
 
     @Override

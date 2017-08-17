@@ -38,6 +38,8 @@ import com.app.android.tensel.models.TradePost;
 import com.app.android.tensel.models.User;
 import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
@@ -105,6 +107,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     private RxDownloadManager rxDownloadManager;
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
+    private String key;
     //private HttpProxyCacheServer proxyCacheServer;
 
     @Override
@@ -208,7 +211,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         if (intent != null){
             authorImageView.setEnabled(false);
             authorImageView.setActivated(false);
-            String key = intent.getStringExtra(Utils.FEED_DETAIL_ID);
+            key = intent.getStringExtra(Utils.FEED_DETAIL_ID);
             qDatabase.getReference("trades")
                     .child(key)
                     .addValueEventListener(new ValueEventListener() {
@@ -337,7 +340,10 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                 //turn like button on
                 menu.getItem(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_active, null));
             }
+            if (tradePost.getAuthorId().equals(user.getUserId()))
+                menu.getItem(1).setVisible(true);
         }
+
         return true;
     }
 
@@ -384,6 +390,18 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
                     FirebaseCrash.report(e.getCause());
                     Utils.showMessage(this, getString(R.string.sms_error));
                 }
+                return true;
+            case R.id.action_delete:
+                // PERFORM ITEM DELETE ACTION;
+                qDatabase.getReference("trades")
+                        .child(key)
+                        .setValue(null)
+                .addOnCompleteListener(PostDetailActivity.this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        onBackPressed();
+                    }
+                });
                 return true;
             case android.R.id.home:
                 onBackPressed();

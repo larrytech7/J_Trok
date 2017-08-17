@@ -6,12 +6,13 @@
         android:icon="@drawable/ic_like_inactive"
         app:showAsAction="ifRoom"
         android:title="@string/like" />
-    <!--<item
-        android:id="@+id/action_chat"
-        android:icon="@drawable/ic_chat"
-        app:showAsAction="always"
-        android:title="@string/chat"
-        android:titleCondensed="@string/chat_hint"/>-->
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"
+        android:title="@string/delete"
+        android:visible="false"
+        android:titleCondensed="@string/delete"/>
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share"

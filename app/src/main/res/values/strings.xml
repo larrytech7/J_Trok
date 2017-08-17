@@ -126,5 +126,6 @@
     <string name="buytime">Buy more posting time</string>
     <string name="get_image">Pick Image</string>
     <string name="uploading">uploading</string>
+    <string name="delete">Delete</string>
 
 </resources>
