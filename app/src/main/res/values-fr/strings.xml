@@ -60,7 +60,7 @@
     <string name="send">Publier</string>
     <string name="share">Partager</string>
     <string name="share_hint">Partager publication</string>
-    <string name="share_string">%s, vend des choses  sur %s</string>
+    <string name="share_string" formatted="false">%s, vend des choses  sur %s</string>
     <string name="skip">Sauter</string>
     <string name="slide_1_desc">Le moyen le plus rapide d\'acheter ou de vendre parmi les pairs</string>
     <string name="slide_1_title">Entre potes</string>
