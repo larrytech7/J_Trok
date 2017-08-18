@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name" tools:override="true">10Sel</string>
+    <string name="app_name" tools:override="true" translatable="false">10Sel</string>
     <string name="title_activity_registration_form">Register</string>
 
     <string name="title_activity_welcome">Home Screen</string>
@@ -101,7 +101,7 @@
     <string name="share_string" formatted="false">%s is selling awesome stuff on %s</string>
     <string name="call">call</string>
     <string name="call_author">Call Author</string>
-    <string name="sms">SMS</string>
+    <string name="sms" translatable="false">SMS</string>
     <string name="sms_author">SMS Author</string>
     <string name="sms_message">Hello i want to reach out to you for the product you posted on 10Sell</string>
     <string name="search_selling">%s, do you have any of these?</string>
@@ -113,7 +113,7 @@
     <string name="call_error">Unable to place call at the moment</string>
     <string name="notify_item_sale">Receive notification on new posts</string>
     <string name="notify_comment">Notify me about deals i have participated in.</string>
-    <string name="content">Content Data</string>
+    <string name="content" translatable="false">Content Data</string>
     <string name="title_selling">Request what you need</string>
     <string name="send">Post</string>
     <string name="desc_selling">Nicely describe what you are need.</string>
@@ -122,10 +122,11 @@
     <string name="posted">Posted</string>
     <string name="address">City.Country</string>
     <string name="requests">Requests</string>
-    <string name="zero">0</string>
+    <string name="zero" translatable="false">0</string>
     <string name="buytime">Buy more posting time</string>
     <string name="get_image">Pick Image</string>
     <string name="uploading">uploading</string>
     <string name="delete">Delete</string>
+    <string name="delete_post">If you are author of this post, you can delete it from the menu</string>
 
 </resources>
