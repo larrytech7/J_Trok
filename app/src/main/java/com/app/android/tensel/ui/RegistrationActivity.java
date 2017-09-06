@@ -74,7 +74,7 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
         facebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                //Log.d(TAG, "facebook Access Token:" + loginResult.getAccessToken().getToken());
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -107,7 +107,7 @@ public class RegistrationActivity extends AppCompatActivity  implements GoogleAp
     }
 
     private void handleFacebookAccessToken(AccessToken accessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
+        //Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mAuth.signInWithCredential(credential)
