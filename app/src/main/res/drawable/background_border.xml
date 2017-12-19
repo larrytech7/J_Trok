@@ -15,6 +15,6 @@
      use transparent if you only want the border to be displayed-->
     <gradient android:startColor="@android:color/white"
         android:endColor="@android:color/white"
-        android:angle="90"/>
+        android:angle="90" />
 
 </shape>

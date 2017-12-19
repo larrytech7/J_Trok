@@ -76,7 +76,6 @@
     <string name="start">Terminer</string>
     <string name="success">Publié</string>
     <string name="terms">Termes et conditions</string>
-    <string name="timeinterval" translatable="false"></string>
     <string name="title_activity_registration_form">Enregistrement</string>
     <string name="title_activity_welcome">Acceuil</string>
     <string name="title_selling">Demandez ce dont vous avez besoin</string>

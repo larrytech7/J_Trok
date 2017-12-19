@@ -39,8 +39,8 @@ android {
 ext {
     rxDownloadManagerVersion = '0.1'
     buildTools = '23.0.1'
-    apiSupportVersion = '25.1.0'
-    playServiceVersion = '10.2.6'
+    apiSupportVersion = '25.4.0' //'25.1.0'
+    playServiceVersion = '11.8.0' //'10.2.6'
 }
 
 repositories {
@@ -56,6 +56,7 @@ dependencies {
     })
     compile "berlin.volders:rxDownloadManager:$rxDownloadManagerVersion"
     compile 'com.afollestad:material-camera:0.4.4'
+    compile "com.android.support:animated-vector-drawable:$apiSupportVersion"
     compile "com.android.support:appcompat-v7:$apiSupportVersion"
     compile "com.android.support:cardview-v7:$apiSupportVersion"
     compile "com.android.support:recyclerview-v7:$apiSupportVersion"
@@ -74,8 +75,8 @@ dependencies {
     compile 'uk.co.jakelee:vidsta:1.0.0'
     compile 'com.github.marlonlom:timeago:3.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.firebase:firebase-core:10.2.6'
-    compile 'com.google.firebase:firebase-auth:10.2.6'
+    compile "com.google.firebase:firebase-core:$playServiceVersion"
+    compile "com.google.firebase:firebase-auth:$playServiceVersion"
     compile "com.google.android.gms:play-services-auth:$playServiceVersion"
     compile "com.google.firebase:firebase-database:$playServiceVersion"
     compile 'com.firebaseui:firebase-ui-database:1.0.1'
@@ -87,4 +88,16 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "${apiSupportVersion}"
+            }
+        }
+
+    }
+}
+
 apply plugin: 'com.google.gms.google-services'

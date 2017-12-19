@@ -132,11 +132,6 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
         //configure recycler view
         recyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        //staggeredGridLayoutManager.setSpanCount(2);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
         FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
                 firebaseDatabase.getReference("trades").orderByChild("tradeTime"), getActivity(), mAuthenticatedUser);
         recyclerView.setAdapter(adapter);
