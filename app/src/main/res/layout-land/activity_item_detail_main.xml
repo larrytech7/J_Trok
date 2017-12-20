@@ -53,8 +53,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|bottom"
-                    android:layout_marginRight="@dimen/rightMargin"
-                    android:layout_marginEnd="@dimen/rightMargin"
+                    android:layout_marginRight="@dimen/margin_60"
+                    android:layout_marginEnd="@dimen/margin_60"
                     android:background="@drawable/background_border"
                     android:padding="3dp"
                     android:hint="@string/comment"/>
@@ -73,13 +73,13 @@
                     android:src="@drawable/ic_camera"
                     android:background="@drawable/md_transparent"
                     android:layout_gravity="start|center_horizontal"/>-->
-                <ImageButton
+                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/sendChatButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_send"
-                    android:background="@drawable/md_transparent"
-                    android:layout_gravity="end|center_horizontal"/>
+                    android:layout_gravity="bottom|end"
+                    android:src="@drawable/ic_send" />
+
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </LinearLayout>

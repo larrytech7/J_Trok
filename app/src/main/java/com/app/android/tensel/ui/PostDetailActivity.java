@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -96,7 +97,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.sendChatButton)
-    ImageButton sendChatButton;
+    FloatingActionButton sendChatButton;
     /*@BindView(R.id.vplayer)
     VideoView videoView;*/
 
@@ -124,6 +125,9 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         user = Utils.getUserConfig(firebaseAuth.getCurrentUser());
+
+        //configure FAB sendChatButton
+        sendChatButton.setRippleColor(getResources().getColor(R.color.white));
 
         //configure bottom sheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
