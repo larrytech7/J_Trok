@@ -78,6 +78,8 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         ImageButton commentButton;
         @BindView(R.id.shareButton)
         ImageButton shareButton;
+        @BindView(R.id.auctionPeriodTextview)
+        TextView auctionTextView;
 
         public MyViewHolder(View v) {
             super(v);
@@ -184,7 +186,11 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
                 }
             }
         });
-
+        if (model.isAuction()){
+            //set expiration period
+            String expiration = Utils.getExpiration(model.getTradeTime(), model.getAuctionDuration());
+            viewHolder.auctionTextView.setText(expiration);
+        }
         //TODO: Enable authors tap and hold card
     }
 }

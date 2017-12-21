@@ -56,11 +56,33 @@
         android:paddingTop="@dimen/textfield_padding_top"
         android:paddingBottom="@dimen/textfield_padding_top"
         android:paddingLeft="@dimen/textfield_padding_top"
+        android:paddingStart="@dimen/textfield_padding_top"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
         android:layout_marginBottom="@dimen/textfield_padding_top"
         android:hint="@string/post_desc_hint"
         android:textSize="@dimen/normal_font"
         android:background="@drawable/background_border"
         android:minLines="3"/>
+
+    <CheckBox
+        android:id="@+id/auctionChoiceCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/textfield_padding_top"
+        android:text="@string/checkbox_auction_string" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginBottom="@dimen/textfield_padding_top"
+        android:visibility="gone"
+        android:background="@color/colorPrimary"
+        android:max="48"
+        android:progress="0" />
+
     <com.adroitandroid.chipcloud.ChipCloud
         xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
         android:id="@+id/category_chip_cloud"
@@ -77,5 +99,7 @@
         chipcloud:gravity="staggered"
         chipcloud:minHorizontalSpacing="14dp"
         chipcloud:verticalSpacing="16dp"
-        chipcloud:textSize="16sp"/>
+        chipcloud:textSize="16sp">
+
+    </com.adroitandroid.chipcloud.ChipCloud>
 </LinearLayout>

@@ -2,15 +2,19 @@ package com.app.android.tensel.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +24,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.adroitandroid.chipcloud.ChipCloud;
@@ -28,6 +35,7 @@ import com.adroitandroid.chipcloud.ChipListener;
 import com.afollestad.materialcamera.MaterialCamera;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.android.tensel.Manifest;
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.FeedsAdapter;
 import com.app.android.tensel.models.TradePost;
@@ -68,6 +76,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -164,9 +173,28 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 .start(CAMERA_RQ_VIDEO);*/
         //use device camera app
 //        videoUploadUri = Utils.getVideoFileForUpload(getActivity());
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            startVideoCapture();
+        }else{
+            requestPermissions(new String[]{android.Manifest.permission.CAMERA}, CAMERA_RQ_VIDEO);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            startVideoCapture();
+        }else{
+            Utils.showMessage(getActivity(), "Permission: "+permissions[0]+" result: "+grantResults[0]);
+        }
+    }
+
+    private void startVideoCapture(){
         Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        videoIntent.putExtra(MediaStore.EXTRA_OUTPUT,  Utils.getVideoDirPath(getActivity()));
-        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, new PrefManager(getActivity()).getVideoRecordingDuration() );
+        videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Utils.getVideoDirPath(getActivity()));
+        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, new PrefManager(getActivity()).getVideoRecordingDuration());
         startActivityForResult(videoIntent, CAMERA_RQ_VIDEO);
     }
 
@@ -232,6 +260,40 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     private void showPublishDialog(final String filePath){
 
         View view = View.inflate(getActivity(), R.layout.publish_video_post, null);
+        final CheckBox auctionCheckBox = (CheckBox) view.findViewById(R.id.auctionChoiceCheckbox);
+        final SeekBar auctionPeriodSeekBar = (SeekBar) view.findViewById(R.id.seekBar);
+
+        auctionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    auctionPeriodSeekBar.setVisibility(View.VISIBLE);
+                }else{
+                    auctionPeriodSeekBar.setVisibility(View.GONE);
+                    auctionPeriodSeekBar.setProgress(0);
+                }
+            }
+        });
+        auctionPeriodSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                //update the checkbox text with the number of hours selected
+                String checkboxtext = getString(R.string.checkbox_auction_string);
+                String updatedText = String.format(Locale.ENGLISH, "%s. Expires in %d Hour(s)", checkboxtext, progress);
+                auctionCheckBox.setText(updatedText);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         final String[] categories = getResources().getStringArray(R.array.categories);
         final List<String> selectedCategories = new ArrayList<>();
 
@@ -283,6 +345,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             tradePost.setVideoThumbnailUrl(filePath); //temporal filepath
                             tradePost.setTradeVideoUrl(filePath);
                             tradePost.setLikes(new HashMap<String, Boolean>());
+                            tradePost.setIsAuction(auctionCheckBox.isChecked());
+                            tradePost.setAuctionDuration(auctionPeriodSeekBar.getProgress());
                             publishPost(tradePost);
                         }else{
                             //publish error,warning about missing fields

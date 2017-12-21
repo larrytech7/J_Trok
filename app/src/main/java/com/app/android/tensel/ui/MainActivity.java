@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Utils.showMessage(this, getString(R.string.connection_error));
     }
 
     private void updateUser(@NonNull final FirebaseUser user) throws IllegalArgumentException, NullPointerException{

@@ -435,4 +435,31 @@ public class Utils {
 
     }
 
+
+    /**
+     * Return a string with the status of an auction based on the period of the auction
+     * @param tradeTime in millisecond representing the beginning of the auction
+     * @param auctionDuration duration in hours of the auction
+     * @return
+     */
+    public static String getExpiration(long tradeTime, int auctionDuration) {
+        long nowtime = System.currentTimeMillis();
+        long endtime = tradeTime + (auctionDuration * 60 * 60 * 1000);
+        if (endtime <= nowtime)
+            return "EXPIRED";
+        else{
+            //calculate time left. \ of millisecond difference
+            long timelapse = endtime - nowtime;
+            String timeLeft = "";
+            if (timelapse < 1000 * 60){ //less than one minute
+                timeLeft = String.format(Locale.ENGLISH, "Expires in %d seconds", timelapse / (1000*60) );
+            }else if (timelapse < 1000 * 60 * 60){ //less than one hour
+                timeLeft = String.format(Locale.ENGLISH, "Expires in %d Minutes", timelapse / (1000*60*60) );
+            }else if (timelapse > 1000 * 60 * 60 *24){ //over one hour
+                timeLeft = String.format(Locale.ENGLISH, "Expires in %d Hours", timelapse / (1000*60*60*24) );
+            }
+
+            return timeLeft;
+        }
+    }
 }

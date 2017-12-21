@@ -28,6 +28,8 @@ public class TradePost implements Serializable {
     private String tradeImageUrl;
     private List<String> tags;
     private Map<String, Boolean> likes;
+    private boolean isAuction;
+    private int auctionDuration;
 
     public TradePost() {
         this.tags = new ArrayList<>();
@@ -165,5 +167,21 @@ public class TradePost implements Serializable {
                 numberOfValidLikes++;
         }
         return numberOfValidLikes;
+    }
+
+    public int getAuctionDuration() {
+        return auctionDuration;
+    }
+
+    public void setAuctionDuration(int auctionDuration) {
+        this.auctionDuration = auctionDuration;
+    }
+
+    public boolean isAuction() {
+        return isAuction;
+    }
+
+    public void setIsAuction(boolean auction) {
+        this.isAuction = auction;
     }
 }

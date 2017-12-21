@@ -40,6 +40,22 @@
             android:background="#dee"/>
 
         <TextView
+            android:id="@+id/auctionPeriodTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="20sp"
+            android:layout_gravity="start"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="2dp"
+            android:paddingStart="2dp"
+            android:paddingRight="1dp"
+            android:paddingEnd="1dp"
+            android:elevation="3dp"
+            android:background="#dee"/>
+
+
+        <TextView
             android:id="@+id/authorName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

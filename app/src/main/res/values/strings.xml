@@ -37,7 +37,7 @@
     <string name="publish">Publish</string>
     <string name="cancel">Cancel</string>
     <string name="post_title_hint">Name|Title (*)</string>
-    <string name="post_desc_hint">(*) Tell us more about what you are selling. (Preferably start with the name)</string>
+    <string name="post_desc_hint">(*) What are you selling/auctioning? (Preferably start with the name)</string>
     <string name="publish_description">(*) fields are obligatory. Pick categories to improve item visibility</string>
     <string name="price_hint">Price (*)</string>
     <string name="location_hint">Location</string>
@@ -134,5 +134,7 @@
     <string name="intro_text2">Looking for awesome stuff to buy? Here they are!</string>
     <string name="intro_title3">Your great profile!</string>
     <string name="intro_text3">Let others know that they can indeed trust you! Complete your profile</string>
+    <string name="connection_error">Connection error. Check your network connection</string>
+    <string name="checkbox_auction_string">Is this an Auction? (If yes, select the duration in Hours)</string>
 
 </resources>

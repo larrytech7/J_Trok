@@ -38,7 +38,7 @@
     <string name="play_again">Rejouer</string>
     <string name="play_again_desc">Pour voir à nouveau le curseur de bienvenue, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="playing">En cours</string>
-    <string name="post_desc_hint">(*) Dites-nous plus sur ce que vous vendez. (De préférence, commencez par le nom)</string>
+    <string name="post_desc_hint">(*) Que vendez-vous? (De préférence, commencez par le nom)</string>
     <string name="post_title_hint">Nom|titre (*)</string>
     <string name="posted">Publié</string>
     <string name="preparing">en cours de préparer</string>
@@ -106,14 +106,16 @@
     <string name="update_location">Mettre a jour votre position (Ville-Pays)</string>
     <string name="update_status">Bref sur vous</string>
     <string name="upload_error">Erreur lors de l\'importation de la vignette. Veuillez réessayer</string>
-    <string name="uploaded">Publié</string>
+    <string name="uploaded">Publiée</string>
     <string name="uploading">Téléchargement</string>
     <string name="uploading_thumbs">Téléchargement des pouces</string>
     <string name="username">\@%s nom d\'utilisateur</string>
     <string name="intro_text1">Vous voulez vendre ou passer au enchere? Eh bien, dans 10minutes, c\'est fait!</string>
-    <string name="intro_title1">Besoin de vendre ou lancer au encheres?</string>
+    <string name="intro_title1">Besoin de vendre au enchères?</string>
     <string name="intro_title2">Achéter des trucs cool!</string>
-    <string name="intro_text2">Vous chercher des trucs genial? Les voici. Envoyez des colis entre amis via ce service</string>
+    <string name="intro_text2">Vous chercher des trucs génial? Les voici. Envoyez des colis entre amis via ce service</string>
     <string name="intro_title3">Votre profile</string>
     <string name="intro_text3">Remplisser votre profile pour vous mettre en confiance</string>
+    <string name="connection_error">Erreur de connéxion. Veuillez vérifier votre connéxion Internet</string>
+    <string name="checkbox_auction_string">Est-ce une vente au enchères?(Si, oui, choisissez la durée en Heures) </string>
 </resources>
