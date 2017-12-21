@@ -127,7 +127,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                         ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
-                        .child(itemId).child(targetId), current_user,this));
+                        .child(itemId).child(targetId), current_user,this).setHostView(mRecyclerView));
 
             }
             //subscribe FCM for messages
@@ -294,7 +294,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                                     userChat.setAuthorId(current_user.getUserId());
                                     userChat.setAuthorName(current_user.getUserName());
                                     userChat.setAuthorProfileImage(current_user.getUserProfilePhoto());
-                                    userChat.setChatText("image");
+                                    userChat.setChatText("");
                                     userChat.setChatDateTime(System.currentTimeMillis());
                                     userChat.setHasImage(true);
                                     //Set itemAuthorId for this item before sending chat

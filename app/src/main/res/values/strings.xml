@@ -128,5 +128,11 @@
     <string name="uploading">uploading</string>
     <string name="delete">Delete</string>
     <string name="delete_post">If you are author of this post, you can delete it from the menu</string>
+    <string name="intro_text1">Looking to make an awesome sale/auction. Here you come! In 10s the deal is done!</string>
+    <string name="intro_title1">Need to sell/auction awesome stuff?</string>
+    <string name="intro_title2">Buy awesome stuff!</string>
+    <string name="intro_text2">Looking for awesome stuff to buy? Here they are!</string>
+    <string name="intro_title3">Your great profile!</string>
+    <string name="intro_text3">Let others know that they can indeed trust you! Complete your profile</string>
 
 </resources>

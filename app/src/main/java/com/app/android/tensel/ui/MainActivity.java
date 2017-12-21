@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void showHint() {
         SimpleHintContentHolder hintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_buying).getContext())
-                .setContentTitle("Need to sell awesome stuff? ")
-                .setContentText("Looking to make an awesome sale. Here you come! In 7s the deal is done!")
+                .setContentTitle(getString(R.string.intro_title1))
+                .setContentText(getString(R.string.intro_text1))
                 .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
                 .setContentStyle(R.style.MaterialStyledDialogs_Description)
                 .build();
@@ -186,8 +186,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onClosed() {
                         SimpleHintContentHolder secondHintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_selling).getContext())
-                                .setContentTitle("Buy awesome stuff!")
-                                .setContentText("Looking for awesome stuff to buy? Here they are! ")
+                                .setContentTitle(getString(R.string.intro_title2))
+                                .setContentText(getString(R.string.intro_text2))
                                 .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
                                 .setContentStyle(R.style.MaterialStyledDialogs_Description)
                                 .build();
@@ -200,8 +200,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                     @Override
                                     public void onClosed() {
                                         SimpleHintContentHolder thirdHintBlock = new SimpleHintContentHolder.Builder(findViewById(R.id.action_profile).getContext())
-                                                .setContentTitle("Your great profile!")
-                                                .setContentText("Let others know that they can indeed trust you! Complete your profile")
+                                                .setContentTitle(getString(R.string.intro_title3))
+                                                .setContentText(getString(R.string.intro_text3))
                                                 .setTitleStyle(R.style.MaterialStyledDialogs_TitleHeader)
                                                 .setContentStyle(R.style.MaterialStyledDialogs_Description)
                                                 .build();

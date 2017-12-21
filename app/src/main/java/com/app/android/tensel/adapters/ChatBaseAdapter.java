@@ -37,6 +37,7 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
     private final int VIEW_TYPE_OUTGOING = -1;
     private final int VIEW_TYPE_INCOMING_WITH_IMAGE = 2;
     private final int VIEW_TYPE_OUTGOING_WITH_IMAGE = -2;
+    private RecyclerView hostView;
 
     public ChatBaseAdapter(Class<Chat> modelClass, int modelLayout,Class<ViewHolder> viewHolderClass,
                            DatabaseReference ref, User me,Context _ctx) {
@@ -84,9 +85,17 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
                     .load(Uri.parse(model.getChatExtraImageUrl()))
                     .placeholder(R.drawable.loader)
                     //.centerCrop()
-                    .resize(400, viewHolder.itemImageView.getMeasuredHeight())
+                    .resize(300, 300)
                     .into(viewHolder.itemImageView);
-            Log.d("ChatBaseAdapter", "img url: "+model.getChatExtraImageUrl());
+            /*viewHolder.itemImageView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    ImageView imgThumb = (ImageView) v;
+                    Utils.zoomImageFromThumb(imgThumb, imgThumb.getDrawable(), getHostView(),
+                            context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                }
+            });*/
         }
 
         try {
@@ -116,6 +125,15 @@ public class ChatBaseAdapter extends FirebaseRecyclerAdapter<Chat, ChatBaseAdapt
     @Override
     public void cleanup() {
         super.cleanup();
+    }
+
+    public RecyclerView getHostView() {
+        return hostView;
+    }
+
+    public ChatBaseAdapter setHostView(RecyclerView hostView) {
+        this.hostView = hostView;
+        return this;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

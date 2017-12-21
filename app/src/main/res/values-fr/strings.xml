@@ -89,4 +89,10 @@
     <string name="uploading_thumbs">Téléchargement des pouces</string>
     <string name="username">\@%s nom d\'utilisateur</string>
     <string name="zero"></string>
+    <string name="intro_text1">Vous voulez vendre ou passer au enchere? Eh bien, dans 10minutes, c\'est fait!</string>
+    <string name="intro_title1">Besoin de vendre ou lancer au encheres?</string>
+    <string name="intro_title2">Acheter des trucs cool!</string>
+    <string name="intro_text2">Vous chercher des trucs genial? Les voici. Envoyez des colis entre amis via ce service</string>
+    <string name="intro_title3">Votre profile</string>
+    <string name="intro_text3">Remplisser votre profile pour vous mettre en confiance</string>
 </resources>
