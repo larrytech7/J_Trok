@@ -45,8 +45,8 @@
     <string name="search_hint">Quickly search for cool stuff</string>
     <string name="search">%s, quickly find stuff here</string>
     <string name="preparing">preparing </string>
-    <string name="buying">Purchases</string>
-    <string name="selling">Needs</string>
+    <string name="buying">Auctions</string>
+    <string name="selling">Mailing</string>
     <string name="profile">Profile</string>
     <string name="username">\@ %s Username</string>
     <string name="chat_content_hint">chat</string>

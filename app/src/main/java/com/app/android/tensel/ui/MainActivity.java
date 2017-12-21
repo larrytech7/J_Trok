@@ -19,7 +19,6 @@ import com.app.android.tensel.R;
 import com.app.android.tensel.fragments.BuyingFragment;
 import com.app.android.tensel.fragments.ProfileFragment;
 import com.app.android.tensel.fragments.SellingFragment;
-import com.app.android.tensel.models.User;
 import com.app.android.tensel.utility.PrefManager;
 import com.app.android.tensel.utility.Utils;
 import com.google.android.gms.appinvite.AppInvite;
@@ -32,10 +31,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.joanfuentes.hintcase.HintCase;
 import com.joanfuentes.hintcaseassets.contentholderanimators.FadeInContentHolderAnimator;
@@ -87,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                 break;
                             case R.id.action_selling:
                                 fragment = "selling";
-                                item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sell_selected, null));
+                                item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_send, null));
                                 break;
                             case R.id.action_profile:
                                 fragment = "profile";

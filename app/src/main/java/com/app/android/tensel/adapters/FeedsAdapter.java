@@ -107,7 +107,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
 
         viewHolder.mTextView.setText(String.format(Locale.ENGLISH, "By %s ", model.getAuthorName()));
         viewHolder.priceTagTextView.setText(String.format(Locale.ENGLISH ,"%d %s", model.getTradeAmount(), model.getCurrency()));
-        viewHolder.dateTextView.setText(TimeAgo.using(model.getTradeTime()));
+        viewHolder.dateTextView.setText(String.format(Locale.ENGLISH, "%s, %d like(s)",TimeAgo.using(model.getTradeTime()), model.getValidLikes()));
 
         viewHolder.feedsAutorImageView.setOnClickListener(new View.OnClickListener() {
             @Override

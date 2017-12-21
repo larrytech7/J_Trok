@@ -13,7 +13,6 @@
     <string name="chat_content_hint">message</string>
     <string name="chat_hint">Discutez avec l\'auteur</string>
     <string name="comment">Commenter</string>
-    <string name="content"></string>
     <string name="delete">Supprimer</string>
     <string name="delete_post">Si vous etes l\'auteur de cette publications, vous pouvez la supprimer a partir du menu</string>
     <string name="desc_selling">Decrivez gentiment ce que vous voulez</string>
@@ -46,6 +45,29 @@
     <string name="price_hint">Prix(*)</string>
     <string name="profile">Profile</string>
     <string name="publish">Publier</string>
+    <string-array name="categories">
+        <item>Téléphones</item>
+        <item>Ordinateurs</item>
+        <item>Livres</item>
+        <item>Android</item>
+        <item>IOS</item>
+        <item>Fashion | Vetements</item>
+        <item>Chaises</item>
+        <item>Boissons</item>
+        <item>Modems</item>
+        <item>Internet</item>
+        <item>Vestes</item>
+        <item>TVs</item>
+        <item>Consoles</item>
+        <item>Jeux/Loisirs</item>
+        <item>Véhicules</item>
+        <item>Camions</item>
+        <item>Logiciels</item>
+        <item>Jewelry</item>
+        <item>Chaussures</item>
+        <item>Arts</item>
+        <item>Sports</item>
+    </string-array>
     <string name="publish_description">(*) Les champs sont obligatoires. Choisissez des catégories pour améliorer la visibilité des objets</string>
     <string name="publishing">En cours de publication. Veuillez patienter</string>
     <string name="pv">Chat privé</string>
@@ -54,13 +76,13 @@
     <string name="requests">Demandes</string>
     <string name="retry_loading">Réessayer</string>
     <string name="search">%s, trouver rapidements des trucs cool ici</string>
-    <string name="search_hint">Recherchez rapidement des choses intéressantes</string>
+    <string name="search_hint">Passer a la recherche rapide</string>
     <string name="search_selling">%s, avez vous ces choses?</string>
     <string name="selling">Besoins</string>
     <string name="send">Publier</string>
     <string name="share">Partager</string>
     <string name="share_hint">Partager publication</string>
-    <string name="share_string" formatted="false">%s, vend des choses  sur %s</string>
+    <string name="share_string" formatted="false">%s, vend/liquide des trucs cool sur %s</string>
     <string name="skip">Sauter</string>
     <string name="slide_1_desc">Le moyen le plus rapide d\'acheter ou de vendre parmi les pairs</string>
     <string name="slide_1_title">Entre potes</string>
@@ -88,10 +110,9 @@
     <string name="uploading">Téléchargement</string>
     <string name="uploading_thumbs">Téléchargement des pouces</string>
     <string name="username">\@%s nom d\'utilisateur</string>
-    <string name="zero"></string>
     <string name="intro_text1">Vous voulez vendre ou passer au enchere? Eh bien, dans 10minutes, c\'est fait!</string>
     <string name="intro_title1">Besoin de vendre ou lancer au encheres?</string>
-    <string name="intro_title2">Acheter des trucs cool!</string>
+    <string name="intro_title2">Achéter des trucs cool!</string>
     <string name="intro_text2">Vous chercher des trucs genial? Les voici. Envoyez des colis entre amis via ce service</string>
     <string name="intro_title3">Votre profile</string>
     <string name="intro_text3">Remplisser votre profile pour vous mettre en confiance</string>

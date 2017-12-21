@@ -2,6 +2,7 @@ package com.app.android.tensel.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,5 +151,19 @@ public class TradePost implements Serializable {
 
     public void setLikes(Map<String, Boolean> likes) {
         this.likes = likes;
+    }
+
+    /**
+     * Compute the number of valid likes in the 'likes set'
+     * @return
+     */
+    public int getValidLikes(){
+        Collection<Boolean> validLikes = getLikes().values();
+        int numberOfValidLikes = 0;
+        for (boolean likeIsTrue : validLikes){
+            if (likeIsTrue)
+                numberOfValidLikes++;
+        }
+        return numberOfValidLikes;
     }
 }

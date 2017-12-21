@@ -6,7 +6,7 @@
         android:title="@string/buying" />
     <item
         android:id="@+id/action_selling"
-        android:icon="@drawable/ic_sell"
+        android:icon="@drawable/ic_send"
         android:title="@string/selling"/>
     <item
         android:id="@+id/action_profile"
