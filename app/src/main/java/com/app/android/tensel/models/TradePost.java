@@ -155,7 +155,7 @@ public class TradePost implements Serializable {
 
     /**
      * Compute the number of valid likes in the 'likes set'
-     * @return
+     * @return number of valid likes
      */
     public int getValidLikes(){
         Collection<Boolean> validLikes = getLikes().values();
