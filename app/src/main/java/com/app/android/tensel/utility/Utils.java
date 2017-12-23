@@ -9,10 +9,10 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -34,8 +34,8 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 
@@ -80,6 +80,8 @@ public class Utils {
     public static final String PROFILE_IMG = "USER_PROFILE_PHOTO";
     public static final String AUTHOR_ID = "AUTHOR_ID";
     public static final String STORAGE_REF_IMAGES = "media/images";
+    public static final String ITEM_TRADE_POST = "app.tensel.tradepost";
+    public static final String PUBLISH_ITEM_INTENT = "com.app.tensel.publish";
 
     public static User getUserConfig(@NonNull  FirebaseUser user){
         User muser = new User();
@@ -90,37 +92,6 @@ public class Utils {
         muser.setUserId(user.getUid());
         muser.setUserProfilePhoto(user.getPhotoUrl().toString());
         return muser;
-    }
-
-    public static Bitmap retriveVideoThumbnail(String videoPath) throws Throwable
-    {
-        Bitmap bitmap = null;
-        MediaMetadataRetriever mediaMetadataRetriever = null;
-        try
-        {
-            mediaMetadataRetriever = new MediaMetadataRetriever();
-            //if (Build.VERSION.SDK_INT >= 14)
-                mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
-            //else
-              //  mediaMetadataRetriever.setDataSource(videoPath);
-            bitmap = mediaMetadataRetriever.getFrameAtTime();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            throw new Throwable(
-                    "Exception in retriveVideoFrameFromVideo(String videoPath)"
-                            + e.getMessage());
-
-        }
-        finally
-        {
-            if (mediaMetadataRetriever != null)
-            {
-                mediaMetadataRetriever.release();
-            }
-        }
-        return bitmap;
     }
 
     public static void deleteFilesAtPath( File parentDir )
@@ -148,7 +119,12 @@ public class Utils {
 
     public static String getVideoDirPath( Context ctx )
     {
-        return getSdCard().getAbsolutePath() + "/Android/data/" + ctx.getPackageName() + "/media/videos";
+        //Check if directory exists, else create new one then return the resulting path
+        File directory = new File(getSdCard().getAbsolutePath() + "/Tensel/media/videos");
+        if (directory.isDirectory())
+            return getSdCard().getAbsolutePath() + "/Tensel/media/videos";
+        else
+            return directory.mkdirs() ? directory.toString() : getSdCard().getAbsolutePath() + "/Android/data/" + ctx.getPackageName() + "/media/videos";
     }
 
     public static Uri getVideoFileForUpload(Context context){
@@ -166,8 +142,9 @@ public class Utils {
     }
 
     public static String getFileName(@NonNull String file){
-        File newfile = new File(file);
-        return newfile.isFile() ? newfile.getName() : null;
+        File mfile = new File(file);
+        return mfile.isFile() ? mfile.getName() :
+                String.valueOf(System.currentTimeMillis()+ Math.floor(new Random().nextDouble()));
     }
 
     public static String getImageDirPath( Context ctx )
@@ -227,15 +204,15 @@ public class Utils {
         return null;
     }
 
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-    public static boolean isDownloadsDocument(Uri uri) {
+    private static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
-    public static boolean isMediaDocument(Uri uri) {
+    private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
@@ -461,5 +438,20 @@ public class Utils {
 
             return timeLeft;
         }
+    }
+
+    public static Bitmap getVideoThumbnail(Context ac, String video_id){
+        Bitmap bitmap;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inDither = false;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        bitmap = MediaStore.Video.Thumbnails.getThumbnail(ac.getContentResolver(),
+                Long.parseLong(video_id),
+                MediaStore.Images.Thumbnails.MINI_KIND,
+                options);
+
+        return bitmap;
     }
 }

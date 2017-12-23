@@ -90,6 +90,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
     private static final String LOGTAG = "BuyingFragment";
     private final static int CAMERA_RQ_VIDEO = 6969;
+    private static final int MANAGE_MEDIA_CONTENT = 8088;
     private Unbinder unbinder;
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
@@ -174,21 +175,23 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         //use device camera app
 //        videoUploadUri = Utils.getVideoFileForUpload(getActivity());
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             startVideoCapture();
         }else{
-            requestPermissions(new String[]{android.Manifest.permission.CAMERA}, CAMERA_RQ_VIDEO);
+            requestPermissions(new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MANAGE_MEDIA_CONTENT);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            startVideoCapture();
-        }else{
-            Utils.showMessage(getActivity(), "Permission: "+permissions[0]+" result: "+grantResults[0]);
-        }
+        if (requestCode == MANAGE_MEDIA_CONTENT)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                startVideoCapture();
+            }else{
+                Utils.showMessage(getActivity(), "Permission: "+permissions[0]+" result: "+grantResults[0]);
+            }
     }
 
     private void startVideoCapture(){
@@ -256,8 +259,9 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     /**
      * Show dialog to fill in details for this post
      * @param filePath path to file to be uploaded with details filled-in
+     * @param videoFileNumber the number of the video file generated in MediaStore
      */
-    private void showPublishDialog(final String filePath){
+    private void showPublishDialog(final String filePath, final String videoFileNumber){
 
         View view = View.inflate(getActivity(), R.layout.publish_video_post, null);
         final CheckBox auctionCheckBox = (CheckBox) view.findViewById(R.id.auctionChoiceCheckbox);
@@ -342,7 +346,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             tradePost.setCurrency(Utils.fetchPrice(pDesc).getCurrency()); //fetch currency from description
                             tradePost.setTradeLocation(mAuthenticatedUser.getUserCity()); //assume location is user's city
                             tradePost.setTags(selectedCategories);
-                            tradePost.setVideoThumbnailUrl(filePath); //temporal filepath
+                            tradePost.setVideoThumbnailUrl(videoFileNumber); //temporal filepath
                             tradePost.setTradeVideoUrl(filePath);
                             tradePost.setLikes(new HashMap<String, Boolean>());
                             tradePost.setIsAuction(auctionCheckBox.isChecked());
@@ -368,88 +372,23 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
     /**
      * Upload post resource to firebase
-     * TODO: Task needs to be moved to background
      * @param tradePost
      */
     private void publishPost(final TradePost tradePost) {
         //create video thumbnail and upload post
         try {
-            final MaterialDialog mProgressDialog = new MaterialDialog.Builder(getActivity())
-                    .progress(true, 10)
-                    .autoDismiss(false)
-                    .cancelable(false)
-                    .widgetColor(ResourcesCompat.getColor(getResources(), R.color.bg_screen3, null))
-                    .content(getString(R.string.publishing)).show();
-
             //configure tradepost author
             tradePost.setAuthorId(mAuthenticatedUser.getUserId());
             tradePost.setAuthorName(mAuthenticatedUser.getUserName());
             tradePost.setAuthorProfileImage(mAuthenticatedUser.getUserProfilePhoto());
             tradePost.setTradeTime(System.currentTimeMillis());
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ThumbnailUtils.createVideoThumbnail(tradePost.getVideoThumbnailUrl(),
-                    MediaStore.Video.Thumbnails.MICRO_KIND)
-                    .compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            final StorageReference storageReference = firebaseStorage.getReference()
-                    .child(Utils.STORAGE_REF_VIDEO_THUMBS+File.separatorChar+Utils.getFileName(tradePost.getVideoThumbnailUrl())+".JPG");
-            final StorageTask<UploadTask.TaskSnapshot> thumbsTask = storageReference.putBytes(byteArrayOutputStream.toByteArray()).addOnCompleteListener(getActivity(), new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if (task.isComplete() & task.isSuccessful()) {
-                                //start uploading video file. Get url to stored thumbnail and get set to the model
-                                tradePost.setVideoThumbnailUrl(task.getResult().getDownloadUrl().toString());
+            //send broadcast
+            Intent publishIntent = new Intent(Utils.PUBLISH_ITEM_INTENT);
+            publishIntent.putExtra(Utils.CURRENT_USER, mAuthenticatedUser);
+            publishIntent.putExtra(Utils.ITEM_TRADE_POST, tradePost);
+            getActivity().sendBroadcast(publishIntent);
 
-                            } else {
-                                //Notify on Error
-                                Utils.showMessage(getActivity(), getString(R.string.upload_error));
-
-                            }
-                        }
-                    });
-            InputStream videoStream = new FileInputStream(new File(tradePost.getTradeVideoUrl()));
-            //Uri videoUpload = Uri.fromFile(new File(tradePost.getTradeVideoUrl()));
-            firebaseStorage.getReference().child(Utils.STORAGE_REF_VIDEO+File.separatorChar+Utils.getFileName(tradePost.getTradeVideoUrl()))
-                    .putStream(videoStream).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    //upload video after thumbsTask has completed
-                    if (thumbsTask.isComplete()){
-                        if (task.isComplete() && task.isSuccessful()) {
-                            tradePost.setTradeVideoUrl(task.getResult().getDownloadUrl().toString());
-                            DatabaseReference ref = firebaseDatabase.getReference().child(Utils.DATABASE_TRADES).push();
-                            String key = ref.getKey();
-                            tradePost.setTradePostId(key);
-                            //subscribe FCM for messages on this item
-                            FirebaseMessaging.getInstance().subscribeToTopic(key);
-
-                            ref.setValue(tradePost).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Map<String, Object> update = new HashMap<>();
-                                    update.put("sells", mAuthenticatedUser.getSells()+1);
-                                    firebaseDatabase.getReference().child(Utils.DATABASE_USERS)
-                                            .child(mAuthenticatedUser.getUserId())
-                                            .updateChildren(update);
-                                    //Flag for new Event
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, tradePost.getTradePostId());
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, tradePost.getTradeNameTitle());
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, Utils.ANALYTICS_PARAM_ARTICLE_SELL_CATEGORY);
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
-                                    mFirebaseAnalytics.logEvent(Utils.CUSTOM_EVENT_ARTICLE_PUBLISHED, bundle);
-                                }
-                            });
-                            Utils.showMessage(getActivity(), getString(R.string.uploaded));
-                        }else{
-                            Utils.showMessage(getActivity(), getString(R.string.error_uploading));
-                        }
-                    }else{
-                      Utils.showMessage(getActivity(), getString(R.string.uploading_thumbs));
-                    }
-                    mProgressDialog.dismiss();
-                }
-            });
         } catch (Throwable throwable) {
             throwable.printStackTrace();
             FirebaseCrash.report(throwable);
@@ -474,11 +413,13 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
 
             if (resultCode == RESULT_OK) {
                 String filePath = data.getDataString();
+                final String[] videoFilenumber = filePath.split("/");
+
                 Log.d(LOGTAG, "Saved to: " + filePath);
                 try {
                     //compress video at this point
                     new AsyncTask<Uri, Integer, Boolean>() {
-                        private ProgressDialog mPrograssDialog;
+                        private ProgressDialog mProgressDialog;
 
                         @Override
                         protected Boolean doInBackground(Uri... paths) {
@@ -500,31 +441,31 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                         protected void onProgressUpdate(Integer... values) {
                             super.onProgressUpdate(values);
                             //Update progressdialog
-                            Log.d(LOGTAG, "Video compression Progress ... " + values[0]);
-                            mPrograssDialog.setSecondaryProgress(values[0] * 10);
-                            //mPrograssDialog.setProgress(values[0] * 10);
+                            Log.d(LOGTAG, "Video compression Progress ... " + (values[0] / 100) * 100 );
+                            mProgressDialog.setProgress((values[0]/100) * 100 );
                         }
 
                         @Override
                         protected void onPreExecute() {
                             super.onPreExecute();
-                            mPrograssDialog = new ProgressDialog(getActivity());
-                            mPrograssDialog.setIndeterminate(true);
-                            mPrograssDialog.setMessage(getString(R.string.preparing));
-                            mPrograssDialog.setCancelable(false);
-                            mPrograssDialog.setCanceledOnTouchOutside(false);
-                            mPrograssDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                            mPrograssDialog.show();
+                            mProgressDialog = new ProgressDialog(getActivity());
+                            mProgressDialog.setIndeterminate(false);
+                            mProgressDialog.setProgress(0);
+                            mProgressDialog.setMessage(getString(R.string.preparing));
+                            mProgressDialog.setCancelable(false);
+                            mProgressDialog.setCanceledOnTouchOutside(false);
+                            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            mProgressDialog.show();
                         }
 
                         @Override
                         protected void onPostExecute(Boolean isConverted) {
-                            mPrograssDialog.dismiss();
+                            mProgressDialog.dismiss();
                             if (isConverted) {
                                 //log converted path
-                                Log.d(LOGTAG, "Path: " + MediaController.cachedFile.getPath());
+                                Log.d(LOGTAG, "Compressed Video Path: " + MediaController.cachedFile.getPath());
                                 //upload this version of the file to the cloud. Here'd be a suitable place to call the showPublishDialog method
-                                showPublishDialog(MediaController.cachedFile.getPath());
+                                showPublishDialog(MediaController.cachedFile.getPath(), videoFilenumber[videoFilenumber.length -1]);
                             }
                             super.onPostExecute(isConverted);
                         }
@@ -532,7 +473,6 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 }catch (Exception ex){
                     FirebaseCrash.report(ex.getCause());
                 }
-
 
             } else if(data != null) {
                 Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);
