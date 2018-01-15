@@ -25,7 +25,7 @@
     <string name="loading">Chargement</string>
     <string name="location_hint">Position</string>
     <string name="login_error">Erreur d\'identification %s</string>
-    <string name="message_sell">Avez-vous des choses incroyables à vendre? Vendez vos trucs en 10 secondes. Ca commence par ce bouton!</string>
+    <string name="message_sell">Avez-vous des choses incroyables à vendre? Vendez en 10 secondes. Ca commence par ce bouton!</string>
     <string name="new_comments">%d commentaire(s)</string>
     <string name="new_posts">%d nouveau</string>
     <string name="next">Suivant</string>
@@ -87,14 +87,14 @@
     <string name="slide_1_desc">Le moyen le plus rapide d\'acheter ou de vendre parmi les pairs</string>
     <string name="slide_1_title">Entre potes</string>
     <string name="slide_2_desc">"Echangez avec des potes sur la toile. "</string>
-    <string name="slide_2_title">Connecter les potes via le commerce</string>
+    <string name="slide_2_title">Connectez des potes via le commerce</string>
     <string name="slide_3_desc">Obtenez les meilleures offres en 10s! Seulement de vos potes</string>
     <string name="slide_3_title">Faire des ventes impressionnantes</string>
     <string name="slogan">Fait une ventes impressionnante en %d secondes</string>
     <string name="slogan_2">Inspirer vos achats pour générer vos ventes</string>
     <string name="sms_author">SMS auteur</string>
     <string name="sms_error">Impossible d\'envoyer des SMS à l\'heure.</string>
-    <string name="sms_message">Bonjour, je souhaite vous contacter pour le produit que vous avez posté sur 10Sell</string>
+    <string name="sms_message">Bonjour, je souhaite vous contacter par rapport a ce que vous avez posté sur 10Sel</string>
     <string name="start">Terminer</string>
     <string name="success">Publié</string>
     <string name="terms">Termes et conditions</string>
