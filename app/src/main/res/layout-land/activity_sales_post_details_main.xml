@@ -52,6 +52,7 @@
             android:layout_marginTop="@dimen/textfield_padding_bottom"
             android:src="@drawable/app_icon"
             android:transitionName="profile_shared" />
+
         <TextView
             android:id="@+id/contentTextView"
             android:layout_width="match_parent"

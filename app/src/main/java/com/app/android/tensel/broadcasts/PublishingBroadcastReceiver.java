@@ -2,16 +2,17 @@ package com.app.android.tensel.broadcasts;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.support.v4.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.app.android.tensel.R;
@@ -35,8 +36,10 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class PublishingBroadcastReceiver extends BroadcastReceiver {
@@ -90,7 +93,7 @@ public class PublishingBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
 
-            InputStream videoStream = new FileInputStream(new File(tradePost.getTradeVideoUrl()));
+            final InputStream videoStream = new FileInputStream(new File(tradePost.getTradeVideoUrl()));
             //Upload compressed video to firebase
             firebaseStorage.getReference().child(Utils.STORAGE_REF_VIDEO+File.separatorChar+Utils.getFileName(tradePost.getTradeVideoUrl()))
                     .putStream(videoStream)
@@ -98,9 +101,17 @@ public class PublishingBroadcastReceiver extends BroadcastReceiver {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             //update the progress notification
-                            Long progress = taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount() ;
-                            Log.e(LOGTAG, "Progress: "+progress.intValue());
-                            updateProgressNotification(context, progress.intValue() * 100);
+                            //int progress = (int) (100 * (float) taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            int bytesRead = 0;
+                            try {
+                                bytesRead = videoStream.read();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            //double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount() ;
+                            Log.e(LOGTAG, String.format(Locale.ENGLISH, "%d, Sent: %d, total: %d", bytesRead, taskSnapshot.getBytesTransferred(),
+                                    taskSnapshot.getTotalByteCount()));
+                            updateProgressNotification(context, bytesRead >= 0 ? 50 : 100 );
                         }
                     })
                     .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -144,8 +155,13 @@ public class PublishingBroadcastReceiver extends BroadcastReceiver {
 
     private void updateProgressNotification(Context context, int progress) {
         notificationBuilder.setProgress(100, progress, false);
-        if (progress == 100)
-            notificationBuilder.setSound(Uri.parse("android.resource://"+context.getPackageName()+"/"+R.raw.send_sound));
+        if (progress == 50 )
+            notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        if (progress == 100) {
+            notificationBuilder.setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.send_sound));
+            notificationBuilder.setContentTitle(context.getString(R.string.uploaded));
+        }
+
         mNotificationManager.notify(0, notificationBuilder.build());
     }
 
@@ -182,6 +198,7 @@ public class PublishingBroadcastReceiver extends BroadcastReceiver {
             notificationBuilder.setAutoCancel(true);
             notificationBuilder.setProgress(100, 0, false);
             notificationBuilder.setWhen(0);
+            //notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
             //notify
             mNotificationManager.notify(0, notificationBuilder.build());
         }

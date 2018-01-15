@@ -349,7 +349,7 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                             tradePost.setVideoThumbnailUrl(videoFileNumber); //temporal filepath
                             tradePost.setTradeVideoUrl(filePath);
                             tradePost.setLikes(new HashMap<String, Boolean>());
-                            tradePost.setIsAuction(auctionCheckBox.isChecked());
+                            tradePost.setAuction(auctionCheckBox.isChecked());
                             tradePost.setAuctionDuration(auctionPeriodSeekBar.getProgress());
                             publishPost(tradePost);
                         }else{

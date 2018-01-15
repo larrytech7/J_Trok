@@ -425,15 +425,15 @@ public class Utils {
         if (endtime <= nowtime)
             return "EXPIRED";
         else{
-            //calculate time left. \ of millisecond difference
+            //calculate time left in terms of millisecond difference
             long timelapse = endtime - nowtime;
             String timeLeft = "";
             if (timelapse < 1000 * 60){ //less than one minute
-                timeLeft = String.format(Locale.ENGLISH, "Expires in %d seconds", timelapse / (1000*60) );
+                timeLeft = String.format(Locale.ENGLISH, "Expires in %d seconds", timelapse / (1000) );
             }else if (timelapse < 1000 * 60 * 60){ //less than one hour
-                timeLeft = String.format(Locale.ENGLISH, "Expires in %d Minutes", timelapse / (1000*60*60) );
-            }else if (timelapse > 1000 * 60 * 60 *24){ //over one hour
-                timeLeft = String.format(Locale.ENGLISH, "Expires in %d Hours", timelapse / (1000*60*60*24) );
+                timeLeft = String.format(Locale.ENGLISH, "Expires in %d Minute(s)", timelapse / (1000*60) );
+            }else if (timelapse <= 1000 * 60 * 60 *24){ //over one hour
+                timeLeft = String.format(Locale.ENGLISH, "Expires in about %.1f Hour(s)", (1.0 * timelapse) / (1000*60*60) );
             }
 
             return timeLeft;

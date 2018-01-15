@@ -27,7 +27,7 @@
     <string name="login_error">Erreur d\'identification %s</string>
     <string name="message_sell">Avez-vous des choses incroyables à vendre? Vendez vos trucs en 10 secondes. Ca commence par ce bouton!</string>
     <string name="new_comments">%d commentaire(s)</string>
-    <string name="new_posts">%d nouveau trucs</string>
+    <string name="new_posts">%d nouveau</string>
     <string name="next">Suivant</string>
     <string name="no_data">Donnes non disponilbe, mais vous pouvez continuer</string>
     <string name="notify_comment">Informez-moi des offres auxquelles j\'ai participé.</string>

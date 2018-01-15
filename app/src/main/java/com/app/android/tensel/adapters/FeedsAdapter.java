@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -189,6 +190,7 @@ public class FeedsAdapter extends FirebaseRecyclerAdapter<TradePost, FeedsAdapte
         if (model.isAuction()){
             //set expiration period
             String expiration = Utils.getExpiration(model.getTradeTime(), model.getAuctionDuration());
+            Log.d("FeedsAdapter", "Expiration: "+expiration);
             viewHolder.auctionTextView.setText(expiration);
         }
         //TODO: Enable authors tap and hold card

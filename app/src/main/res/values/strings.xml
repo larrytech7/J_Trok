@@ -97,7 +97,7 @@
     <string name="obligatory_field">Message cannot be empty</string>
     <string name="reply">Reply</string>
     <string name="new_comments">%d comment(s)</string>
-    <string name="new_posts">%d new stuff published</string>
+    <string name="new_posts">%d new updates</string>
     <string name="share_string" formatted="false">%s is selling awesome stuff on %s</string>
     <string name="call">call</string>
     <string name="call_author">Call Author</string>

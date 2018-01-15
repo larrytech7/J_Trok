@@ -177,11 +177,11 @@ public class TradePost implements Serializable {
         this.auctionDuration = auctionDuration;
     }
 
-    public boolean isAuction() {
-        return isAuction;
+    public void setAuction(boolean auction) {
+        this.isAuction = auction;
     }
 
-    public void setIsAuction(boolean auction) {
-        this.isAuction = auction;
+    public boolean isAuction() {
+        return isAuction;
     }
 }
