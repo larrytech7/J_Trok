@@ -15,11 +15,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@mipmap/ic_send" />
 
-    <com.quinny898.library.persistentsearch.SearchBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchbox"/>
-
     <!--<com.adroitandroid.chipcloud.ChipCloud
         xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
         android:id="@+id/select_tag"
@@ -51,10 +46,31 @@
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         tools:listitem="@layout/card_layout"/>
 
-    <!--<ImageView
-        android:id="@+id/expanded_image"
+    <LinearLayout
+        android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"/>-->
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_50">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty"
+            android:scaleType="center"
+            android:adjustViewBounds="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/text_size_large"
+            style="@style/Base.TextAppearance.AppCompat.Title"/>
+    </LinearLayout>
+
+    <com.quinny898.library.persistentsearch.SearchBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchbox"/>
 
 </android.support.design.widget.CoordinatorLayout>

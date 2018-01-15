@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -47,13 +48,15 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
 
     private User mAuthenticatedUser;
     private Unbinder unbinder;
-    //@BindView(R.id.empty_view)
-    //LinearLayout emptyLayoutView;
+    @BindView(R.id.empty_view)
+    LinearLayout emptyView;
     @BindView(R.id.searchbox)
     public SearchBox searchBox;
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
     private DatabaseReference mDatabaseRef;
+    private SalesAdpater adapter;
+    private RecyclerView.AdapterDataObserver observer;
 
     public static SellingFragment newInstance(FirebaseUser user) {
         SellingFragment fragment = new SellingFragment();
@@ -88,11 +91,37 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         unbinder = ButterKnife.bind(this, rootView);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        //observer
+        observer = new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (itemCount > 0){
+                    emptyView.setVisibility(View.GONE);
+                }else{
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if (itemCount > 0){
+                    emptyView.setVisibility(View.GONE);
+                }else{
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+            }
+
+        };
+
         recyclerView.setHasFixedSize(true);
-        SalesAdpater adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
+        adapter = new SalesAdpater(getActivity(), mAuthenticatedUser, SalePost.class,
                 R.layout.item_for_sale,
                 SalesAdpater.MyViewHolder.class,
                 mDatabaseRef.child(Utils.FIREBASE_SELLS).orderByChild("timestamp"));
+        adapter.registerAdapterDataObserver(observer);
         recyclerView.setAdapter(adapter);
 
         String[] categories = getResources().getStringArray(R.array.categories);
@@ -117,6 +146,12 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         searchBox.toggleSearch();
         searchBox.clearResults();
         searchBox.clearFocus();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.unregisterAdapterDataObserver(observer);
     }
 
     @Override

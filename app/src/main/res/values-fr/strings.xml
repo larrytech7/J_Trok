@@ -29,7 +29,7 @@
     <string name="new_comments">%d commentaire(s)</string>
     <string name="new_posts">%d nouveau</string>
     <string name="next">Suivant</string>
-    <string name="no_data">Donnes non disponilbe, mais vous pouvez continuer</string>
+    <string name="no_data">Données non disponible, postez avec le boutton ci enbas</string>
     <string name="notify_comment">Informez-moi des offres auxquelles j\'ai participé.</string>
     <string name="notify_item_sale">Recevoir une notification sur les nouveaux publications/offres</string>
     <string name="obligatory_field">Message ne peut etre vide</string>

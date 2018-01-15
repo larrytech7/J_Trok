@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -99,10 +100,11 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
     public SearchBox search;
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
-    private FirebaseStorage firebaseStorage;
+    @BindView(R.id.empty_view)
+    public LinearLayout emptyLayout;
     private FirebaseDatabase firebaseDatabase;
-    private FirebaseAnalytics mFirebaseAnalytics;
-    private Uri videoUploadUri;
+    private RecyclerView.AdapterDataObserver observer;
+    private FeedsAdapter adapter;
 
     public static BuyingFragment newInstance(FirebaseUser user) {
         BuyingFragment fragment = new BuyingFragment();
@@ -136,14 +138,32 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         View rootView = inflater.inflate(R.layout.fragment_buy, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         //firebase
-        firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-
         //configure recycler view
+        observer = new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (itemCount > 0){
+                    emptyLayout.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if (itemCount > 0){
+                    emptyLayout.setVisibility(View.GONE);
+                }else
+                    emptyLayout.setVisibility(View.VISIBLE);
+            }
+        };
+
         recyclerView.setHasFixedSize(true);
-        FeedsAdapter adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
+        adapter = new FeedsAdapter(TradePost.class, R.layout.custom_view, FeedsAdapter.MyViewHolder.class,
                 firebaseDatabase.getReference("trades").orderByChild("tradeTime"), getActivity(), mAuthenticatedUser);
+        adapter.registerAdapterDataObserver(observer);
         recyclerView.setAdapter(adapter);
 
         //configure search
@@ -402,6 +422,12 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
         //search.toggleSearch();
         search.clearResults();
         search.clearFocus();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.unregisterAdapterDataObserver(observer);
     }
 
     @Override
