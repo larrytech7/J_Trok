@@ -99,7 +99,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     Toolbar toolbar;
     @BindView(R.id.sendChatButton)
     FloatingActionButton sendChatButton;
-    @BindView(R.id.empty_view)
+    @BindView(R.id.emptyview)
     LinearLayout emptyView;
     /*@BindView(R.id.vplayer)
     VideoView videoView;*/
@@ -158,30 +158,28 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (itemCount > 0){
+                if (positionStart > 0){
                     emptyView.setVisibility(View.GONE);
-                }else{
-                    emptyView.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (itemCount > 0){
+                if (positionStart > 0){
                     emptyView.setVisibility(View.GONE);
                 }else{
                     emptyView.setVisibility(View.VISIBLE);
                 }
             }
         };
+        adapter.registerAdapterDataObserver(observer);
+        chatRecyclerView.setAdapter(adapter);
         if (adapter.getItemCount() > 0 ){
             emptyView.setVisibility(View.GONE);
         }else{
             emptyView.setVisibility(View.VISIBLE);
         }
-        adapter.registerAdapterDataObserver(observer);
-        chatRecyclerView.setAdapter(adapter);
         //proxyCacheServer = SevenApp.getProxy(PostDetailActivity.this);
         // Grabs a reference to the player view
         //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");

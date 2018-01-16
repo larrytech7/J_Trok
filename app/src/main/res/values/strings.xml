@@ -138,5 +138,6 @@
     <string name="checkbox_auction_string">Is this an Auction? (If yes, select the duration in Hours)</string>
     <string name="empty_content">No Items available</string>
     <string name="empty_comments">No comments yet</string>
+    <string name="empty_chats">No chats</string>
 
 </resources>

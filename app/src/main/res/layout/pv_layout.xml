@@ -24,4 +24,26 @@
         app:layoutManager="LinearLayoutManager"
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         tools:listitem="@layout/item_chat_incoming" />
+    <LinearLayout
+        android:id="@+id/emptyview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/card_height"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_chat"
+            android:adjustViewBounds="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_chats"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/text_size_large"
+            style="@style/Base.TextAppearance.AppCompat.Title"/>
+    </LinearLayout>
 </merge>

@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("comn.example.user.j_trok", appContext.getPackageName());
+        assertEquals("com.app.android.tensel", appContext.getPackageName());
     }
 }

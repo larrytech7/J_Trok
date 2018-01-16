@@ -97,17 +97,15 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (itemCount > 0){
+                if (positionStart > 0){
                     emptyView.setVisibility(View.GONE);
-                }else{
-                    emptyView.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (itemCount > 0){
+                if (positionStart > 0){
                     emptyView.setVisibility(View.GONE);
                 }else{
                     emptyView.setVisibility(View.VISIBLE);
@@ -151,6 +149,7 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
         searchBox.toggleSearch();
         searchBox.clearResults();
         searchBox.clearFocus();
+
     }
 
     @Override

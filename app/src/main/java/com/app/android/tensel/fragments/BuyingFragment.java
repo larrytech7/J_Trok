@@ -145,17 +145,15 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (itemCount > 0){
+                if (positionStart > 0){
                     emptyLayout.setVisibility(View.GONE);
-                }else{
-                    emptyLayout.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (itemCount > 0){
+                if (positionStart > 0){
                     emptyLayout.setVisibility(View.GONE);
                 }else
                     emptyLayout.setVisibility(View.VISIBLE);

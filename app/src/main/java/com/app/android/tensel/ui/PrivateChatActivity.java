@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.app.android.tensel.R;
 import com.app.android.tensel.adapters.ChatBaseAdapter;
@@ -70,6 +71,8 @@ public class PrivateChatActivity extends AppCompatActivity {
     ImageButton captureImage;
     @BindView(R.id.loadingProgressView)
     ProgressView loadingProgressView;
+    @BindView(R.id.emptyview)
+    LinearLayout emptyView;
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private User current_user;
@@ -79,6 +82,8 @@ public class PrivateChatActivity extends AppCompatActivity {
     private String profile;
     private String itemAuthorId; //id of author of the item (purchase/need)
     private Chat userChat;
+    private RecyclerView.AdapterDataObserver observer;
+    private ChatBaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,9 +120,38 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 targetId = userid; //user.getUserId();
 
-                mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_pv_incoming,
+                adapter = new ChatBaseAdapter(Chat.class, R.layout.item_chat_pv_incoming,
                         ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
-                        .child(itemId).child(targetId), current_user,this));
+                        .child(itemId).child(targetId), current_user,this);
+                observer = new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        super.onItemRangeInserted(positionStart, itemCount);
+                        if (positionStart > 0){
+                            emptyView.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onItemRangeRemoved(int positionStart, int itemCount) {
+                        super.onItemRangeRemoved(positionStart, itemCount);
+                        if (positionStart > 0){
+                            emptyView.setVisibility(View.GONE);
+                        }else{
+                            emptyView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                };
+
+                adapter.registerAdapterDataObserver(observer);
+                mRecyclerView.setAdapter(adapter);
+                if (adapter.getItemCount() > 0 ){
+                    emptyView.setVisibility(View.GONE);
+                }else{
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                Log.d("PrivateChat", "chats: "+adapter.getItemCount());
+
 
             }else{
                 //launched by participant [not Author]
@@ -125,9 +159,35 @@ public class PrivateChatActivity extends AppCompatActivity {
                 toolbar.setSubtitle("--");
                 targetId = current_user.getUserId();
 
-                mRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
+                adapter = new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
                         ChatBaseAdapter.ViewHolder.class, qDatabase.getReference(Utils.PV)
-                        .child(itemId).child(targetId), current_user,this).setHostView(mRecyclerView));
+                        .child(itemId).child(targetId), current_user,this).setHostView(mRecyclerView);
+                observer = new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        super.onItemRangeInserted(positionStart, itemCount);
+                        if (positionStart > 0){
+                            emptyView.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onItemRangeRemoved(int positionStart, int itemCount) {
+                        super.onItemRangeRemoved(positionStart, itemCount);
+                        if (positionStart > 0){
+                            emptyView.setVisibility(View.GONE);
+                        }else{
+                            emptyView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                };
+                adapter.registerAdapterDataObserver(observer);
+                mRecyclerView.setAdapter(adapter);
+                if (adapter.getItemCount() > 0 ){
+                    emptyView.setVisibility(View.GONE);
+                }else{
+                    emptyView.setVisibility(View.VISIBLE);
+                }
 
             }
             //subscribe FCM for messages
@@ -377,5 +437,11 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.unregisterAdapterDataObserver(observer);
     }
 }
