@@ -6,7 +6,7 @@
     <string name="buying">Achats</string>
     <string name="buytime">Acheter plus de temps</string>
     <string name="call">Appeler</string>
-    <string name="call_author">Appeler auteur</string>
+    <string name="call_author">Appeler l\'auteur</string>
     <string name="call_error">Incapable d\'emettre l\'apel</string>
     <string name="cancel">Quitter</string>
     <string name="chat">Message</string>
@@ -14,7 +14,7 @@
     <string name="chat_hint">Discutez avec l\'auteur</string>
     <string name="comment">Commenter</string>
     <string name="delete">Supprimer</string>
-    <string name="delete_post">Si vous etes l\'auteur de cette publications, vous pouvez la supprimer a partir du menu</string>
+    <string name="delete_post">Si vous etes l\'auteur de cette publication, vous pouvez la supprimer a partir du menu</string>
     <string name="desc_selling">Decrivez gentiment ce que vous voulez</string>
     <string name="email">Email</string>
     <string name="err_empty">Ce champ ne peut etre vide</string>
@@ -36,7 +36,7 @@
     <string name="pause">Pause</string>
     <string name="phone_contact">Contact téléphonique</string>
     <string name="play_again">Rejouer</string>
-    <string name="play_again_desc">Pour voir à nouveau le curseur de bienvenue, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again_desc">Pour voir à nouveau le curseur de bienvenue, aller a parametres -> apps -> welcome slider -> clear data</string>
     <string name="playing">En cours</string>
     <string name="post_desc_hint">(*) Que vendez-vous? (De préférence, commencez par le nom)</string>
     <string name="post_title_hint">Nom|titre (*)</string>
@@ -70,37 +70,37 @@
     </string-array>
     <string name="publish_description">(*) Les champs sont obligatoires. Choisissez des catégories pour améliorer la visibilité des objets</string>
     <string name="publishing">En cours de publication. Veuillez patienter</string>
-    <string name="pv">Chat privé</string>
+    <string name="pv">Chat en privé</string>
     <string name="pv_hint">Appuyez sur l\'icône de l\'auteur pour un chat privé</string>
     <string name="reply">Répondre</string>
-    <string name="requests">Demandes</string>
+    <string name="requests">Enchère</string>
     <string name="retry_loading">Réessayer</string>
     <string name="search">%s, trouver rapidements des trucs cool ici</string>
     <string name="search_hint">Passer a la recherche rapide</string>
     <string name="search_selling">%s, avez vous ces choses?</string>
-    <string name="selling">Besoins</string>
+    <string name="selling">Expédier</string>
     <string name="send">Publier</string>
     <string name="share">Partager</string>
     <string name="share_hint">Partager publication</string>
     <string name="share_string" formatted="false">%s, vend/liquide des trucs cool sur %s</string>
     <string name="skip">Sauter</string>
-    <string name="slide_1_desc">Le moyen le plus rapide d\'acheter ou de vendre parmi les pairs</string>
+    <string name="slide_1_desc">Le marcher rapide des enchères, d\'achat ou de vendre entre pairs</string>
     <string name="slide_1_title">Entre potes</string>
     <string name="slide_2_desc">"Echangez avec des potes sur la toile. "</string>
     <string name="slide_2_title">Connectez des potes via le commerce</string>
     <string name="slide_3_desc">Obtenez les meilleures offres en 10s! Seulement de vos potes</string>
-    <string name="slide_3_title">Faire des ventes impressionnantes</string>
+    <string name="slide_3_title">Faire des enchères impressionnantes</string>
     <string name="slogan">Fait une ventes impressionnante en %d secondes</string>
     <string name="slogan_2">Inspirer vos achats pour générer vos ventes</string>
     <string name="sms_author">SMS auteur</string>
     <string name="sms_error">Impossible d\'envoyer des SMS à l\'heure.</string>
     <string name="sms_message">Bonjour, je souhaite vous contacter par rapport a ce que vous avez posté sur 10Sel</string>
     <string name="start">Terminer</string>
-    <string name="success">Publié</string>
+    <string name="success">Publier</string>
     <string name="terms">Termes et conditions</string>
     <string name="title_activity_registration_form">Enregistrement</string>
     <string name="title_activity_welcome">Acceuil</string>
-    <string name="title_selling">Demandez ce dont vous avez besoin</string>
+    <string name="title_selling">Que voulez vous expédié?</string>
     <string name="update">Mettre à jour</string>
     <string name="update_contact">Entrez comme international (+)</string>
     <string name="update_location">Mettre a jour votre position (Ville-Pays)</string>
@@ -110,7 +110,7 @@
     <string name="uploading">Téléchargement</string>
     <string name="uploading_thumbs">Téléchargement des pouces</string>
     <string name="username">\@%s nom d\'utilisateur</string>
-    <string name="intro_text1">Vous voulez vendre ou passer au enchere? Eh bien, dans 10minutes, c\'est fait!</string>
+    <string name="intro_text1">Vous voulez vendre ou passer au enchères? Eh bien, dans 10minutes, c\'est fait!</string>
     <string name="intro_title1">Besoin de vendre au enchères?</string>
     <string name="intro_title2">Achéter des trucs cool!</string>
     <string name="intro_text2">Vous chercher des trucs génial? Les voici. Envoyez des colis entre amis via ce service</string>
@@ -118,4 +118,7 @@
     <string name="intro_text3">Remplisser votre profile pour vous mettre en confiance</string>
     <string name="connection_error">Erreur de connéxion. Veuillez vérifier votre connéxion Internet</string>
     <string name="checkbox_auction_string">Est-ce une vente au enchères?(Si, oui, choisissez la durée en Heures) </string>
+    <string name="empty_content">Aucun article disponible</string>
+    <string name="empty_comments">Aucun commentaire pour l\'instant</string>
+    <string name="empty_chats">Aucun message. \\nCes messages sont chiffré</string>
 </resources>
