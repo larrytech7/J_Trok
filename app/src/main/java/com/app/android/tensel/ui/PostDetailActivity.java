@@ -25,9 +25,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -101,8 +99,6 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     FloatingActionButton sendChatButton;
     @BindView(R.id.emptyview)
     LinearLayout emptyView;
-    /*@BindView(R.id.vplayer)
-    VideoView videoView;*/
 
     private User user, author;
     private FirebaseDatabase qDatabase;
@@ -175,11 +171,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         };
         adapter.registerAdapterDataObserver(observer);
         chatRecyclerView.setAdapter(adapter);
-        if (adapter.getItemCount() > 0 ){
-            emptyView.setVisibility(View.GONE);
-        }else{
-            emptyView.setVisibility(View.VISIBLE);
-        }
+
         //proxyCacheServer = SevenApp.getProxy(PostDetailActivity.this);
         // Grabs a reference to the player view
         //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
@@ -302,9 +294,17 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
 
                         }
                     });
-            chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/posts/"+key), user,this));
 
+            adapter = new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
+                    ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("chats/posts/"+key), user,this);
+            adapter.registerAdapterDataObserver(observer);
+            chatRecyclerView.swapAdapter(adapter, true);
+            if (adapter.getItemCount() >= 1 ){
+                emptyView.setVisibility(View.GONE);
+            }else{
+                emptyView.setVisibility(View.VISIBLE);
+            }
+            Log.d(TAG,"comments: "+adapter.getItemCount());
 
         }
     }

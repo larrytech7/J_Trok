@@ -75,7 +75,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'uk.co.jakelee:vidsta:1.0.0'
     compile 'com.github.marlonlom:timeago:3.0.1'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.facebook.android:facebook-android-sdk:4.29.0'
     compile "com.google.firebase:firebase-core:$playServiceVersion"
     compile "com.google.firebase:firebase-auth:$playServiceVersion"
     compile "com.google.android.gms:play-services-auth:$playServiceVersion"

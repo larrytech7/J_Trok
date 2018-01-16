@@ -145,13 +145,6 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 adapter.registerAdapterDataObserver(observer);
                 mRecyclerView.setAdapter(adapter);
-                if (adapter.getItemCount() > 0 ){
-                    emptyView.setVisibility(View.GONE);
-                }else{
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-                Log.d("PrivateChat", "chats: "+adapter.getItemCount());
-
 
             }else{
                 //launched by participant [not Author]
@@ -183,13 +176,13 @@ public class PrivateChatActivity extends AppCompatActivity {
                 };
                 adapter.registerAdapterDataObserver(observer);
                 mRecyclerView.setAdapter(adapter);
-                if (adapter.getItemCount() > 0 ){
-                    emptyView.setVisibility(View.GONE);
-                }else{
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-
             }
+            if (adapter.getItemCount() > 0 ){
+                emptyView.setVisibility(View.GONE);
+            }else{
+                emptyView.setVisibility(View.VISIBLE);
+            }
+            Log.d("PrivateChat", "chats: "+adapter.getItemCount());
             //subscribe FCM for messages
             FirebaseMessaging.getInstance().subscribeToTopic(targetId);
         }
