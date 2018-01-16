@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.android.tensel.R;
@@ -98,6 +99,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     Toolbar toolbar;
     @BindView(R.id.sendChatButton)
     FloatingActionButton sendChatButton;
+    @BindView(R.id.empty_view)
+    LinearLayout emptyView;
     /*@BindView(R.id.vplayer)
     VideoView videoView;*/
 
@@ -109,6 +112,8 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     private Tutors tutors;
     private Iterator<Map.Entry<String, View>> iterator;
     private String key;
+    private ChatBaseAdapter adapter;
+    private RecyclerView.AdapterDataObserver observer;
     //private HttpProxyCacheServer proxyCacheServer;
 
     @Override
@@ -147,8 +152,36 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
         //setup comments RecyclerView
         qDatabase = FirebaseDatabase.getInstance();
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        chatRecyclerView.setAdapter(new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
-                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("p/chats/posts"), user, this));
+        adapter = new ChatBaseAdapter(Chat.class, R.layout.item_chat_outgoing,
+                ChatBaseAdapter.ViewHolder.class, qDatabase.getReference("p/chats/posts"), user, this);
+        observer = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (itemCount > 0){
+                    emptyView.setVisibility(View.GONE);
+                }else{
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if (itemCount > 0){
+                    emptyView.setVisibility(View.GONE);
+                }else{
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+        if (adapter.getItemCount() > 0 ){
+            emptyView.setVisibility(View.GONE);
+        }else{
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        adapter.registerAdapterDataObserver(observer);
+        chatRecyclerView.setAdapter(adapter);
         //proxyCacheServer = SevenApp.getProxy(PostDetailActivity.this);
         // Grabs a reference to the player view
         //player.setVideoSource("http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
@@ -329,6 +362,7 @@ public class PostDetailActivity extends AppCompatActivity implements VideoStateL
     protected void onDestroy() {
         super.onDestroy();
         player.stop();
+        adapter.unregisterAdapterDataObserver(observer);
     }
 
     @Override

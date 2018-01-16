@@ -123,6 +123,11 @@ public class SellingFragment extends Fragment implements SearchBox.SearchListene
                 mDatabaseRef.child(Utils.FIREBASE_SELLS).orderByChild("timestamp"));
         adapter.registerAdapterDataObserver(observer);
         recyclerView.setAdapter(adapter);
+        if (adapter.getItemCount() > 0 ){
+            emptyView.setVisibility(View.GONE);
+        }else{
+            emptyView.setVisibility(View.VISIBLE);
+        }
 
         String[] categories = getResources().getStringArray(R.array.categories);
         for(String category : categories){

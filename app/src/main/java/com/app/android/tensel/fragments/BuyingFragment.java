@@ -147,6 +147,8 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 super.onItemRangeInserted(positionStart, itemCount);
                 if (itemCount > 0){
                     emptyLayout.setVisibility(View.GONE);
+                }else{
+                    emptyLayout.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -165,6 +167,11 @@ public class BuyingFragment extends Fragment implements TutorialListener, Search
                 firebaseDatabase.getReference("trades").orderByChild("tradeTime"), getActivity(), mAuthenticatedUser);
         adapter.registerAdapterDataObserver(observer);
         recyclerView.setAdapter(adapter);
+        if (adapter.getItemCount() > 0 ){
+            emptyLayout.setVisibility(View.GONE);
+        }else{
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
 
         //configure search
         search = (SearchBox) rootView.findViewById(R.id.searchbox);

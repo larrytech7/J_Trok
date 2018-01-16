@@ -137,5 +137,6 @@
     <string name="connection_error">Connection error. Check your network connection</string>
     <string name="checkbox_auction_string">Is this an Auction? (If yes, select the duration in Hours)</string>
     <string name="empty_content">No Items available</string>
+    <string name="empty_comments">No comments yet</string>
 
 </resources>
